@@ -24,7 +24,7 @@ public abstract class EntityLiving extends Entity {
 	@Override
 	protected void updateMotion() {
 		if(!lockedVelocity) {
-			double moveSpeed = (up || down) && (left || right) ? walkSpeed * 0.707 : walkSpeed;
+			double moveSpeed = (up || down) && (left || right) ? getWalkSpeed() * 0.707 : getWalkSpeed();
 			if(up) { velocity.y = moveSpeed; }
 			else if(down) { velocity.y = -moveSpeed; }
 			else { velocity.y = 0; }

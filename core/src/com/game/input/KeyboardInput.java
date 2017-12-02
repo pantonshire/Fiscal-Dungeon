@@ -19,20 +19,20 @@ public class KeyboardInput extends Input {
 		bindings = new HashMap<Action, Integer>();
 	}
 
-	public double getXDirection() {
-		boolean left = Gdx.input.isKeyPressed(Keys.A),
-				right = Gdx.input.isKeyPressed(Keys.D);
-		if(left && !right) { return -1; }
-		if(!left && right) { return 1; }
-		return 0;
+	public boolean up() {
+		return Gdx.input.isKeyPressed(Keys.W);
 	}
-
-	public double getYDirection() {
-		boolean up = Gdx.input.isKeyPressed(Keys.W),
-				down = Gdx.input.isKeyPressed(Keys.S);
-		if(up && !down) { return 1; }
-		if(!down && up) { return -1; }
-		return 0;
+	
+	public boolean down() {
+		return Gdx.input.isKeyPressed(Keys.S);
+	}
+	
+	public boolean left() {
+		return Gdx.input.isKeyPressed(Keys.A);
+	}
+	
+	public boolean right() {
+		return Gdx.input.isKeyPressed(Keys.D);
 	}
 
 	public Vector getTargetPos() {

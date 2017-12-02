@@ -6,30 +6,62 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.audio.SoundEffects;
+import com.game.graphics.Animation;
+import com.game.graphics.LayerRenderer;
+import com.game.graphics.Sequence;
+import com.game.graphics.Textures;
+import com.game.world.World;
 
 public class Main extends ApplicationAdapter {
 	
-	SpriteBatch batch;
-	Texture img;
+	private LayerRenderer gameRenderer;
+	private LayerRenderer overlayRenderer;
+	private World currentWorld;
 	
 	public void create() {
-		batch = new SpriteBatch();
-		img = new Texture("textures/gem_red.png");
+//		batch = new SpriteBatch();
+//		img = new Texture("textures/gem_red.png");
 		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select");
-		SoundEffects.instance.play("coin", 1, 1, 0);
+		SoundEffects.instance.play("good", 1, 1, 0);
+		
+//		anmtest = new Animation(TextureManager.instance.getTexture("gem_red"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
+//		anmtest = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
+		
+		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
+		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1);
+		currentWorld = new World(gameRenderer, overlayRenderer);
 	}
 	
 	public void render() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		clearScreen();
+		
+		if(currentWorld != null) {
+			currentWorld.update();
+			gameRenderer.beginBatch();
+			currentWorld.render(0);
+			gameRenderer.endBatch();
+			overlayRenderer.beginBatch();
+			currentWorld.render(1);
+			overlayRenderer.endBatch();
+		}
+		
+//		batch.begin();
+//		batch.draw(img, 0, 0);
+//		batch.draw(anmtest.getFrame(), 30, 30);
+//		anmtest.updateTimer();
+//		batch.end();
 	}
 	
 	public void dispose() {
-		batch.dispose();
-		img.dispose();
+//		batch.dispose();
+//		img.dispose();
+		gameRenderer.dispose();
+		Textures.instance.dispose();
 		SoundEffects.instance.dispose();
+	}
+	
+	private void clearScreen() {
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 }

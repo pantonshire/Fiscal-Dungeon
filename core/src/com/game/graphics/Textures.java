@@ -5,13 +5,13 @@ import java.util.HashMap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 
-public class TextureManager implements Disposable {
+public class Textures implements Disposable {
 	
-	public static final TextureManager instance = new TextureManager();
+	public static final Textures instance = new Textures();
 	
 	public HashMap<String, Texture> textures;
 	
-	public TextureManager() {
+	public Textures() {
 		textures = new HashMap<String, Texture>();
 	}
 	
