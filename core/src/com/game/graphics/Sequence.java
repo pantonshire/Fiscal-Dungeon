@@ -9,7 +9,7 @@ public class Sequence {
 	private boolean noLoop;
 	private String name = "";
 	
-	public static Sequence[] prepareSequences(Sequence... sequences) {
+	public static Sequence[] formatSequences(Sequence... sequences) {
 		for(int i = 0; i < sequences.length; i++) {
 			if(i > 0) {
 				sequences[i].setRegionY(sequences[i - 1].getNextSequenceY());

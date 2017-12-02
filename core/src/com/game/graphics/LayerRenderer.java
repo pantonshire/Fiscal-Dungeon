@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.vector.Vector;
 
-public class Renderer implements Disposable {
+public class LayerRenderer implements Disposable {
 
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
@@ -24,7 +24,7 @@ public class Renderer implements Disposable {
 	private float zoom;
 	private boolean cameraMoved;
 
-	public Renderer(int width, int height, float zoom) {
+	public LayerRenderer(int width, int height, float zoom) {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
