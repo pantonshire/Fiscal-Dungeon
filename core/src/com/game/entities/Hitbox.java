@@ -5,10 +5,10 @@ import com.game.world.TileMap;
 
 public class Hitbox {
 
-	private EntityLiving entity;
+	private Entity entity;
 	private double width, height;
 	
-	public Hitbox(EntityLiving boundEntity, double width, double height) {
+	public Hitbox(Entity boundEntity, double width, double height) {
 		entity = boundEntity;
 		this.width = width;
 		this.height = height;

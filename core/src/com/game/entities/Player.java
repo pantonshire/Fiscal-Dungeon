@@ -8,6 +8,7 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.input.Action;
 import com.game.input.Input;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
@@ -16,10 +17,12 @@ import com.game.world.World;
 public class Player extends EntityLiving {
 
 	private static final int MAX_COINS = 100; //You die when you reach 100 coins
-
+	private static final int SLASH_TIME = 40;
+	
 	private Animation animation;
 	private Texture sword;
 	private double swordRotation;
+	private int slashTimer;
 	private int facing;
 	private int coins; //Basically health in this game lol
 
@@ -49,6 +52,7 @@ public class Player extends EntityLiving {
 
 	private void die() {
 		destroy();
+		coins = 0;
 		world.startGameOverTimer();
 		SoundEffects.instance.play("blast", 1, 1, 0);
 		for(int i = 0; i < 200; i++) {
@@ -99,11 +103,32 @@ public class Player extends EntityLiving {
 			}
 		}
 		
-		swordRotation = position.angleBetween(Input.instance.getTargetPos(world.gameRenderer));
+		if(slashTimer > 0) {
+			--slashTimer;
+		}
+		
+		if(Input.instance.isPerformingAction(Action.ATTACK) && slashTimer == 0) {
+			slashTimer = SLASH_TIME;
+		}
+		
+		if(slashTimer == 0) {
+			swordRotation = position.angleBetween(Input.instance.getTargetPos(world.gameRenderer)) - Math.toRadians(60);
+		}
+		
+		else {
+			int time = SLASH_TIME - slashTimer;
+			if(time < 10) {
+				swordRotation += Math.toRadians(18);
+			}
+			
+			else if(time >= 15 && time < 25) {
+				swordRotation -= Math.toRadians(18);
+			}
+		}
 		
 		ArrayList<Coin> coins = world.getCoins();
 		for(Coin coin : coins) {
-			if(position.distSqBetween(coin.getPosition()) < 50) {
+			if(hitbox.intersectsHitbox(coin.hitbox)) {
 				coin.collect(this);
 				break;
 			}

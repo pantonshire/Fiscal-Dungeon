@@ -1,21 +1,27 @@
 package com.game.world;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.game.graphics.LayerRenderer;
+import com.game.vector.Vector;
 
 public class TileMap {
 
 	private TextureRegion tileset;
 	private int tileSize;
 	private byte[][] tiles;
+	private AStar aStar;
 
 	public TileMap(Texture texture, byte[][] tiles, int tileSize) {
 		this.tiles = tiles;
 		tileset = new TextureRegion();
 		this.tileSize = tileSize;
+		this.aStar = new AStar(this);
 		setTileset(texture);
 	}
 
@@ -78,6 +84,10 @@ public class TileMap {
 
 	public int getTileSize() {
 		return tileSize;
+	}
+	
+	public ArrayList<Point> findPath(Vector start, Vector end, int maxSearchDistance, boolean diagonal) {
+		return aStar.findPath(start, end, maxSearchDistance, diagonal);
 	}
 
 	public void render(LayerRenderer renderer) {

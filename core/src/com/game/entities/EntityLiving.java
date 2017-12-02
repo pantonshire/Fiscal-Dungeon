@@ -133,4 +133,73 @@ public abstract class EntityLiving extends Entity {
 	public double getWalkSpeed() {
 		return walkSpeed;
 	}
+	
+	public boolean canSee(Entity other) {
+		double ownX = position.x, ownY = position.y, otherX = other.position.x, otherY = other.position.y;
+		
+		double deltaX = Math.abs(otherX - ownX);
+		double deltaY = Math.abs(otherY - ownY);
+
+		int x = (int)ownX;
+		int y = (int)ownY;
+
+		double inverseDeltaX = 1.0D / deltaX;
+		double inverseDeltaY = 1.0D / deltaY;
+
+		int n = 1;
+		int xIncrement, yIncrement;
+		double tNextVertical, tNextHorizontal;
+
+		if(deltaX == 0) {
+			xIncrement = 0;
+			tNextHorizontal = inverseDeltaX;
+		}
+		
+		else if(otherX > ownX) {
+			xIncrement = 1;
+			n += (int)otherX - x;
+			tNextHorizontal = ((int)ownX + 1 - ownX) * inverseDeltaX;
+		}
+		
+		else {
+			xIncrement = -1;
+			n += x - (int)otherX;
+			tNextHorizontal = (ownX - (int)ownX) * inverseDeltaX;
+		}
+
+		if(deltaY == 0) {
+			yIncrement = 0;
+			tNextVertical = inverseDeltaY;
+		}
+		
+		else if(otherY > ownY) {
+			yIncrement = 1;
+			n += (int)otherY - y;
+			tNextVertical = ((int)ownY + 1 - ownY) * inverseDeltaY;
+		}
+		
+		else {
+			yIncrement = -1;
+			n += y - (int)otherY;
+			tNextVertical = (ownY - (int)ownY) * inverseDeltaY;
+		}
+
+		for(; n > 0; n--) {
+			if(world.getTileMap().isTileCollidable(x, y)) {
+				return false;
+			}
+
+			if(tNextVertical < tNextHorizontal) {
+				y += yIncrement;
+				tNextVertical += inverseDeltaY;
+			}
+			
+			else {
+				x += xIncrement;
+				tNextHorizontal += inverseDeltaX;
+			}
+		}
+
+		return true;
+	}
 }

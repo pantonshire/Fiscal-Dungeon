@@ -19,6 +19,7 @@ public class KeyboardInput extends Input {
 
 	public KeyboardInput() {
 		bindings = new HashMap<Action, Integer>();
+		bindings.put(Action.ATTACK, LEFT_BUTTON);
 	}
 	
 	public Vector3 unprojectMousePos(LayerRenderer renderer, int x, int y) {

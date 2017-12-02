@@ -7,10 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.game.entities.Coin;
+import com.game.entities.CoinSnake;
 import com.game.entities.Entity;
-import com.game.entities.GoldCoin;
 import com.game.entities.Player;
-import com.game.entities.RedGem;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
@@ -48,10 +47,11 @@ public class World {
 		coins = new ArrayList<Coin>();
 
 		createPlayer(50, 50);
-		for(int i = 0; i < 100; i++) {
-			spawn(new GoldCoin(this, 350, 300 + i * 10));
-			spawn(new RedGem(this, 380, 300 + i * 10));
-		}
+//		for(int i = 0; i < 100; i++) {
+//			spawn(new GoldCoin(this, 350, 300 + i * 10));
+//			spawn(new RedGem(this, 380, 300 + i * 10));
+//		}
+		spawn(new CoinSnake(this, 350, 300));
 		
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 	}
