@@ -17,12 +17,10 @@ import com.game.world.World;
 public class Player extends EntityLiving {
 
 	private static final int MAX_COINS = 100; //You die when you reach 100 coins
-	private static final int SLASH_TIME = 40;
 	
 	private Animation animation;
-	private Texture sword;
-	private double swordRotation;
-	private int slashTimer;
+	private Animation bow;
+	private double armRotation;
 	private int facing;
 	private int coins; //Basically health in this game lol
 
@@ -36,7 +34,12 @@ public class Player extends EntityLiving {
 						new Sequence(16, 35, 5, 4),
 						new Sequence(16, 35, 5, 4),
 						new Sequence(16, 35, 5, 4)));
-		sword = Textures.instance.getTexture("basic_sword");
+		
+		bow = new Animation(Textures.instance.getTexture("bow"),
+				Sequence.formatSequences(
+						new Sequence(18, 14, 0, 1),
+						new Sequence(18, 14, 1, 5),
+						new Sequence(16, 35, 5, 4)));
 	}
 	
 	public int getCoins() {
@@ -103,27 +106,10 @@ public class Player extends EntityLiving {
 			}
 		}
 		
-		if(slashTimer > 0) {
-			--slashTimer;
-		}
+		armRotation = position.angleBetween(Input.instance.getTargetPos(world.gameRenderer));
 		
-		if(Input.instance.isPerformingAction(Action.ATTACK) && slashTimer == 0) {
-			slashTimer = SLASH_TIME;
-		}
-		
-		if(slashTimer == 0) {
-			swordRotation = position.angleBetween(Input.instance.getTargetPos(world.gameRenderer)) - Math.toRadians(60);
-		}
-		
-		else {
-			int time = SLASH_TIME - slashTimer;
-			if(time < 10) {
-				swordRotation += Math.toRadians(18);
-			}
+		if(Input.instance.isPerformingAction(Action.ATTACK)) {
 			
-			else if(time >= 15 && time < 25) {
-				swordRotation -= Math.toRadians(18);
-			}
 		}
 		
 		ArrayList<Coin> coins = world.getCoins();
@@ -143,11 +129,10 @@ public class Player extends EntityLiving {
 
 		renderer.getSpriteBatch().draw(animation.getFrame(), (float)(position.x - (animation.getFrameWidth() / 2)), (float)(position.y - (animation.getFrameHeight() / 2)));
 		animation.updateTimer();
-//		renderer.getSpriteBatch().draw(sword, (float)(position.x - 3), (float)(position.y));
 		
-		Vector swordPos = position.copy().add((new Vector().setAngle(swordRotation, 10))).add(0, 20);
-		float renderRotation = (float)Math.toDegrees(swordRotation) - 90;
-		renderer.getSpriteBatch().draw(sword, (float)swordPos.x - (sword.getWidth() / 2), (float)swordPos.y - (sword.getHeight() / 2), 6, 3, sword.getWidth(), sword.getHeight(), 1, 1, renderRotation, 0, 0, sword.getWidth(), sword.getHeight(), false, false);
-//		batch.draw(texture, position.x, position.y, pivot.x, pivot.y, texture.getWidth(), texture.getHeight(), scaleX, scaleY, -rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+		float renderRotation = (float)Math.toDegrees(armRotation) - 90;
+		Vector armPos = position.copy().add(-3, 11);
+		
+		renderer.getSpriteBatch().draw(bow.getFrame(), (float)armPos.x - (bow.getFrameWidth() / 2), (float)armPos.y - (bow.getFrameHeight() / 2), 9, 1, bow.getFrameWidth(), bow.getFrameHeight(), 1, 1, renderRotation);
 	}
 }
