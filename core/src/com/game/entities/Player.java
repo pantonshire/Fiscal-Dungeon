@@ -17,12 +17,14 @@ import com.game.world.World;
 public class Player extends EntityLiving {
 
 	private static final int MAX_COINS = 100; //You die when you reach 100 coins
+	private static final int SHOOT_TIME = 20;
 	
 	private Animation animation;
 	private Animation bow;
 	private double armRotation;
 	private int facing;
 	private int coins; //Basically health in this game lol
+	private int shootTimer;
 
 	public Player(World world, double x, double y) {
 		super(world, x, y, 10, 30, 1.5);
@@ -38,8 +40,7 @@ public class Player extends EntityLiving {
 		bow = new Animation(Textures.instance.getTexture("bow"),
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
-						new Sequence(18, 14, 1, 5),
-						new Sequence(16, 35, 5, 4)));
+						new Sequence(18, 14, 3, 5).setNoLoop()));
 	}
 	
 	public int getCoins() {
@@ -108,8 +109,15 @@ public class Player extends EntityLiving {
 		
 		armRotation = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(world.gameRenderer));
 		
-		if(Input.instance.isPerformingAction(Action.ATTACK)) {
-			
+		if(shootTimer > 0) {
+			--shootTimer;
+		}
+		
+		if(Input.instance.isPerformingAction(Action.ATTACK) && shootTimer == 0) {
+			shootTimer = SHOOT_TIME;
+			bow.setSequence(1, true);
+			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position);
+			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, 7));
 		}
 		
 		ArrayList<Coin> coins = world.getCoins();
@@ -148,5 +156,9 @@ public class Player extends EntityLiving {
 		Vector armPos = position.copy().add(-3, 11);
 		renderer.getSpriteBatch().draw(bow.getFrame(), (float)armPos.x - (bow.getFrameWidth() / 2), (float)armPos.y - (bow.getFrameHeight() / 2), 9, 1, bow.getFrameWidth(), bow.getFrameHeight(), 1, 1, renderRotation);
 		bow.updateTimer();
+		
+		if(bow.getSequence() == 1 && bow.isDone()) {
+			bow.setSequence(0, true);
+		}
 	}
 }

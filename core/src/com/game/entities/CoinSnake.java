@@ -3,13 +3,15 @@ package com.game.entities;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import com.game.audio.SoundEffects;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.utils.RandomUtils;
 import com.game.world.World;
 
-public class CoinSnake extends EntityLiving {
+public class CoinSnake extends Enemy {
 
 	private int PATH_FIND_UPDATE_RATE = 60;
 	private int DROP_COIN_RATE = 20;
@@ -20,7 +22,7 @@ public class CoinSnake extends EntityLiving {
 	private int dropCoinTimer;
 	
 	public CoinSnake(World world, double x, double y) {
-		super(world, x, y, 14, 14, 1);
+		super(world, x, y, 14, 14, 1, 3);
 		animation = new Animation(Textures.instance.getTexture("coin_snake"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		path = new ArrayList<Point>();
 	}
@@ -107,5 +109,14 @@ public class CoinSnake extends EntityLiving {
 	public void render(LayerRenderer renderer) {
 		renderer.getSpriteBatch().draw(animation.getFrame(), (float)(position.x - (animation.getFrameWidth() / 2)), (float)(position.y - (animation.getFrameHeight() / 2)));
 		animation.updateTimer();
+	}
+	
+	protected void onDeath() {
+		SoundEffects.instance.play("hurt", 1, 1, 0);
+		for(int i = 0; i < 5; i++) {
+			Coin coin = new GoldCoin(world, position.x, position.y);
+			coin.getVelocity().setAngle(2 * Math.PI / 5 * i, RandomUtils.randDouble(0.5, 1.0));
+			world.spawn(coin);
+		}
 	}
 }

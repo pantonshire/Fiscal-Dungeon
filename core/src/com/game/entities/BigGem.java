@@ -3,13 +3,15 @@ package com.game.entities;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import com.game.audio.SoundEffects;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.utils.RandomUtils;
 import com.game.world.World;
 
-public class BigGem extends EntityLiving {
+public class BigGem extends Enemy {
 
 	private int PATH_FIND_UPDATE_RATE = 10;
 	private int ATTACK_RATE = 60;
@@ -20,8 +22,8 @@ public class BigGem extends EntityLiving {
 	private int attackTimer;
 	
 	public BigGem(World world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25);
-		animation = new Animation(Textures.instance.getTexture("big_gem"), Sequence.formatSequences(new Sequence(32, 32, 4, 5)));
+		super(world, x, y, 30, 30, 0.25, 15);
+		animation = new Animation(Textures.instance.getTexture("big_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();
 	}
 	
@@ -107,5 +109,19 @@ public class BigGem extends EntityLiving {
 	public void render(LayerRenderer renderer) {
 		renderer.getSpriteBatch().draw(animation.getFrame(), (float)(position.x - (animation.getFrameWidth() / 2)), (float)(position.y - (animation.getFrameHeight() / 2)));
 		animation.updateTimer();
+	}
+	
+	protected void onDeath() {
+		SoundEffects.instance.play("boom", 1, 1, 0);
+		for(int i = 0; i < 10; i++) {
+			Coin coin = new RedGem(world, position.x, position.y);
+			coin.getVelocity().setAngle(RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
+			world.spawn(coin);
+		}
+		
+		for(int i = 0; i < 5; i++) {
+			Coin projectile = new PurpleGemProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, world.getPlayer().getWalkSpeed() - 0.5);
+			world.spawn(projectile);
+		}
 	}
 }

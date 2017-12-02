@@ -10,6 +10,7 @@ import com.game.entities.BigGem;
 import com.game.entities.Coin;
 import com.game.entities.CoinSnake;
 import com.game.entities.DemonCoin;
+import com.game.entities.Enemy;
 import com.game.entities.Entity;
 import com.game.entities.Player;
 import com.game.graphics.Animation;
@@ -33,6 +34,7 @@ public class World {
 	private ArrayList<Entity> entities;
 	private HashSet<Entity> spawnQueue;
 	private ArrayList<Coin> coins;
+	private ArrayList<Enemy> enemies;
 	
 	private Animation coin;
 
@@ -47,15 +49,16 @@ public class World {
 		entities = new ArrayList<Entity>();
 		spawnQueue = new HashSet<Entity>();
 		coins = new ArrayList<Coin>();
+		enemies = new ArrayList<Enemy>();
 
 		createPlayer(50, 50);
 //		for(int i = 0; i < 100; i++) {
 //			spawn(new GoldCoin(this, 350, 300 + i * 10));
 //			spawn(new RedGem(this, 380, 300 + i * 10));
 //		}
-		spawn(new CoinSnake(this, 350, 300));
-		spawn(new BigGem(this, 350, 350));
-		spawn(new DemonCoin(this, 650, 350));
+		spawn(new CoinSnake(this, 650, 300));
+		spawn(new BigGem(this, 650, 350));
+		spawn(new DemonCoin(this, 650, 400));
 		
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 	}
@@ -75,6 +78,10 @@ public class World {
 	public ArrayList<Coin> getCoins() {
 		return coins;
 	}
+	
+	public ArrayList<Enemy> getEnemies() {
+		return enemies;
+	}
 
 	public void spawn(Entity entity) {
 		spawnQueue.add(entity);
@@ -89,6 +96,10 @@ public class World {
 				entities.remove(toRemove);
 				coins.remove(0);
 			}
+		}
+		
+		if(entity instanceof Enemy) {
+			enemies.add((Enemy)entity);
 		}
 	}
 
@@ -123,6 +134,7 @@ public class World {
 			for(int i = 0; i < entities.size(); i++) {
 				if(entities.get(i).shouldRemove()) {
 					if(entities.get(i) instanceof Coin) { coins.remove(entities.get(i)); }
+					if(entities.get(i) instanceof Enemy) { enemies.remove(entities.get(i)); }
 					entities.remove(i);
 					--i;
 				}
