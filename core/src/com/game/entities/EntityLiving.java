@@ -185,6 +185,7 @@ public abstract class EntityLiving extends Entity {
 		}
 
 		for(; n > 0; n--) {
+			System.out.println(world.getTileMap().isTileCollidable(x, y));
 			if(world.getTileMap().isTileCollidable(x, y)) {
 				return false;
 			}

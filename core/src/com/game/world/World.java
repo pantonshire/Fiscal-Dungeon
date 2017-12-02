@@ -80,6 +80,11 @@ public class World {
 		entities.add(entity);
 		if(entity instanceof Coin) {
 			coins.add((Coin)entity);
+			if(coins.size() >= 500) {
+				Coin toRemove = coins.get(0);
+				entities.remove(toRemove);
+				coins.remove(0);
+			}
 		}
 	}
 

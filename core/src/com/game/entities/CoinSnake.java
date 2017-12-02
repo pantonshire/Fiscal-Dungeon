@@ -12,7 +12,7 @@ import com.game.world.World;
 public class CoinSnake extends EntityLiving {
 
 	private int PATH_FIND_UPDATE_RATE = 60;
-	private int DROP_COIN_RATE = 60;
+	private int DROP_COIN_RATE = 20;
 	
 	private Animation animation;
 	private ArrayList<Point> path;
@@ -88,9 +88,11 @@ public class CoinSnake extends EntityLiving {
 	
 	protected void updateEntity() {
 		if(pathFindTimer > 0) { --pathFindTimer; }
-		if(pathFindTimer == 0 && canSee(world.getPlayer())) {
+		if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null) && canSee(world.getPlayer())) {
+//			Point currentTarget = path != null && path.size() > 0 ? path.get(0) : null;
 			path = world.getTileMap().findPath(position, world.getPlayer().position, 30, false);
 			pathFindTimer = PATH_FIND_UPDATE_RATE;
+//			world.spawn(new GoldCoin(world, position.x, position.y));
 		}
 		
 		followPath();
