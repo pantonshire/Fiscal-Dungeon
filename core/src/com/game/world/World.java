@@ -6,8 +6,10 @@ import java.util.HashSet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.game.entities.BigGem;
 import com.game.entities.Coin;
 import com.game.entities.CoinSnake;
+import com.game.entities.DemonCoin;
 import com.game.entities.Entity;
 import com.game.entities.Player;
 import com.game.graphics.Animation;
@@ -37,7 +39,7 @@ public class World {
 	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
-		tiles = TileMapFactory.newBlankMap("tilemap", (byte)-8, 32, 100, 100);
+		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, 100, 100);
 		TileMapFactory.insertRoom(tiles, new StartRoom(this), 0, 0);
 		TileMapFactory.insertRoom(tiles, new TestRoom(this), 16, 0);
 		TileMapFactory.insertRoom(tiles, new VerticalCorridor(this), 3, 9);
@@ -52,6 +54,8 @@ public class World {
 //			spawn(new RedGem(this, 380, 300 + i * 10));
 //		}
 		spawn(new CoinSnake(this, 350, 300));
+		spawn(new BigGem(this, 350, 350));
+		spawn(new DemonCoin(this, 650, 350));
 		
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 	}
