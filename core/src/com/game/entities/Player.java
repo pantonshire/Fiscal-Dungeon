@@ -10,6 +10,7 @@ import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.input.Input;
 import com.game.utils.RandomUtils;
+import com.game.vector.Vector;
 import com.game.world.World;
 
 public class Player extends EntityLiving {
@@ -18,11 +19,12 @@ public class Player extends EntityLiving {
 
 	private Animation animation;
 	private Texture sword;
+	private double swordRotation;
 	private int facing;
 	private int coins; //Basically health in this game lol
 
 	public Player(World world, double x, double y) {
-		super(world, x, y, 8, 20, 1.5);
+		super(world, x, y, 10, 30, 1.5);
 		animation = new Animation(Textures.instance.getTexture("player"),
 				Sequence.formatSequences(
 						new Sequence(16, 35, 5, 4),
@@ -97,9 +99,11 @@ public class Player extends EntityLiving {
 			}
 		}
 		
+		swordRotation = position.angleBetween(Input.instance.getTargetPos(world.gameRenderer));
+		
 		ArrayList<Coin> coins = world.getCoins();
 		for(Coin coin : coins) {
-			if(position.distSqBetween(coin.getPosition()) < 25) {
+			if(position.distSqBetween(coin.getPosition()) < 50) {
 				coin.collect(this);
 				break;
 			}
@@ -114,6 +118,11 @@ public class Player extends EntityLiving {
 
 		renderer.getSpriteBatch().draw(animation.getFrame(), (float)(position.x - (animation.getFrameWidth() / 2)), (float)(position.y - (animation.getFrameHeight() / 2)));
 		animation.updateTimer();
-		renderer.getSpriteBatch().draw(sword, (float)(position.x + 2), (float)(position.y - 6));
+//		renderer.getSpriteBatch().draw(sword, (float)(position.x - 3), (float)(position.y));
+		
+		Vector swordPos = position.copy().add((new Vector().setAngle(swordRotation, 10))).add(0, 20);
+		float renderRotation = (float)Math.toDegrees(swordRotation) - 90;
+		renderer.getSpriteBatch().draw(sword, (float)swordPos.x - (sword.getWidth() / 2), (float)swordPos.y - (sword.getHeight() / 2), 6, 3, sword.getWidth(), sword.getHeight(), 1, 1, renderRotation, 0, 0, sword.getWidth(), sword.getHeight(), false, false);
+//		batch.draw(texture, position.x, position.y, pivot.x, pivot.y, texture.getWidth(), texture.getHeight(), scaleX, scaleY, -rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 	}
 }

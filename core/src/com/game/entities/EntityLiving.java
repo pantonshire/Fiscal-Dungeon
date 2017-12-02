@@ -61,7 +61,7 @@ public abstract class EntityLiving extends Entity {
 
 		if(velocity.y != 0) {
 			if(hitbox.collidedVertical(world.getTileMap())) {
-				velocity.x = 0;
+				velocity.y = 0;
 				touchedCollidable = true;
 			}
 		}

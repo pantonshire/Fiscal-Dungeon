@@ -3,12 +3,8 @@ package com.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.audio.SoundEffects;
-import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
-import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.world.World;
 

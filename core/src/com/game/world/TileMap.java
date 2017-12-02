@@ -32,7 +32,7 @@ public class TileMap {
 	}
 	
 	private int getBorderSize() {
-		return 2;
+		return 0;
 	}
 
 	public byte getTile(int x, int y) {

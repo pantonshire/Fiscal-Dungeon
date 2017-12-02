@@ -15,12 +15,16 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.rooms.HorizontalCorridor;
+import com.game.rooms.StartRoom;
+import com.game.rooms.TestRoom;
+import com.game.rooms.VerticalCorridor;
 import com.game.vector.Vector;
 
 public class World {
 
-	private LayerRenderer gameRenderer;
-	private LayerRenderer overlayRenderer;
+	public LayerRenderer gameRenderer;
+	public LayerRenderer overlayRenderer;
 	private boolean paused;
 	private int gameOverTimer;
 	private TileMap tiles;
@@ -34,12 +38,16 @@ public class World {
 	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
-		tiles = new TileMap(Textures.instance.getTexture("tilemap"), new byte[100][100], 20);
+		tiles = TileMapFactory.newBlankMap("tilemap", (byte)-8, 32, 100, 100);
+		TileMapFactory.insertRoom(tiles, new StartRoom(this), 0, 0);
+		TileMapFactory.insertRoom(tiles, new TestRoom(this), 16, 0);
+		TileMapFactory.insertRoom(tiles, new VerticalCorridor(this), 3, 9);
+		TileMapFactory.insertRoom(tiles, new HorizontalCorridor(this), 9, 3);
 		entities = new ArrayList<Entity>();
 		spawnQueue = new HashSet<Entity>();
 		coins = new ArrayList<Coin>();
 
-		createPlayer(0, 0);
+		createPlayer(50, 50);
 		for(int i = 0; i < 100; i++) {
 			spawn(new GoldCoin(this, 350, 300 + i * 10));
 			spawn(new RedGem(this, 380, 300 + i * 10));
@@ -141,6 +149,7 @@ public class World {
 	}
 
 	private void renderGameLayer() {
+		tiles.render(gameRenderer);
 		for(Entity entity : entities) {
 			entity.render(gameRenderer);
 		}

@@ -1,5 +1,6 @@
 package com.game.input;
 
+import com.game.graphics.LayerRenderer;
 import com.game.vector.Vector;
 
 public abstract class Input {
@@ -10,7 +11,7 @@ public abstract class Input {
 	public abstract boolean down();
 	public abstract boolean left();
 	public abstract boolean right();
-	public abstract Vector getTargetPos();
+	public abstract Vector getTargetPos(LayerRenderer renderer);
 	public abstract boolean isPerformingAction(Action action);
 	public abstract boolean isJustPerformingAction(Action action);
 }
