@@ -135,7 +135,8 @@ public abstract class EntityLiving extends Entity {
 	}
 	
 	public boolean canSee(Entity other) {
-		double ownX = position.x, ownY = position.y, otherX = other.position.x, otherY = other.position.y;
+		int tileSize = world.getTileMap().getTileSize();
+		double ownX = position.x / tileSize, ownY = position.y / tileSize, otherX = other.position.x / tileSize, otherY = other.position.y / tileSize;
 		
 		double deltaX = Math.abs(otherX - ownX);
 		double deltaY = Math.abs(otherY - ownY);
