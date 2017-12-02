@@ -89,6 +89,18 @@ public class Vector {
 		return x * x + y * y;
 	}
 	
+	public double distBetween(Vector other) {
+		double deltaX = x - other.x;
+		double deltaY = y - other.y;
+		return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+	}
+
+	public double distSqBetween(Vector other) {
+		double deltaX = x - other.x;
+		double deltaY = y - other.y;
+		return deltaX * deltaX + deltaY * deltaY;
+	}
+	
 	public double angleBetween(Vector other) {
 		return Math.atan2(other.y - y, other.x - x);
 	}

@@ -7,6 +7,10 @@ import com.game.Main;
 public class DesktopLauncher {
 	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Fiscal Dungeon";
+		config.width = 1280;
+		config.height = 800;
+		config.resizable = false;
 		new LwjglApplication(new Main(), config);
 	}
 }
