@@ -16,7 +16,7 @@ public class World {
 		this.overlayRenderer = overlayRenderer;
 		
 		tiles = new TileMap(Textures.instance.getTexture("coin"), new byte[100][100], 20);
-		player = new Player(this, 0, 0);
+		player = new Player(this, 300, 300);
 	}
 	
 	public TileMap getTileMap() {
