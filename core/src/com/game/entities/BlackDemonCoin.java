@@ -18,7 +18,7 @@ public class BlackDemonCoin extends Enemy {
 	private double startAngle;
 
 	public BlackDemonCoin(World world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 15);
+		super(world, x, y, 30, 30, 0.25, 8);
 		animation = new Animation(Textures.instance.getTexture("black_demon_coin"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),

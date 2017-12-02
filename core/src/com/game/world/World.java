@@ -176,9 +176,11 @@ public class World {
 	}
 
 	private void renderOverlayLayer() {
-		overlayRenderer.getSpriteBatch().draw(coin.getFrame(), 20, Gdx.graphics.getHeight() - 40);
+		overlayRenderer.getSpriteBatch().draw(coin.getFrame(), 330, Gdx.graphics.getHeight() / 2 + 180);
 		coin.updateTimer();
-		overlayRenderer.setTextColour(Color.BLACK);
-		overlayRenderer.drawText("x " + player.getCoins(), 40, Gdx.graphics.getHeight() - 27);
+		overlayRenderer.setTextColour(Color.WHITE);
+		overlayRenderer.drawText("x " + player.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
+		double weight = player.getCoins() * 12.0D / 100.0D;
+		overlayRenderer.drawText("Weight: " + weight + " kg", 334, Gdx.graphics.getHeight() / 2 + 172);
 	}
 }
