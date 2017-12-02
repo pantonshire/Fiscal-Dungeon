@@ -106,7 +106,7 @@ public class Player extends EntityLiving {
 			}
 		}
 		
-		armRotation = position.angleBetween(Input.instance.getTargetPos(world.gameRenderer));
+		armRotation = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(world.gameRenderer));
 		
 		if(Input.instance.isPerformingAction(Action.ATTACK)) {
 			
@@ -122,17 +122,31 @@ public class Player extends EntityLiving {
 	}
 
 	public void render(LayerRenderer renderer) {
+		if(facing == 0 || facing == 1 || facing == 3) {
+			renderBody(renderer);
+			renderArm(renderer);
+		}
+		
+		else {
+			renderArm(renderer);
+			renderBody(renderer);
+		}
+	}
+	
+	private void renderBody(LayerRenderer renderer) {
 		boolean walking = isWalking();
 		if(!animation.isPaused() && !walking) { animation.resetFrame(); }
 		animation.setPaused(!walking);
 		if(!animation.isPaused()) { animation.setSequence(facing, false); }
-
+		
 		renderer.getSpriteBatch().draw(animation.getFrame(), (float)(position.x - (animation.getFrameWidth() / 2)), (float)(position.y - (animation.getFrameHeight() / 2)));
 		animation.updateTimer();
-		
+	}
+	
+	private void renderArm(LayerRenderer renderer) {
 		float renderRotation = (float)Math.toDegrees(armRotation) - 90;
 		Vector armPos = position.copy().add(-3, 11);
-		
 		renderer.getSpriteBatch().draw(bow.getFrame(), (float)armPos.x - (bow.getFrameWidth() / 2), (float)armPos.y - (bow.getFrameHeight() / 2), 9, 1, bow.getFrameWidth(), bow.getFrameHeight(), 1, 1, renderRotation);
+		bow.updateTimer();
 	}
 }
