@@ -114,8 +114,7 @@ public class BigGem extends Enemy {
 	protected void onDeath() {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i < 10; i++) {
-			Coin coin = new RedGem(world, position.x, position.y);
-			coin.getVelocity().setAngle(RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
+			Coin coin = new RedGemProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
 			world.spawn(coin);
 		}
 		

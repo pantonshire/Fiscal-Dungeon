@@ -12,7 +12,7 @@ public class Arrow extends Entity {
 	private Texture texture;
 	private Hitbox hitbox;
 	private double angle;
-	
+
 	public Arrow(World world, double x, double y, double angle, double speed) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 3, 3);
@@ -20,7 +20,7 @@ public class Arrow extends Entity {
 		velocity.setAngle(angle, speed);
 		this.angle = angle;
 	}
-	
+
 	public void updateTileCollisions() {
 		boolean touchedCollidable = false;
 
@@ -42,21 +42,22 @@ public class Arrow extends Entity {
 			destroy();
 		}
 	}
-	
+
 	protected void updateEntity() {
 		updateTileCollisions();
-		
+
 		if(!shouldRemove()) {
 			ArrayList<Enemy> enemies = world.getEnemies();
 			for(Enemy enemy : enemies) {
 				if(hitbox.intersectsHitbox(enemy.hitbox)) {
-					enemy.damage(1);
-					destroy();
+					if(enemy.damage(1)) {
+						destroy();
+					}
 				}
 			}
 		}
 	}
-	
+
 	public void render(LayerRenderer renderer) {
 		int width = texture.getWidth(), height = texture.getHeight();
 		float renderAngle = (float)Math.toDegrees(angle) + 90;

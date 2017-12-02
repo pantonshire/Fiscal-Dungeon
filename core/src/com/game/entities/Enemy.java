@@ -1,5 +1,6 @@
 package com.game.entities;
 
+import com.game.audio.SoundEffects;
 import com.game.world.World;
 
 public abstract class Enemy extends EntityLiving {
@@ -11,12 +12,18 @@ public abstract class Enemy extends EntityLiving {
 		this.health = health;
 	}
 
-	public void damage(int amount) {
+	public boolean damage(int amount) {
 		health -= amount;
 		if(health <= 0) {
 			destroy();
 			onDeath();
 		}
+		
+		else {
+			SoundEffects.instance.play("hurt", 1, 1, 0);
+		}
+		
+		return true;
 	}
 	
 	protected abstract void onDeath();

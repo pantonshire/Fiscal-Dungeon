@@ -6,10 +6,8 @@ import java.util.HashSet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.game.entities.BigGem;
+import com.game.entities.BlackDemonCoin;
 import com.game.entities.Coin;
-import com.game.entities.CoinSnake;
-import com.game.entities.DemonCoin;
 import com.game.entities.Enemy;
 import com.game.entities.Entity;
 import com.game.entities.Player;
@@ -56,9 +54,10 @@ public class World {
 //			spawn(new GoldCoin(this, 350, 300 + i * 10));
 //			spawn(new RedGem(this, 380, 300 + i * 10));
 //		}
-		spawn(new CoinSnake(this, 650, 300));
-		spawn(new BigGem(this, 650, 350));
-		spawn(new DemonCoin(this, 650, 400));
+//		spawn(new CoinSnake(this, 650, 300));
+//		spawn(new BigGem(this, 650, 350));
+//		spawn(new DemonCoin(this, 650, 400));
+		spawn(new BlackDemonCoin(this, 650, 400));
 		
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 	}

@@ -118,6 +118,7 @@ public class Player extends EntityLiving {
 			bow.setSequence(1, true);
 			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position);
 			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, 7));
+			SoundEffects.instance.play("schut", 1, 1, 0);
 		}
 		
 		ArrayList<Coin> coins = world.getCoins();

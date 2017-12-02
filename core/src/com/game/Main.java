@@ -17,7 +17,7 @@ public class Main extends ApplicationAdapter {
 	public void create() {
 //		batch = new SpriteBatch();
 //		img = new Texture("textures/gem_red.png");
-		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select");
+		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut");
 //		SoundEffects.instance.play("good", 1, 1, 0);
 		
 //		anmtest = new Animation(TextureManager.instance.getTexture("gem_red"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
