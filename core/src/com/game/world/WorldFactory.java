@@ -40,16 +40,31 @@ public class WorldFactory {
 	
 	public static String getFloorName() {
 		switch(floor) {
-		case 0:
+		case EASY:
 			return "dungeon entrance";
-		case 1:
+		case NORMAL:
 			return "dungeon depths";
-		case 2:
+		case HARD:
 			return "treasure trove";
-		case 3:
+		case MADNESS:
 			return "madness";
 		default:
 			return "you shouldn\'t see this message";
+		}
+	}
+	
+	public static String getTileset() {
+		switch(floor) {
+		case EASY:
+			return "tilemap";
+		case NORMAL:
+			return "tilemap_2";
+		case HARD:
+			return "tilemap_3";
+		case MADNESS:
+			return "tilemap_4";
+		default:
+			return "tilemap";
 		}
 	}
 }

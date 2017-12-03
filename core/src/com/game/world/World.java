@@ -49,7 +49,7 @@ public class World {
 
 		createPlayer(732, 256);
 		
-		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, width, height);
+		tiles = TileMapFactory.newBlankMap(WorldFactory.getTileset(), (byte)1, 32, width, height);
 		tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor);
 	}
 

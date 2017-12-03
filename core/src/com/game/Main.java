@@ -101,7 +101,16 @@ public class Main extends ApplicationAdapter {
 		}
 		
 		else if(screen == 1) {
+			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+				screen = 0;
+			}
 			
+			overlayRenderer.beginBatch();
+			renderMenuBg();
+			overlayRenderer.drawText("Congratulations on conquering the Fiscal Dungeon!", 340, 580);
+			overlayRenderer.drawText("Thank you for playing my game.", 340, 560);
+			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 540);
+			overlayRenderer.endBatch();
 		}
 		
 		else if(screen == 2) {
@@ -117,10 +126,11 @@ public class Main extends ApplicationAdapter {
 			overlayRenderer.drawText("Your quest will not be easy. The dungeon is full of gold and treasure, but beware; many", 340, 500);
 			overlayRenderer.drawText("believe it all to be cursed. After all, the theme of this Ludum Dare is \"the more you have, the", 340, 480);
 			overlayRenderer.drawText("worse it is\"!", 340, 460);
-			overlayRenderer.drawText("A polite reminder that, by dungeon law, adventurers are required to pay a \'murder tax\' of 10", 340, 430);
-			overlayRenderer.drawText("gold coins for each dungeon entity they slaugher on their travels. If you see any tax return", 340, 410);
-			overlayRenderer.drawText("documents, I implore you to do the lawful thing and pick them up in order to pay them.", 340, 390);
-			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 360);
+			overlayRenderer.drawText("Obtaining 100 coins in the dungeon will likely result in your death.", 340, 440);
+			overlayRenderer.drawText("A polite reminder that, by dungeon law, adventurers are required to pay a \'murder tax\' of 10", 340, 410);
+			overlayRenderer.drawText("gold coins for each dungeon entity they slaugher on their travels. If you see any tax return", 340, 390);
+			overlayRenderer.drawText("documents, I implore you to do the lawful thing and pick them up in order to pay them.", 340, 370);
+			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 340);
 			overlayRenderer.endBatch();
 		}
 	}

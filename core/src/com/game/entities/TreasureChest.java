@@ -113,7 +113,7 @@ public class TreasureChest extends Enemy {
 					switch(RandomUtils.randInt(4)) {
 					case 0:
 						for(int i = 0; i < 10; i++) {
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 8, RandomUtils.randDouble(1, 2.5)));
+							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 8, RandomUtils.randDouble(2.5, 4)));
 						}
 						break;
 					case 1:
@@ -127,7 +127,7 @@ public class TreasureChest extends Enemy {
 						break;
 					case 2:
 						for(int i = 0; i < 40; i++) {
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - RandomUtils.randDouble(Math.toRadians(20)) + Math.toRadians(10), RandomUtils.randDouble(2, 4)));
+							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - RandomUtils.randDouble(Math.toRadians(40)) + Math.toRadians(20), RandomUtils.randDouble(2, 4)));
 						}
 						break;
 					case 3:
@@ -138,6 +138,8 @@ public class TreasureChest extends Enemy {
 					case 4:
 						for(int i = 0; i <= 20; i++) {
 							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.5));
+							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.25));
+							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.0));
 						}
 						break;
 					}
@@ -198,7 +200,7 @@ public class TreasureChest extends Enemy {
 			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1));
 		}
 
-		if(RandomUtils.randDouble() < 0.3) {
+		if(RandomUtils.randDouble() < 0.15) {
 			world.spawn(new Tax(world, position.x, position.y));
 		}
 	}

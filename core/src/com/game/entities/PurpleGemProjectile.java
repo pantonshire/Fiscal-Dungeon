@@ -26,6 +26,6 @@ public class PurpleGemProjectile extends Coin {
 	}
 	
 	private double getSpeed() {
-		return world.getPlayer().getWalkSpeed() - 0.75;
+		return world.getPlayer().getWalkSpeed() - 0.6;
 	}
 }

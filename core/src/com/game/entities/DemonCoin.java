@@ -43,7 +43,7 @@ public class DemonCoin extends Enemy {
 					phase = 1;
 					timer = 120;
 					for(int i = 0; i < 12; i++) {
-						world.spawn(new CoinProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position) - RandomUtils.randDouble(Math.toRadians(16)) + Math.toRadians(8), RandomUtils.randDouble(1, 3)));
+						world.spawn(new CoinProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position) - RandomUtils.randDouble(Math.toRadians(30)) + Math.toRadians(15), RandomUtils.randDouble(1, 3)));
 					}
 				}
 			}
