@@ -3,6 +3,7 @@ package com.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
@@ -102,6 +103,27 @@ public class Main extends ApplicationAdapter {
 		else if(screen == 1) {
 			
 		}
+		
+		else if(screen == 2) {
+			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+				screen = 0;
+			}
+			
+			overlayRenderer.beginBatch();
+			overlayRenderer.setTextColour(Color.BLACK);
+			overlayRenderer.drawText("Welcome, brave adventurer, to the Fiscal Dungeon!", 340, 580);
+			overlayRenderer.drawText("Once you embark on your quest to conquer the dungeon, use the W, A, S and D keys to move,", 340, 550);
+			overlayRenderer.drawText("use your mouse to aim your bow and use left-click to shoot.", 340, 530);
+			overlayRenderer.drawText("Your quest will not be easy. The dungeon is full of gold and treasure, but beware; many", 340, 500);
+			overlayRenderer.drawText("believe it all to be cursed. After all, the theme of this Ludum Dare is \"the more you have, the", 340, 480);
+			overlayRenderer.drawText("worse it is\"!", 340, 460);
+			overlayRenderer.drawText("A polite reminder that, by dungeon law, adventurers are required to pay a \'murder tax\' of 10", 340, 430);
+			overlayRenderer.drawText("gold coins for each dungeon entity they slaugher on their travels. If you see any tax return", 340, 410);
+			overlayRenderer.drawText("documents, I implore you to do the lawful thing and pick them up in order to pay them.", 340, 390);
+			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 360);
+			overlayRenderer.setTextColour(Color.WHITE);
+			overlayRenderer.endBatch();
+		}
 	}
 	
 	public void dispose() {
@@ -123,6 +145,6 @@ public class Main extends ApplicationAdapter {
 	
 	public static void toCongratulesScreen() {
 		screen = 1;
-		instance.deleteWorld = true;;
+		instance.deleteWorld = true;
 	}
 }
