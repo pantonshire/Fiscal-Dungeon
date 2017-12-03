@@ -47,7 +47,7 @@ public class World {
 		coins = new ArrayList<Coin>();
 		enemies = new ArrayList<Enemy>();
 
-		createPlayer(764, 288);
+		createPlayer(732, 256);
 		
 		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, width, height);
 		tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor);

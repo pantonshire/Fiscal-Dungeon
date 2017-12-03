@@ -3,7 +3,6 @@ package com.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
@@ -92,6 +91,7 @@ public class Main extends ApplicationAdapter {
 			Texture quit = Textures.instance.getTexture("quit");
 			
 			overlayRenderer.beginBatch();
+			renderMenuBg();
 			overlayRenderer.getSpriteBatch().draw(title, Gdx.graphics.getWidth() / 2 - title.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 120);
 			overlayRenderer.getSpriteBatch().draw(newGame, Gdx.graphics.getWidth() / 2 - newGame.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 20);
 			overlayRenderer.getSpriteBatch().draw(help, Gdx.graphics.getWidth() / 2 - newGame.getWidth() / 2, Gdx.graphics.getHeight() / 2 - 30);
@@ -110,7 +110,7 @@ public class Main extends ApplicationAdapter {
 			}
 			
 			overlayRenderer.beginBatch();
-			overlayRenderer.setTextColour(Color.BLACK);
+			renderMenuBg();
 			overlayRenderer.drawText("Welcome, brave adventurer, to the Fiscal Dungeon!", 340, 580);
 			overlayRenderer.drawText("Once you embark on your quest to conquer the dungeon, use the W, A, S and D keys to move,", 340, 550);
 			overlayRenderer.drawText("use your mouse to aim your bow and use left-click to shoot.", 340, 530);
@@ -121,7 +121,6 @@ public class Main extends ApplicationAdapter {
 			overlayRenderer.drawText("gold coins for each dungeon entity they slaugher on their travels. If you see any tax return", 340, 410);
 			overlayRenderer.drawText("documents, I implore you to do the lawful thing and pick them up in order to pay them.", 340, 390);
 			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 360);
-			overlayRenderer.setTextColour(Color.WHITE);
 			overlayRenderer.endBatch();
 		}
 	}
@@ -135,6 +134,15 @@ public class Main extends ApplicationAdapter {
 	private void clearScreen() {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	}
+	
+	private void renderMenuBg() {
+		Texture bg = Textures.instance.getTexture("bg");
+		for(int x = 0; x < 20; x++) {
+			for(int y = 0; y < 13; y++) {
+				overlayRenderer.getSpriteBatch().draw(bg, x * bg.getWidth() + 320, y * bg.getWidth() + 200);
+			}
+		}
 	}
 	
 	public static void toMainMenu() {

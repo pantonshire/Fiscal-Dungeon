@@ -114,7 +114,7 @@ public class TileMapFactory {
 			TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, point.x, point.y, difficulty);
 		}
 
-		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 24, 14, difficulty);
+		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 23, 14, difficulty);
 
 		return map;
 	}
