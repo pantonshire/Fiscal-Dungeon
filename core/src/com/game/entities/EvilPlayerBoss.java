@@ -205,5 +205,12 @@ public class EvilPlayerBoss extends Enemy {
 		int x = world.getTileMap().getMapCoordinate(position.x), y = world.getTileMap().getMapCoordinate(position.y);
 		world.getTileMap().setTile(x, y, (byte)-9);
 		world.spawn(new Trapdoor(world, world.getTileMap().getWorldCoordinate(x), world.getTileMap().getWorldCoordinate(y)));
+		
+		ArrayList<Enemy> enemies = world.getEnemies();
+		for(Enemy enemy : enemies) {
+			if(enemy != this) {
+				enemy.damage(1000);
+			}
+		}
 	}
 }

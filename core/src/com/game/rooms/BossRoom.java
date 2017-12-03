@@ -1,7 +1,8 @@
 package com.game.rooms;
 
+import com.game.entities.BlackDemonCoin;
 import com.game.entities.EvilPlayerBoss;
-import com.game.entities.TreasureChest;
+import com.game.entities.GemBoss;
 import com.game.entities.TreasureChestBoss;
 import com.game.world.TileMap;
 import com.game.world.World;
@@ -63,8 +64,13 @@ public class BossRoom extends Room {
 			break;
 		case WorldFactory.BOSS_3:
 			world.spawn(new EvilPlayerBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
-			world.spawn(new TreasureChest(world, tiles.getWorldCoordinate(minX + 10), tiles.getWorldCoordinate(minY + 19)));
-			world.spawn(new TreasureChest(world, tiles.getWorldCoordinate(minX + 28), tiles.getWorldCoordinate(minY + 19)));
+			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 10), tiles.getWorldCoordinate(minY + 21)));
+			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 28), tiles.getWorldCoordinate(minY + 21)));
+			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 10), tiles.getWorldCoordinate(minY + 17)));
+			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 28), tiles.getWorldCoordinate(minY + 17)));
+			break;
+		case WorldFactory.BOSS_4:
+			world.spawn(new GemBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
 			break;
 		}
 	}
