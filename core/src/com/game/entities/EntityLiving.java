@@ -140,6 +140,10 @@ public abstract class EntityLiving extends Entity {
 		
 		double deltaX = Math.abs(otherX - ownX);
 		double deltaY = Math.abs(otherY - ownY);
+		
+		if(deltaX > 1600 || deltaY > 1600) {
+			return false;
+		}
 
 		int x = (int)ownX;
 		int y = (int)ownY;

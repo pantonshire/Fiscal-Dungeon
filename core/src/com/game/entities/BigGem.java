@@ -122,5 +122,9 @@ public class BigGem extends Enemy {
 			Coin projectile = new PurpleGemProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, world.getPlayer().getWalkSpeed() - 0.5);
 			world.spawn(projectile);
 		}
+		
+		if(RandomUtils.randDouble() < 0.1) {
+			world.spawn(new Tax(world, position.x, position.y));
+		}
 	}
 }

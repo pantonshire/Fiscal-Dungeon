@@ -16,7 +16,7 @@ import com.game.world.World;
 public class Player extends EntityLiving {
 
 	private static final int MAX_COINS = 100; //You die when you reach 100 coins
-	private static final int SHOOT_TIME = 20;
+	private static final int SHOOT_TIME = 12;
 	
 	private Animation animation;
 	private Animation bow;
@@ -26,7 +26,7 @@ public class Player extends EntityLiving {
 	private int shootTimer;
 
 	public Player(World world, double x, double y) {
-		super(world, x, y, 10, 30, 1.5);
+		super(world, x, y, 10, 30, 2);
 		animation = new Animation(Textures.instance.getTexture("player"),
 				Sequence.formatSequences(
 						new Sequence(16, 35, 5, 4),
@@ -39,7 +39,7 @@ public class Player extends EntityLiving {
 		bow = new Animation(Textures.instance.getTexture("bow"),
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
-						new Sequence(18, 14, 3, 5).setNoLoop()));
+						new Sequence(18, 14, 2, 5).setNoLoop()));
 	}
 	
 	public int getCoins() {
@@ -50,6 +50,10 @@ public class Player extends EntityLiving {
 		coins += amount;
 		if(coins >= MAX_COINS) {
 			die();
+		}
+		
+		if(coins < 0) {
+			coins = 0;
 		}
 	}
 

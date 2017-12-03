@@ -1,5 +1,7 @@
 package com.game.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
 import com.game.graphics.LayerRenderer;
 import com.game.vector.Vector;
 import com.game.world.World;
@@ -47,6 +49,14 @@ public abstract class Entity {
 		if(!velocity.isZero()) {
 			position.add(velocity);
 		}
+	}
+	
+	public boolean isOnScreen(LayerRenderer renderer) {
+		float zoom = renderer.getCamera().zoom;
+		float halfWidth = Gdx.graphics.getWidth() / 2 * zoom, halfHeight = Gdx.graphics.getHeight() / 2 * zoom;
+		Vector3 cameraPos = renderer.getCamera().position;
+		float minX = cameraPos.x - halfWidth, maxX = cameraPos.x + halfWidth, minY = cameraPos.y - halfHeight, maxY = cameraPos.y + halfHeight;
+		return position.x + 32 >= minX && position.x <= maxX + 32 && position.y + 32 >= minY && position.y <= maxY + 32;
 	}
 	
 	/** Used by subclasses of entity to update their behaviour. */

@@ -22,7 +22,7 @@ public class CoinSnake extends Enemy {
 	private int dropCoinTimer;
 	
 	public CoinSnake(World world, double x, double y) {
-		super(world, x, y, 14, 14, 1, 3);
+		super(world, x, y, 14, 14, 1, 1);
 		animation = new Animation(Textures.instance.getTexture("coin_snake"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		path = new ArrayList<Point>();
 	}
@@ -116,6 +116,10 @@ public class CoinSnake extends Enemy {
 		for(int i = 0; i < 5; i++) {
 			Coin coin = new CoinProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, RandomUtils.randDouble(0.5, 1.0));
 			world.spawn(coin);
+		}
+		
+		if(RandomUtils.randDouble() < 0.05) {
+			world.spawn(new Tax(world, position.x, position.y));
 		}
 	}
 }

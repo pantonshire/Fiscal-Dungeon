@@ -15,17 +15,15 @@ public class Main extends ApplicationAdapter {
 	private World currentWorld;
 	
 	public void create() {
-//		batch = new SpriteBatch();
-//		img = new Texture("textures/gem_red.png");
 		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut");
-//		SoundEffects.instance.play("good", 1, 1, 0);
-		
-//		anmtest = new Animation(TextureManager.instance.getTexture("gem_red"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
-//		anmtest = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		
 		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
-		currentWorld = new World(gameRenderer, overlayRenderer);
+		currentWorld = new World(gameRenderer, overlayRenderer, 100, 100);
+		//First 100 x 100
+		//Second 180 x 180
+		//Third 240 x 240
+		//Fourth 320 x 320
 	}
 	
 	public void render() {
@@ -40,17 +38,9 @@ public class Main extends ApplicationAdapter {
 			currentWorld.render(1);
 			overlayRenderer.endBatch();
 		}
-		
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.draw(anmtest.getFrame(), 30, 30);
-//		anmtest.updateTimer();
-//		batch.end();
 	}
 	
 	public void dispose() {
-//		batch.dispose();
-//		img.dispose();
 		gameRenderer.dispose();
 		Textures.instance.dispose();
 		SoundEffects.instance.dispose();

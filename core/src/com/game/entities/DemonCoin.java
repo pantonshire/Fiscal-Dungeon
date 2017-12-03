@@ -17,7 +17,7 @@ public class DemonCoin extends Enemy {
 	private int phase;
 
 	public DemonCoin(World world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 10);
+		super(world, x, y, 30, 30, 0.25, 12);
 		animation = new Animation(Textures.instance.getTexture("demon_coin"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),
@@ -41,7 +41,7 @@ public class DemonCoin extends Enemy {
 			if(phase == 0) {
 				if(canSee(world.getPlayer())) {
 					phase = 1;
-					timer = 30;
+					timer = 120;
 					for(int i = 0; i < 20; i++) {
 						world.spawn(new CoinProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position) + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 4, RandomUtils.randDouble(1, 3)));
 					}
@@ -91,6 +91,10 @@ public class DemonCoin extends Enemy {
 		for(int i = 0; i < 20; i++) {
 			Coin coin = RandomUtils.randDouble() < 0.05 ? new RedGemProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.5)) : new CoinProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.5));
 			world.spawn(coin);
+		}
+		
+		if(RandomUtils.randDouble() < 0.1) {
+			world.spawn(new Tax(world, position.x, position.y));
 		}
 	}
 }

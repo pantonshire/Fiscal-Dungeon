@@ -17,7 +17,7 @@ public class BigRedGem extends Enemy {
 	private double angle;
 	
 	public BigRedGem(World world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 20);
+		super(world, x, y, 30, 30, 0.25, 15);
 		animation = new Animation(Textures.instance.getTexture("big_red_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 	}
 	
@@ -29,7 +29,7 @@ public class BigRedGem extends Enemy {
 			attackTimer = ATTACK_RATE;
 			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1.5));
 			world.spawn(new CoinProjectile(world, position.x, position.y, angle + Math.PI, 1.5));
-			angle += Math.toRadians(10);
+			angle += Math.toRadians(16);
 			
 			if(angle > Math.PI) {
 				angle -= Math.PI * 2;
@@ -52,6 +52,10 @@ public class BigRedGem extends Enemy {
 		for(int i = 0; i < 5; i++) {
 			Coin projectile = new CoinProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, 4);
 			world.spawn(projectile);
+		}
+		
+		if(RandomUtils.randDouble() < 0.1) {
+			world.spawn(new Tax(world, position.x, position.y));
 		}
 	}
 }

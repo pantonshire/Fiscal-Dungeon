@@ -12,6 +12,7 @@ public class Arrow extends Entity {
 	private Texture texture;
 	private Hitbox hitbox;
 	private double angle;
+	private int time;
 
 	public Arrow(World world, double x, double y, double angle, double speed) {
 		super(world, x, y);
@@ -44,6 +45,10 @@ public class Arrow extends Entity {
 	}
 
 	protected void updateEntity() {
+		if(++time > 60) {
+			destroy();
+		}
+		
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
@@ -60,7 +65,7 @@ public class Arrow extends Entity {
 
 	public void render(LayerRenderer renderer) {
 		int width = texture.getWidth(), height = texture.getHeight();
-		float renderAngle = (float)Math.toDegrees(angle) + 90;
+		float renderAngle = (float)Math.toDegrees(angle) - 90;
 		renderer.getSpriteBatch().draw(texture, (float)position.x - width / 2, (float)position.y - width / 2, width / 2, height / 2, width, height, 1, 1, renderAngle, 0, 0, width, height, false, false);
 	}
 }

@@ -10,20 +10,18 @@ import com.game.entities.Coin;
 import com.game.entities.Enemy;
 import com.game.entities.Entity;
 import com.game.entities.Player;
+import com.game.entities.TreasureChest;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
-import com.game.rooms.HorizontalCorridor;
-import com.game.rooms.StandardRoom;
-import com.game.rooms.StartRoom;
-import com.game.rooms.VerticalCorridor;
 import com.game.vector.Vector;
 
 public class World {
 
 	public LayerRenderer gameRenderer;
 	public LayerRenderer overlayRenderer;
+	public int difficulty;
 	private boolean paused;
 	private int gameOverTimer;
 	private TileMap tiles;
@@ -35,7 +33,7 @@ public class World {
 	
 	private Animation coin;
 
-	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer) {
+	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
@@ -46,15 +44,10 @@ public class World {
 
 		createPlayer(640, 160);
 		
-//		TileMapFactory.insertRoom(tiles, new StartRoom(this), this, 0, 0);
-//		TileMapFactory.insertRoom(tiles, new StandardRoom(this), this, 16, 0);
-//		TileMapFactory.insertRoom(tiles, new StandardRoom(this), this, 38, 0);
-//		TileMapFactory.insertRoom(tiles, new VerticalCorridor(this), this, 3, 9);
-//		TileMapFactory.insertRoom(tiles, new HorizontalCorridor(this), this, 9, 3);
-//		TileMapFactory.insertRoom(tiles, new HorizontalCorridor(this), this, 31, 3);
-		
-		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, 1000, 1000);
+		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, width, height);
 		tiles = TileMapFactory.generateRandomMap(this, tiles, 4);
+		
+		spawn(new TreasureChest(this, 680, 160));
 	}
 
 	public TileMap getTileMap() {
@@ -170,7 +163,9 @@ public class World {
 	private void renderGameLayer() {
 		tiles.render(gameRenderer);
 		for(Entity entity : entities) {
-			entity.render(gameRenderer);
+			if(entity.isOnScreen(gameRenderer)) {
+				entity.render(gameRenderer);
+			}
 		}
 	}
 
@@ -184,6 +179,10 @@ public class World {
 		
 		if(player.shouldRemove() && gameOverTimer < 0) {
 			overlayRenderer.drawText("GAME OVER", Gdx.graphics.getWidth() / 2 - 60, Gdx.graphics.getHeight() / 2);
+		}
+		
+		else if(paused) {
+			overlayRenderer.drawText("PAUSED", Gdx.graphics.getWidth() / 2 - 60, Gdx.graphics.getHeight() / 2);
 		}
 	}
 }
