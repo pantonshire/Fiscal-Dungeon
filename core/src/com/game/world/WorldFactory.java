@@ -33,4 +33,19 @@ public class WorldFactory {
 	public static boolean nextFloorExists() {
 		return floor < NUM_FLOORS - 1;
 	}
+	
+	public static String getFloorName() {
+		switch(floor) {
+		case 0:
+			return "dungeon entrance";
+		case 1:
+			return "dungeon depths";
+		case 2:
+			return "treasure trove";
+		case 3:
+			return "madness";
+		default:
+			return "you shouldn\'t see this message";
+		}
+	}
 }

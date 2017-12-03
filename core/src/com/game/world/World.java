@@ -6,6 +6,7 @@ import java.util.HashSet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.game.entities.Coin;
 import com.game.entities.Enemy;
 import com.game.entities.Entity;
@@ -23,7 +24,7 @@ public class World {
 	public int difficulty;
 	private boolean paused;
 	private int gameOverTimer;
-	private int fadeOut, fadeIn;
+	private int fadeOut, fadeIn, roomTitle;
 	private TileMap tiles;
 	private Player player;
 	private ArrayList<Entity> entities;
@@ -38,6 +39,7 @@ public class World {
 		this.overlayRenderer = overlayRenderer;
 		fadeOut = -1;
 		fadeIn = 60;
+		roomTitle = 240;
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		entities = new ArrayList<Entity>();
 		spawnQueue = new HashSet<Entity>();
@@ -78,7 +80,7 @@ public class World {
 		entities.add(entity);
 		if(entity instanceof Coin) {
 			coins.add((Coin)entity);
-			if(coins.size() >= 500) {
+			if(coins.size() >= 5000) {
 				Coin toRemove = coins.get(0);
 				entities.remove(toRemove);
 				coins.remove(0);
@@ -199,6 +201,15 @@ public class World {
 		overlayRenderer.drawText("x " + player.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
 		double weight = player.getCoins() * 12.0D / 100.0D;
 		overlayRenderer.drawText("Weight: " + weight + " kg", 334, Gdx.graphics.getHeight() / 2 + 172);
+		
+		if(roomTitle > 0) {
+			--roomTitle;
+			overlayRenderer.drawText("Weight: " + weight + " kg", 334, Gdx.graphics.getHeight() / 2 + 172);
+			String text = "Floor " + (WorldFactory.floor + 1) + ": " + WorldFactory.getFloorName();
+			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
+			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
+			overlayRenderer.drawText(text, x, y);
+		}
 		
 		if(player.shouldRemove() && gameOverTimer < 0) {
 			overlayRenderer.drawText("GAME OVER", Gdx.graphics.getWidth() / 2 - 60, Gdx.graphics.getHeight() / 2);
