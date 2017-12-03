@@ -9,6 +9,8 @@ public class HorizontalCorridor extends Room {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 },
 			new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 },
+			new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 },
+			new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 },
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1 }
 		});
 	}

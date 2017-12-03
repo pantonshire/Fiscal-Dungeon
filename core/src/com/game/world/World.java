@@ -23,6 +23,7 @@ public class World {
 	public int difficulty;
 	private boolean paused;
 	private int gameOverTimer;
+	private int fadeOut, fadeIn;
 	private TileMap tiles;
 	private Player player;
 	private ArrayList<Entity> entities;
@@ -35,13 +36,15 @@ public class World {
 	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
+		fadeOut = -1;
+		fadeIn = 60;
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		entities = new ArrayList<Entity>();
 		spawnQueue = new HashSet<Entity>();
 		coins = new ArrayList<Coin>();
 		enemies = new ArrayList<Enemy>();
 
-		createPlayer(640, 160);
+		createPlayer(764, 288);
 		
 		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, width, height);
 		tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor);
@@ -96,6 +99,10 @@ public class World {
 		gameOverTimer = 120;
 	}
 	
+	public void nextRoom() {
+		fadeOut = 60;
+	}
+	
 	private void updateCamera() {
 		OrthographicCamera camera = gameRenderer.getCamera();
 		Vector cameraPos = player.getPosition().copy().add(0, 40);
@@ -110,7 +117,7 @@ public class World {
 	}
 
 	public void update() {
-		if(!paused) {
+		if(!paused && fadeOut == -1) {
 			for(Entity entity : entities) {
 				entity.update();
 			}
@@ -142,6 +149,14 @@ public class World {
 		if(gameOverTimer <= -120) {
 			//Go to main menu
 		}
+		
+		if(fadeOut > 0 && --fadeOut == 0) {
+			WorldFactory.nextFloor(this);
+		}
+		
+		if(fadeIn > 0) {
+			--fadeIn;
+		}
 	}
 
 	public void render(int pass) {
@@ -158,11 +173,22 @@ public class World {
 	}
 
 	private void renderGameLayer() {
+		Color color = gameRenderer.getSpriteBatch().getColor();
+		float fade = fadeOut > 0 ? (float)fadeOut / 59.0F : (fadeIn > 0 ? (float)(59 - fadeIn) / 59.0F : -1);
+		
+		if(fade != -1) {
+			gameRenderer.getSpriteBatch().setColor(new Color(color.r * fade, color.g * fade, color.b * fade, color.a));
+		}
+		
 		tiles.render(gameRenderer);
 		for(Entity entity : entities) {
 			if(entity.isOnScreen(gameRenderer)) {
 				entity.render(gameRenderer);
 			}
+		}
+		
+		if(fade != -1) {
+			gameRenderer.getSpriteBatch().setColor(color);
 		}
 	}
 

@@ -57,8 +57,8 @@ public class TileMapFactory {
 			}
 		}
 
-		int spawnRoomX = 0, spawnRoomY = 2;
-		TileMapFactory.insertRoom(map, new StartRoom(world), world, 16, 0, difficulty);
+		int spawnRoomX = 5, spawnRoomY = 7;
+		TileMapFactory.insertRoom(map, new StartRoom(world), world, 21, 5, difficulty);
 
 		int firstRoomX = spawnRoomX + 14, firstRoomY = spawnRoomY + 14;
 		int roomSeparation = 22;
@@ -75,7 +75,7 @@ public class TileMapFactory {
 					//Horizontal corridor
 					if(x < rooms[0].length - 1 && (rooms[y][x + 1] == 1 || rooms[y][x + 1] == 2 || rooms[y][x + 1] == 3)) {
 						if(RandomUtils.randDouble() > 0.3 || rooms[y][x] == 2 || rooms[y][x + 1] == 3) {
-							xCorridors.add(new Point(roomX + 15, roomY + RandomUtils.randInt(5, 11)));
+							xCorridors.add(new Point(roomX + 15, roomY + RandomUtils.randInt(10)));
 						}
 
 						else {
@@ -86,7 +86,7 @@ public class TileMapFactory {
 
 					//Vertical corridor
 					if(y > 0 && (rooms[y - 1][x] == 1 || rooms[y - 1][x] == 2 || rooms[y - 1][x] == 3)) {
-						yCorridors.add(new Point(roomX + RandomUtils.randInt(5, 11), roomY + 15));
+						yCorridors.add(new Point(roomX + RandomUtils.randInt(10), roomY + 15));
 					}
 
 					if(rooms[y][x] == 1) {
@@ -114,7 +114,7 @@ public class TileMapFactory {
 			TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, point.x, point.y, difficulty);
 		}
 
-		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 19, 9, difficulty);
+		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 24, 14, difficulty);
 
 		return map;
 	}

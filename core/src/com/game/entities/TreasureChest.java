@@ -19,7 +19,7 @@ public class TreasureChest extends Enemy {
 	private int phase;
 
 	public TreasureChest(World world, double x, double y) {
-		super(world, x, y, 30, 30, 2, 45);
+		super(world, x, y, 30, 30, 2, 25);
 		animation = new Animation(Textures.instance.getTexture("treasure_chest"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),

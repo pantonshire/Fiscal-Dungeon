@@ -19,7 +19,7 @@ public class BlackTreasureChest extends Enemy {
 	private int phase;
 
 	public BlackTreasureChest(World world, double x, double y) {
-		super(world, x, y, 30, 30, 1.5, 50);
+		super(world, x, y, 30, 30, 1.5, 30);
 		animation = new Animation(Textures.instance.getTexture("demon_treasure_chest"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),

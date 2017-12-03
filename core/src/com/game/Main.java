@@ -20,7 +20,7 @@ public class Main extends ApplicationAdapter {
 	public void create() {
 		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut");
 		
-		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 10F);
+		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 		WorldFactory.firstFloor(gameRenderer, overlayRenderer);
 		//First 100 x 100

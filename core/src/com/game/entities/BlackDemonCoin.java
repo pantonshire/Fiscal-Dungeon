@@ -98,7 +98,7 @@ public class BlackDemonCoin extends Enemy {
 			world.spawn(coin);
 		}
 		
-		if(RandomUtils.randDouble() < 0.3) {
+		if(RandomUtils.randDouble() < 0.15) {
 			world.spawn(new Tax(world, position.x, position.y));
 		}
 	}

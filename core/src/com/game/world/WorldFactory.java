@@ -12,7 +12,7 @@ public class WorldFactory {
 	HARD = 2,
 	MADNESS = 3;
 
-	public static int floor = 0;
+	public static int floor = 4;
 	private static final int[] SIZES = new int[] { 100, 180, 240, 320 };
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
