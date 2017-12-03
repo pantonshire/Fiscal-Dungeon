@@ -25,6 +25,7 @@ public class BigGem extends Enemy {
 		super(world, x, y, 30, 30, 0.25, 10);
 		animation = new Animation(Textures.instance.getTexture("big_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();
+		attackTimer = ATTACK_RATE;
 	}
 	
 	private void followPath() {

@@ -24,6 +24,7 @@ public class BlackDemonCoin extends Enemy {
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 2, 6).setNoLoop(),
 				new Sequence(32, 32, 2, 6).setNoLoop()));
+		timer = 120;
 	}
 	
 	@Override

@@ -32,7 +32,7 @@ public class ExitRoom extends Room {
 		TileMap tiles = world.getTileMap();
 		world.spawn(new Trapdoor(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 12)));
 		
-		int numTaxes = difficulty + 1;
+		int numTaxes = difficulty / 2 + 1;
 		for(int i = 0; i < numTaxes; i++) {
 			world.spawn(new Tax(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8 - i)));
 		}

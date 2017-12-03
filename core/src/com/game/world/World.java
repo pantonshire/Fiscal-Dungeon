@@ -16,6 +16,7 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.rooms.BossRoom;
 import com.game.vector.Vector;
 
 public class World {
@@ -35,7 +36,7 @@ public class World {
 	
 	private Animation coin;
 
-	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height) {
+	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height, boolean boss) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
 		fadeOut = -1;
@@ -47,10 +48,13 @@ public class World {
 		coins = new ArrayList<Coin>();
 		enemies = new ArrayList<Enemy>();
 
-		createPlayer(732, 256);
+		if(boss) { createPlayer(1280, 560); }
+		else { createPlayer(732, 256); }
 		
 		tiles = TileMapFactory.newBlankMap(WorldFactory.getTileset(), (byte)1, 32, width, height);
-		tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor);
+		
+		if(boss) { TileMapFactory.insertRoom(tiles, new BossRoom(this), this, 21, 5, WorldFactory.floor); }
+		else { tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor); }
 	}
 
 	public TileMap getTileMap() {

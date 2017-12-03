@@ -25,6 +25,7 @@ public class TreasureChest extends Enemy {
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 4, 2)));
 		path = new ArrayList<Point>();
+		timer = 120;
 	}
 
 	private void followPath() {
@@ -159,7 +160,7 @@ public class TreasureChest extends Enemy {
 			else if(phase == 3) {
 				timer = 90;
 				phase = 4;
-				path = world.getTileMap().findPath(position, world.getPlayer().position, 10, false);
+				path = world.getTileMap().findPath(position, world.getPlayer().position, 19, false);
 			}
 
 			else if(phase == 4) {
