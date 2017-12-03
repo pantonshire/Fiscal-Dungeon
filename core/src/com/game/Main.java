@@ -17,6 +17,7 @@ public class Main extends ApplicationAdapter {
 	private LayerRenderer overlayRenderer;
 	private World currentWorld;
 	private int option;
+	private boolean deleteWorld;
 	
 	public static World nextWorld;
 	private static int screen;
@@ -33,6 +34,11 @@ public class Main extends ApplicationAdapter {
 	public void render() {
 		clearScreen();
 
+		if(deleteWorld) {
+			deleteWorld = false;
+			currentWorld = null;
+		}
+		
 		if(nextWorld != null) {
 			currentWorld = null;
 			currentWorld = nextWorld;
@@ -111,12 +117,12 @@ public class Main extends ApplicationAdapter {
 	
 	public static void toMainMenu() {
 		screen = 0;
-		instance.currentWorld = null;
+		instance.deleteWorld = true;
 		instance.option = 0;
 	}
 	
 	public static void toCongratulesScreen() {
 		screen = 1;
-		instance.currentWorld = null;
+		instance.deleteWorld = true;;
 	}
 }
