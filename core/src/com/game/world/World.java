@@ -174,7 +174,7 @@ public class World {
 
 	private void renderGameLayer() {
 		Color color = gameRenderer.getSpriteBatch().getColor();
-		float fade = fadeOut > 0 ? (float)fadeOut / 59.0F : (fadeIn > 0 ? (float)(59 - fadeIn) / 59.0F : -1);
+		float fade = fadeOut >= 0 ? (float)fadeOut / 59.0F : (fadeIn > 0 ? (float)(59 - fadeIn) / 59.0F : -1);
 		
 		if(fade != -1) {
 			gameRenderer.getSpriteBatch().setColor(new Color(color.r * fade, color.g * fade, color.b * fade, color.a));
