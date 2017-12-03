@@ -56,6 +56,10 @@ public class Player extends EntityLiving {
 			coins = 0;
 		}
 	}
+	
+	public void setCoins(int amount) {
+		coins = amount;
+	}
 
 	private void die() {
 		destroy();

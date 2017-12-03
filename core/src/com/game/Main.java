@@ -7,6 +7,7 @@ import com.game.audio.SoundEffects;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.world.World;
+import com.game.world.WorldFactory;
 
 public class Main extends ApplicationAdapter {
 	
@@ -14,12 +15,14 @@ public class Main extends ApplicationAdapter {
 	private LayerRenderer overlayRenderer;
 	private World currentWorld;
 	
+	public static World nextWorld;
+	
 	public void create() {
 		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut");
 		
-		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
+		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 10F);
 		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
-		currentWorld = new World(gameRenderer, overlayRenderer, 100, 100);
+		WorldFactory.firstFloor(gameRenderer, overlayRenderer);
 		//First 100 x 100
 		//Second 180 x 180
 		//Third 240 x 240
@@ -28,6 +31,12 @@ public class Main extends ApplicationAdapter {
 	
 	public void render() {
 		clearScreen();
+		
+		if(nextWorld != null) {
+			currentWorld = null;
+			currentWorld = nextWorld;
+			nextWorld = null;
+		}
 		
 		if(currentWorld != null) {
 			currentWorld.update();

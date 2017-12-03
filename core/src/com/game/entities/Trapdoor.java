@@ -2,6 +2,7 @@ package com.game.entities;
 
 import com.game.graphics.LayerRenderer;
 import com.game.world.World;
+import com.game.world.WorldFactory;
 
 public class Trapdoor extends Entity {
 	
@@ -14,7 +15,7 @@ public class Trapdoor extends Entity {
 
 	protected void updateEntity() {
 		if(world.getPlayer().getHitbox().intersectsHitbox(hitbox)) {
-			world.getPlayer().destroy();
+			WorldFactory.nextFloor(world);
 		}
 	}
 

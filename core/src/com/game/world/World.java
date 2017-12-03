@@ -6,7 +6,6 @@ import java.util.HashSet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.game.entities.BlackTreasureChest;
 import com.game.entities.Coin;
 import com.game.entities.Enemy;
 import com.game.entities.Entity;
@@ -45,9 +44,7 @@ public class World {
 		createPlayer(640, 160);
 		
 		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, width, height);
-		tiles = TileMapFactory.generateRandomMap(this, tiles, 4);
-		
-		spawn(new BlackTreasureChest(this, 680, 160));
+		tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor);
 	}
 
 	public TileMap getTileMap() {

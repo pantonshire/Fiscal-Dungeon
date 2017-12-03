@@ -13,7 +13,7 @@ public class HorizontalCorridor extends Room {
 		});
 	}
 	
-	public void spawnEntities(World world, int minX, int minY) {
+	public void spawnEntities(World world, int minX, int minY, int difficulty) {
 		
 	}
 }

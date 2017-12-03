@@ -27,18 +27,18 @@ public class TileMapFactory {
 		return new TileMap(Textures.instance.getTexture(tileMap), tiles, tileSize);
 	}
 
-	public static TileMap insertRoom(TileMap tileMap, Room room, World world, int x, int y) {
+	public static TileMap insertRoom(TileMap tileMap, Room room, World world, int x, int y, int difficulty) {
 		for(int i = 0; i < room.getWidth(); i++) {
 			for(int j = 0; j < room.getHeight(); j++) {
 				tileMap.setTile(x + i, y + j, room.getTile(i, j));
 			}
 		}
 
-		room.spawnEntities(world, x, y);
+		room.spawnEntities(world, x, y, difficulty);
 		return tileMap;
 	}
 
-	public static TileMap generateRandomMap(World world, TileMap map, int numPaths) {
+	public static TileMap generateRandomMap(World world, TileMap map, int numPaths, int difficulty) {
 		int numRoomsX = (int)(map.getWidth() / 24.0D) - 1, numRoomsY = (int)(map.getHeight() / 24.0D) - 1;
 		int[][] rooms = new int[numRoomsY][numRoomsX];
 		rooms[0][rooms[0].length - 1] = 3; //Exit room
@@ -58,7 +58,7 @@ public class TileMapFactory {
 		}
 
 		int spawnRoomX = 0, spawnRoomY = 2;
-		TileMapFactory.insertRoom(map, new StartRoom(world), world, 16, 0);
+		TileMapFactory.insertRoom(map, new StartRoom(world), world, 16, 0, difficulty);
 
 		int firstRoomX = spawnRoomX + 14, firstRoomY = spawnRoomY + 14;
 		int roomSeparation = 22;
@@ -74,7 +74,7 @@ public class TileMapFactory {
 
 					//Horizontal corridor
 					if(x < rooms[0].length - 1 && (rooms[y][x + 1] == 1 || rooms[y][x + 1] == 2 || rooms[y][x + 1] == 3)) {
-						if(RandomUtils.randDouble() > 0.3 || rooms[y][x] == 2 || rooms[y][x] == 3) {
+						if(RandomUtils.randDouble() > 0.3 || rooms[y][x] == 2 || rooms[y][x + 1] == 3) {
 							xCorridors.add(new Point(roomX + 15, roomY + RandomUtils.randInt(5, 11)));
 						}
 
@@ -91,30 +91,30 @@ public class TileMapFactory {
 
 					if(rooms[y][x] == 1) {
 						if(longRoom) {
-							TileMapFactory.insertRoom(map, new LongRoom(world), world, roomX, roomY);
+							TileMapFactory.insertRoom(map, new LongRoom(world), world, roomX, roomY, difficulty);
 						}
 
 						else {
-							TileMapFactory.insertRoom(map, new StandardRoom(world), world, roomX, roomY);
+							TileMapFactory.insertRoom(map, new StandardRoom(world), world, roomX, roomY, difficulty);
 						}
 					}
 					
 					else if(rooms[y][x] == 3) {
-						TileMapFactory.insertRoom(map, new ExitRoom(world), world, roomX, roomY);
+						TileMapFactory.insertRoom(map, new ExitRoom(world), world, roomX, roomY, difficulty);
 					}
 				}
 			}
 		}
 
 		for(Point point : xCorridors) {
-			TileMapFactory.insertRoom(map, new HorizontalCorridor(world), world, point.x, point.y);
+			TileMapFactory.insertRoom(map, new HorizontalCorridor(world), world, point.x, point.y, difficulty);
 		}
 
 		for(Point point : yCorridors) {
-			TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, point.x, point.y);
+			TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, point.x, point.y, difficulty);
 		}
 
-		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 19, 9);
+		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 19, 9, difficulty);
 
 		return map;
 	}

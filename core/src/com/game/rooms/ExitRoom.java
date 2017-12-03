@@ -27,7 +27,7 @@ public class ExitRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(World world, int minX, int minY) {
+	public void spawnEntities(World world, int minX, int minY, int difficulty) {
 		TileMap tiles = world.getTileMap();
 		world.spawn(new Trapdoor(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 12)));
 	}
