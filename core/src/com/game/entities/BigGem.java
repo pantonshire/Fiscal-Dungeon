@@ -22,7 +22,7 @@ public class BigGem extends Enemy {
 	private int attackTimer;
 	
 	public BigGem(World world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 15);
+		super(world, x, y, 30, 30, 0.25, 10);
 		animation = new Animation(Textures.instance.getTexture("big_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();
 	}
@@ -102,7 +102,7 @@ public class BigGem extends Enemy {
 		if(attackTimer > 0) { --attackTimer; }
 		if(canSee && attackTimer == 0) {
 			attackTimer = ATTACK_RATE;
-			world.spawn(new PurpleGemProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position), world.getPlayer().getWalkSpeed() - 0.5));
+			world.spawn(new PurpleGemProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position)));
 		}
 	}
 	
@@ -114,13 +114,8 @@ public class BigGem extends Enemy {
 	protected void onDeath() {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i < 10; i++) {
-			Coin coin = new RedGemProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
+			Coin coin = new CoinProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
 			world.spawn(coin);
-		}
-		
-		for(int i = 0; i < 5; i++) {
-			Coin projectile = new PurpleGemProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, world.getPlayer().getWalkSpeed() - 0.5);
-			world.spawn(projectile);
 		}
 		
 		if(RandomUtils.randDouble() < 0.1) {

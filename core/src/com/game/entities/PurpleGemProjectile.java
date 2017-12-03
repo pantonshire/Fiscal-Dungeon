@@ -6,14 +6,11 @@ import com.game.graphics.Textures;
 import com.game.world.World;
 
 public class PurpleGemProjectile extends Coin {
-
-	private double speed;
 	
-	public PurpleGemProjectile(World world, double x, double y, double angle, double speed) {
+	public PurpleGemProjectile(World world, double x, double y, double angle) {
 		super(world, x, y, 3, "coin");
-		this.speed = speed;
 		animation = new Animation(Textures.instance.getTexture("gem_purple"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
-		velocity.setAngle(angle, speed);
+		velocity.setAngle(angle, getSpeed());
 	}
 	
 	@Override
@@ -24,7 +21,11 @@ public class PurpleGemProjectile extends Coin {
 		}
 		
 		else if(position.distSqBetween(world.getPlayer().position) < 4096) {
-			velocity.setAngle(position.angleBetween(world.getPlayer().position), speed);
+			velocity.setAngle(position.angleBetween(world.getPlayer().position), getSpeed());
 		}
+	}
+	
+	private double getSpeed() {
+		return world.getPlayer().getWalkSpeed() - 0.75;
 	}
 }

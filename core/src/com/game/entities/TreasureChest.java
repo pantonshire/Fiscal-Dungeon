@@ -132,7 +132,7 @@ public class TreasureChest extends Enemy {
 						break;
 					case 3:
 						for(int i = 0; i <= 5; i++) {
-							world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(20) + (Math.toRadians(40) / 5 * i), world.getPlayer().getWalkSpeed() - 0.5));
+							world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(20) + (Math.toRadians(40) / 5 * i)));
 						}
 						break;
 					case 4:
@@ -196,8 +196,6 @@ public class TreasureChest extends Enemy {
 			double angle = Math.PI * 2 / 15 * i;
 			world.spawn(new RedGemProjectile(world, position.x, position.y, angle, 1.25));
 			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1));
-			world.spawn(new RedGemProjectile(world, position.x, position.y, angle, 0.75));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 0.5));
 		}
 
 		if(RandomUtils.randDouble() < 0.3) {

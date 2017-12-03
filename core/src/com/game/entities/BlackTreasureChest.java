@@ -113,7 +113,7 @@ public class BlackTreasureChest extends Enemy {
 					switch(RandomUtils.randInt(4)) {
 					case 0:
 						for(int i = 0; i < 8; i++) {
-							world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 8, world.getPlayer().getWalkSpeed() - RandomUtils.randDouble(0.5, 1)));
+							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 8, world.getPlayer().getWalkSpeed() - RandomUtils.randDouble(0.5, 1)));
 						}
 						break;
 					case 1:
@@ -132,7 +132,7 @@ public class BlackTreasureChest extends Enemy {
 						break;
 					case 3:
 						for(int i = 0; i <= 7; i++) {
-							world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(20) + (Math.toRadians(40) / 7 * i), world.getPlayer().getWalkSpeed() - 0.5));
+							world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(20) + (Math.toRadians(40) / 7 * i)));
 						}
 						break;
 					case 4:

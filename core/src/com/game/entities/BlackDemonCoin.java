@@ -18,7 +18,7 @@ public class BlackDemonCoin extends Enemy {
 	private double startAngle;
 
 	public BlackDemonCoin(World world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 12);
+		super(world, x, y, 30, 30, 0.25, 5);
 		animation = new Animation(Textures.instance.getTexture("black_demon_coin"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),
@@ -77,7 +77,8 @@ public class BlackDemonCoin extends Enemy {
 		
 		if(phase == 1) {
 			if(timer % 5 == 0) {
-				world.spawn(new RedGemProjectile(world, position.x, position.y, startAngle + (30 - timer) * Math.toRadians(3), 1.5));
+				Coin coin = RandomUtils.randDouble() < 0.2 ? new RedGemProjectile(world, position.x, position.y, startAngle + (30 - timer) * Math.toRadians(3), 1.5) : new CoinProjectile(world, position.x, position.y, startAngle + (30 - timer) * Math.toRadians(3), 1.5);
+				world.spawn(coin);
 			}
 		}
 	}
