@@ -55,8 +55,8 @@ public class TileMapFactory {
 			}
 		}
 		
-		int spawnRoomX = 0, spawnRoomY = 0;
-		TileMapFactory.insertRoom(map, new StartRoom(world), world, spawnRoomX + 16, spawnRoomY);
+		int spawnRoomX = 0, spawnRoomY = 2;
+		TileMapFactory.insertRoom(map, new StartRoom(world), world, 16, 0);
 		
 		int firstRoomX = spawnRoomX + 14, firstRoomY = spawnRoomY + 14;
 		int roomSeparation = 22;
@@ -91,12 +91,7 @@ public class TileMapFactory {
 			TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, point.x, point.y);
 		}
 		
-//		TileMapFactory.insertRoom(map, new StartRoom(world), world, 0, 0);
-//		TileMapFactory.insertRoom(map, new StandardRoom(world), world, 16, 0);
-//		TileMapFactory.insertRoom(map, new StandardRoom(world), world, 38, 0);
-//		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 3, 9);
-//		TileMapFactory.insertRoom(map, new HorizontalCorridor(world), world, 9, 3);
-//		TileMapFactory.insertRoom(map, new HorizontalCorridor(world), world, 31, 3);
+		TileMapFactory.insertRoom(map, new VerticalCorridor(world), world, 19, 9);
 		
 		return map;
 	}
