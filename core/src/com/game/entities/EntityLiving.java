@@ -141,7 +141,7 @@ public abstract class EntityLiving extends Entity {
 		double deltaX = Math.abs(otherX - ownX);
 		double deltaY = Math.abs(otherY - ownY);
 		
-		if(deltaX > 480 || deltaY > 480) {
+		if(deltaX > 48 || deltaY > 48) {
 			return false;
 		}
 

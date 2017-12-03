@@ -46,6 +46,7 @@ public class DemonCoin extends Enemy {
 					for(int i = 0; i < 12; i++) {
 						world.spawn(new CoinProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position) - RandomUtils.randDouble(Math.toRadians(30)) + Math.toRadians(15), RandomUtils.randDouble(1, 3)));
 					}
+					SoundEffects.instance.play("schut_2", 1, 1, 0);
 				}
 			}
 

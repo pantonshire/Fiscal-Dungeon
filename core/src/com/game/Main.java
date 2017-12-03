@@ -25,7 +25,7 @@ public class Main extends ApplicationAdapter {
 	
 	public void create() {
 		instance = this;
-		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut");
+		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut", "coin_snake_die", "schut_2");
 		
 		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);

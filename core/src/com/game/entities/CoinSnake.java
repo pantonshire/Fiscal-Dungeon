@@ -112,7 +112,7 @@ public class CoinSnake extends Enemy {
 	}
 	
 	protected void onDeath() {
-		SoundEffects.instance.play("boom", 1, 1, 0);
+		SoundEffects.instance.play("coin_snake_die", 1, 1, 0);
 		for(int i = 0; i < 5; i++) {
 			Coin coin = new CoinProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, RandomUtils.randDouble(0.5, 1.0));
 			world.spawn(coin);
