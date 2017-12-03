@@ -69,6 +69,10 @@ public class Main extends ApplicationAdapter {
 			}
 			
 			else if(Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isKeyJustPressed(Keys.ENTER)) {
+				if(option != 2) {
+					SoundEffects.instance.play("select", 1, 1, 0);
+				}
+				
 				switch(option) {
 				case 0:
 					WorldFactory.firstFloor(gameRenderer, overlayRenderer);
@@ -103,6 +107,7 @@ public class Main extends ApplicationAdapter {
 		else if(screen == 1) {
 			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 				screen = 0;
+				SoundEffects.instance.play("select", 1, 1, 0);
 			}
 			
 			overlayRenderer.beginBatch();
@@ -116,6 +121,7 @@ public class Main extends ApplicationAdapter {
 		else if(screen == 2) {
 			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 				screen = 0;
+				SoundEffects.instance.play("select", 1, 1, 0);
 			}
 			
 			overlayRenderer.beginBatch();

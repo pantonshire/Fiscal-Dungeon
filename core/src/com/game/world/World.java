@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -124,6 +125,11 @@ public class World {
 	}
 
 	public void update() {
+		if(fadeOut == -1 && fadeIn == 0 && !player.shouldRemove() && (Gdx.input.isKeyJustPressed(Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Keys.P))) {
+			paused = !paused;
+			player.setStopped();
+		}
+		
 		if(!paused && fadeOut == -1) {
 			for(Entity entity : entities) {
 				entity.update();
@@ -153,7 +159,7 @@ public class World {
 			paused = true;
 		}
 		
-		if(gameOverTimer <= -120) {
+		if(gameOverTimer <= -240) {
 			Main.toMainMenu();
 		}
 		
@@ -216,12 +222,18 @@ public class World {
 			overlayRenderer.drawText(text, x, y);
 		}
 		
-		if(player.shouldRemove() && gameOverTimer < 0) {
-			overlayRenderer.drawText("GAME OVER", Gdx.graphics.getWidth() / 2 - 60, Gdx.graphics.getHeight() / 2);
+		if(player.shouldRemove() && gameOverTimer <= 0) {
+			String text = "GAME OVER";
+			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
+			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
+			overlayRenderer.drawText(text, x, y);
 		}
 		
 		else if(paused) {
-			overlayRenderer.drawText("PAUSED", Gdx.graphics.getWidth() / 2 - 60, Gdx.graphics.getHeight() / 2);
+			String text = "PAUSED";
+			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
+			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
+			overlayRenderer.drawText(text, x, y);
 		}
 	}
 }
