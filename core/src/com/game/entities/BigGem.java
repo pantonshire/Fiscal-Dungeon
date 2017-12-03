@@ -104,7 +104,6 @@ public class BigGem extends Enemy {
 		if(canSee && attackTimer == 0) {
 			attackTimer = ATTACK_RATE;
 			world.spawn(new PurpleGemProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position)));
-			SoundEffects.instance.play("schut_2", 1, 1, 0);
 		}
 	}
 	
