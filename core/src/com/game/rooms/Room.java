@@ -16,6 +16,8 @@ public abstract class Room {
 		this.tiles = tiles;
 	}
 	
+	public abstract void spawnEntities(World world, int minX, int minY);
+	
 	public byte[][] getTiles() {
 		return tiles;
 	}

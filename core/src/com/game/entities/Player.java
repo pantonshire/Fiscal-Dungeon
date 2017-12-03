@@ -2,7 +2,6 @@ package com.game.entities;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;

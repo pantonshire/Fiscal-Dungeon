@@ -14,7 +14,7 @@ import com.game.world.World;
 public class BigGem extends Enemy {
 
 	private int PATH_FIND_UPDATE_RATE = 10;
-	private int ATTACK_RATE = 60;
+	private int ATTACK_RATE = 240;
 	
 	private Animation animation;
 	private ArrayList<Point> path;

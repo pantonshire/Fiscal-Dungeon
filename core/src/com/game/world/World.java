@@ -6,7 +6,6 @@ import java.util.HashSet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.game.entities.BlackDemonCoin;
 import com.game.entities.Coin;
 import com.game.entities.Enemy;
 import com.game.entities.Entity;
@@ -16,8 +15,8 @@ import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.rooms.HorizontalCorridor;
+import com.game.rooms.StandardRoom;
 import com.game.rooms.StartRoom;
-import com.game.rooms.TestRoom;
 import com.game.rooms.VerticalCorridor;
 import com.game.vector.Vector;
 
@@ -39,27 +38,23 @@ public class World {
 	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
-		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, 100, 100);
-		TileMapFactory.insertRoom(tiles, new StartRoom(this), 0, 0);
-		TileMapFactory.insertRoom(tiles, new TestRoom(this), 16, 0);
-		TileMapFactory.insertRoom(tiles, new VerticalCorridor(this), 3, 9);
-		TileMapFactory.insertRoom(tiles, new HorizontalCorridor(this), 9, 3);
+		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		entities = new ArrayList<Entity>();
 		spawnQueue = new HashSet<Entity>();
 		coins = new ArrayList<Coin>();
 		enemies = new ArrayList<Enemy>();
 
 		createPlayer(50, 50);
-//		for(int i = 0; i < 100; i++) {
-//			spawn(new GoldCoin(this, 350, 300 + i * 10));
-//			spawn(new RedGem(this, 380, 300 + i * 10));
-//		}
-//		spawn(new CoinSnake(this, 650, 300));
-//		spawn(new BigGem(this, 650, 350));
-//		spawn(new DemonCoin(this, 650, 400));
-		spawn(new BlackDemonCoin(this, 650, 400));
 		
-		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
+//		TileMapFactory.insertRoom(tiles, new StartRoom(this), this, 0, 0);
+//		TileMapFactory.insertRoom(tiles, new StandardRoom(this), this, 16, 0);
+//		TileMapFactory.insertRoom(tiles, new StandardRoom(this), this, 38, 0);
+//		TileMapFactory.insertRoom(tiles, new VerticalCorridor(this), this, 3, 9);
+//		TileMapFactory.insertRoom(tiles, new HorizontalCorridor(this), this, 9, 3);
+//		TileMapFactory.insertRoom(tiles, new HorizontalCorridor(this), this, 31, 3);
+		
+		tiles = TileMapFactory.newBlankMap("tilemap", (byte)1, 32, 1000, 1000);
+		tiles = TileMapFactory.generateRandomMap(this, tiles, 4);
 	}
 
 	public TileMap getTileMap() {
@@ -153,6 +148,10 @@ public class World {
 		if(player.shouldRemove() && --gameOverTimer <= 0) {
 			paused = true;
 		}
+		
+		if(gameOverTimer <= -120) {
+			//Go to main menu
+		}
 	}
 
 	public void render(int pass) {
@@ -182,5 +181,9 @@ public class World {
 		overlayRenderer.drawText("x " + player.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
 		double weight = player.getCoins() * 12.0D / 100.0D;
 		overlayRenderer.drawText("Weight: " + weight + " kg", 334, Gdx.graphics.getHeight() / 2 + 172);
+		
+		if(player.shouldRemove() && gameOverTimer < 0) {
+			overlayRenderer.drawText("GAME OVER", Gdx.graphics.getWidth() / 2 - 60, Gdx.graphics.getHeight() / 2);
+		}
 	}
 }

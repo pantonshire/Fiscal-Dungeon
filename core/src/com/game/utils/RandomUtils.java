@@ -8,6 +8,10 @@ public class RandomUtils {
 
 	private static final Random random = new Random();
 	
+	public static boolean randBoolean() {
+		return random.nextBoolean();
+	}
+	
 	public static int randInt() {
 		return random.nextInt();
 	}

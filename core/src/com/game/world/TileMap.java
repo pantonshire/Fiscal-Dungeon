@@ -48,6 +48,10 @@ public class TileMap {
 	public int getMapCoordinate(double coordinate) {
 		return (int)(coordinate / tileSize);
 	}
+	
+	public double getWorldCoordinate(int coordinate) {
+		return coordinate * tileSize + tileSize / 2;
+	}
 
 	public void setTile(int x, int y, int tile) {
 		tiles[y][x] = (byte)tile;

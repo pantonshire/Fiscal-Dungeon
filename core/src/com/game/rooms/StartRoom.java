@@ -18,4 +18,8 @@ public class StartRoom extends Room {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		});
 	}
+
+	public void spawnEntities(World world, int minX, int minY) {
+
+	}
 }
