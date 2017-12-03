@@ -44,7 +44,7 @@ public class World {
 		coins = new ArrayList<Coin>();
 		enemies = new ArrayList<Enemy>();
 
-		createPlayer(50, 50);
+		createPlayer(640, 160);
 		
 //		TileMapFactory.insertRoom(tiles, new StartRoom(this), this, 0, 0);
 //		TileMapFactory.insertRoom(tiles, new StandardRoom(this), this, 16, 0);
