@@ -56,10 +56,9 @@ public class ControllerInput extends Input implements ControllerListener {
 
 	public Vector getTargetPos(Player player, LayerRenderer renderer) {
 		if(Math.abs(rightStick.x) > MIN_AXIS_MOVEMENT || Math.abs(rightStick.y) > MIN_AXIS_MOVEMENT) {
-			target.x = rightStick.x * 50;
-			target.y = rightStick.y * -50;
+			target.set(rightStick.x, -rightStick.y);
 		}
-		return player.getPosition().copy().add(target);
+		return player.getPosition().copy().add(-3, 11).add(target);
 	}
 
 	public boolean isPerformingAction(Action action) {
@@ -81,7 +80,7 @@ public class ControllerInput extends Input implements ControllerListener {
 	}
 	
 	public boolean buttonDown(Controller controller, int buttonCode) {
-		System.out.println(buttonCode + " down");
+//		System.out.println(buttonCode + " down");
 		Action action = bindings.get(buttonCode);
 		if(action != null) {
 			bindingsDown.add(action);
@@ -92,7 +91,7 @@ public class ControllerInput extends Input implements ControllerListener {
 	}
 	
 	public boolean buttonUp(Controller controller, int buttonCode) {
-		System.out.println(buttonCode + " up");
+//		System.out.println(buttonCode + " up");
 		Action action = bindings.get(buttonCode);
 		if(action != null) {
 			bindingsDown.remove(action);
@@ -103,9 +102,9 @@ public class ControllerInput extends Input implements ControllerListener {
 	}
 	
 	public boolean axisMoved(Controller controller, int axisCode, float value) {
-		if(Math.abs(value) > 0.25) {
-			System.out.println(axisCode + " moved by " + value);
-		}
+//		if(Math.abs(value) > 0.25) {
+//			System.out.println(axisCode + " moved by " + value);
+//		}
 		switch(axisCode) {
 		case 0:
 			leftStick.x = value;

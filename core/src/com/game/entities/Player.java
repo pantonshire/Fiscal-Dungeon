@@ -9,6 +9,7 @@ import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.input.Action;
 import com.game.input.Input;
+import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
 import com.game.world.World;
@@ -17,6 +18,7 @@ public class Player extends EntityLiving {
 
 	private static final int MAX_COINS = 100; //You die when you reach 100 coins
 	private static final int SHOOT_TIME = 24;
+	private static final double ARM_ROTATE_SPEED = Math.toRadians(8);
 	
 	private Animation animation;
 	private Animation bow;
@@ -75,6 +77,18 @@ public class Player extends EntityLiving {
 			world.spawn(coin2);
 		}
 	}
+	
+	private void updateArmRotation() {
+		double target = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, world.gameRenderer));
+		if(Math.abs(AngleHelper.angleDifferenceRadians(armRotation, target)) > 0.01) {
+			int rotationDirection = AngleHelper.getQuickestRotationDirection(armRotation, target);
+			double rotationAngle = rotationDirection * ARM_ROTATE_SPEED;
+			armRotation = AngleHelper.correctAngleRadians(armRotation + rotationAngle);
+			if(Math.abs(AngleHelper.angleDifferenceRadians(armRotation, target)) < ARM_ROTATE_SPEED) {
+				armRotation = target;
+			}
+		}
+	}
 
 	protected void updateEntity() {
 		up = Input.instance.up();
@@ -105,7 +119,7 @@ public class Player extends EntityLiving {
 			}
 		}
 		
-		armRotation = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, world.gameRenderer));
+		updateArmRotation();
 		
 		if(shootTimer > 0) {
 			--shootTimer;

@@ -92,12 +92,16 @@ public class Vector {
 		y = (int)y;
 		return this;
 	}
+	
+	public Vector normalise() {
+		return div(magnitude());
+	}
 
-	public double dist() {
+	public double magnitude() {
 		return Math.sqrt(x * x + y * y);
 	}
 
-	public double distSq() {
+	public double magnitudeSq() {
 		return x * x + y * y;
 	}
 	
