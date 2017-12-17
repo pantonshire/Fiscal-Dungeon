@@ -27,6 +27,7 @@ public class Player extends EntityLiving {
 	private int coins;
 	private int shootTimer;
 
+	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
 
 	public Player(World world, double x, double y) {
@@ -85,9 +86,8 @@ public class Player extends EntityLiving {
 		ArrayList<Enemy> enemies = world.getEnemies();
 		Enemy targetedEnemy = null;
 		double shortestDist = 0;
-		double lockOnAngle = 0;
 		for(Enemy enemy : enemies) {
-			if(enemy.isOnScreen(world.gameRenderer)) {
+			if(enemy.isOnScreen(world.gameRenderer) && canSee(enemy)) {
 				double dist = position.distBetween(enemy.getPosition());
 				if(targetedEnemy == null || dist < shortestDist) {
 					double angleToEnemy = position.angleBetween(enemy.position);
@@ -95,14 +95,15 @@ public class Player extends EntityLiving {
 					if(delta <= aimAssist) {
 						shortestDist = dist;
 						targetedEnemy = enemy;
-						lockOnAngle = angleToEnemy;
 					}
 				}
 			}
 		}
 		
 		if(targetedEnemy != null) {
-			target = lockOnAngle;
+			int heuristicArrowTravelTime = (int)Math.ceil(shortestDist / arrowSpeed);
+			Vector estimatedEnemyPosition = targetedEnemy.position.copy().add(targetedEnemy.velocity.copy().mply(heuristicArrowTravelTime));
+			target = position.angleBetween(estimatedEnemyPosition);
 		}
 
 		return target;
@@ -159,7 +160,7 @@ public class Player extends EntityLiving {
 			shootTimer = SHOOT_TIME;
 			bow.setSequence(1, true);
 			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position);
-			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, 7));
+			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, arrowSpeed));
 			SoundEffects.instance.play("schut", 1, 1, 0);
 		}
 
