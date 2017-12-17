@@ -68,6 +68,18 @@ public class Vector {
 		sub(vector.x, vector.y);
 		return this;
 	}
+	
+	public Vector mply(double amount) {
+		x *= amount;
+		y *= amount;
+		return this;
+	}
+	
+	public Vector div(double amount) {
+		x /= amount;
+		y /= amount;
+		return this;
+	}
 
 	public Vector round() {
 		x = Math.round(x);

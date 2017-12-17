@@ -6,7 +6,7 @@ import com.game.world.World;
 public abstract class Enemy extends EntityLiving {
 
 	protected int health;
-	
+
 	public Enemy(World world, double x, double y, int width, int height, double walkSpeed, int health) {
 		super(world, x, y, width, height, walkSpeed);
 		this.health = health;
@@ -18,13 +18,13 @@ public abstract class Enemy extends EntityLiving {
 			destroy();
 			onDeath();
 		}
-		
+
 		else {
 			SoundEffects.instance.play("hurt", 1, 1, 0);
 		}
-		
+
 		return true;
 	}
-	
+
 	protected abstract void onDeath();
 }

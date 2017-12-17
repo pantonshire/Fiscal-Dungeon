@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
+import com.game.entities.Player;
 import com.game.graphics.LayerRenderer;
 import com.game.vector.Vector;
 
@@ -20,10 +21,15 @@ public class KeyboardInput extends Input {
 	public KeyboardInput() {
 		bindings = new HashMap<Action, Integer>();
 		bindings.put(Action.ATTACK, LEFT_BUTTON);
+		bindings.put(Action.PAUSE, Keys.ESCAPE);
 	}
 	
-	public Vector3 unprojectMousePos(LayerRenderer renderer, int x, int y) {
+	private Vector3 unprojectMousePos(LayerRenderer renderer, int x, int y) {
 		return renderer.getCamera().unproject(new Vector3(x, y, 0));
+	}
+	
+	public void update() {
+		
 	}
 
 	public boolean up() {
@@ -42,7 +48,7 @@ public class KeyboardInput extends Input {
 		return Gdx.input.isKeyPressed(Keys.D);
 	}
 
-	public Vector getTargetPos(LayerRenderer renderer) {
+	public Vector getTargetPos(Player player, LayerRenderer renderer) {
 		int x = Gdx.input.getX(), y = Gdx.input.getY();
 		Vector3 unprojected = unprojectMousePos(renderer, x, y);
 		return new Vector(unprojected.x, unprojected.y);

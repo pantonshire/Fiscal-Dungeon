@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -17,6 +16,8 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.input.Action;
+import com.game.input.Input;
 import com.game.rooms.BossRoom;
 import com.game.vector.Vector;
 
@@ -125,7 +126,7 @@ public class World {
 	}
 
 	public void update() {
-		if(fadeOut == -1 && fadeIn == 0 && !player.shouldRemove() && (Gdx.input.isKeyJustPressed(Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Keys.P))) {
+		if(fadeOut == -1 && fadeIn == 0 && !player.shouldRemove() && Input.instance.isJustPerformingAction(Action.PAUSE)) {
 			paused = !paused;
 			player.setStopped();
 		}
@@ -210,12 +211,10 @@ public class World {
 		coin.updateTimer();
 		overlayRenderer.setTextColour(Color.WHITE);
 		overlayRenderer.drawText("x " + player.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
-		double weight = player.getCoins() * 12.0D / 100.0D;
-		overlayRenderer.drawText("Weight: " + weight + " kg", 334, Gdx.graphics.getHeight() / 2 + 172);
+		overlayRenderer.drawText("/ 100", 380, Gdx.graphics.getHeight() / 2 + 192);
 		
 		if(roomTitle > 0) {
 			--roomTitle;
-			overlayRenderer.drawText("Weight: " + weight + " kg", 334, Gdx.graphics.getHeight() / 2 + 172);
 			String text = "Floor " + (WorldFactory.floor + 1) + ": " + WorldFactory.getFloorName();
 			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
 			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;

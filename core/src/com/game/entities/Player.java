@@ -16,17 +16,17 @@ import com.game.world.World;
 public class Player extends EntityLiving {
 
 	private static final int MAX_COINS = 100; //You die when you reach 100 coins
-	private static final int SHOOT_TIME = 12;
+	private static final int SHOOT_TIME = 24;
 	
 	private Animation animation;
 	private Animation bow;
 	private double armRotation;
 	private int facing;
-	private int coins; //Basically health in this game lol
+	private int coins;
 	private int shootTimer;
 
 	public Player(World world, double x, double y) {
-		super(world, x, y, 10, 30, 2);
+		super(world, x, y, 10, 30, 2.5);
 		animation = new Animation(Textures.instance.getTexture("player"),
 				Sequence.formatSequences(
 						new Sequence(16, 35, 5, 4),
@@ -39,7 +39,7 @@ public class Player extends EntityLiving {
 		bow = new Animation(Textures.instance.getTexture("bow"),
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
-						new Sequence(18, 14, 2, 5).setNoLoop()));
+						new Sequence(18, 14, 4, 5).setNoLoop()));
 	}
 	
 	public int getCoins() {
@@ -76,15 +76,6 @@ public class Player extends EntityLiving {
 		}
 	}
 
-	private double getCoinSlowdown() {
-		return coins * 0.01;
-	}
-
-	@Override
-	public double getWalkSpeed() {
-		return walkSpeed - getCoinSlowdown();
-	}
-
 	protected void updateEntity() {
 		up = Input.instance.up();
 		down = Input.instance.down();
@@ -114,7 +105,7 @@ public class Player extends EntityLiving {
 			}
 		}
 		
-		armRotation = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(world.gameRenderer));
+		armRotation = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, world.gameRenderer));
 		
 		if(shootTimer > 0) {
 			--shootTimer;

@@ -55,7 +55,7 @@ public class Arrow extends Entity {
 			ArrayList<Enemy> enemies = world.getEnemies();
 			for(Enemy enemy : enemies) {
 				if(hitbox.intersectsHitbox(enemy.hitbox)) {
-					if(enemy.damage(1)) {
+					if(enemy.damage(2)) {
 						destroy();
 					}
 				}

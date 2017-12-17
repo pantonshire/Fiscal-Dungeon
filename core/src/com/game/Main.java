@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
+import com.game.input.Input;
 import com.game.world.World;
 import com.game.world.WorldFactory;
 
@@ -26,7 +27,7 @@ public class Main extends ApplicationAdapter {
 	public void create() {
 		instance = this;
 		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "schut", "coin_snake_die");
-		
+		Input.init();
 		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 	}
@@ -139,6 +140,8 @@ public class Main extends ApplicationAdapter {
 			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 340);
 			overlayRenderer.endBatch();
 		}
+		
+		Input.instance.update();
 	}
 	
 	public void dispose() {
