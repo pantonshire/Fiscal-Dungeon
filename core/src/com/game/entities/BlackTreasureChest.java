@@ -49,7 +49,7 @@ public class BlackTreasureChest extends Enemy {
 					path.remove(0);
 					targetTile = path.size() > 0 ? path.get(0) : null;
 					targetPos = getTargetPos(targetTile);
-					
+
 					if(path.size() == 0) {
 						timer = 0;
 					}
@@ -94,9 +94,8 @@ public class BlackTreasureChest extends Enemy {
 	}
 
 	protected void updateEntity() {
-		boolean canSee = canSee(world.getPlayer());
-
 		if(timer > 0) { --timer; }
+		Player targetPlayer = getNearestPlayer();
 
 		if(timer == 0) {
 			if(phase == 0) {
@@ -105,12 +104,12 @@ public class BlackTreasureChest extends Enemy {
 			}
 
 			else if(phase == 1) {
-				if(canSee) {
+				if(targetPlayer != null) {
 					phase = 2;
 					timer = 90;
 
-					double angleBetween = position.angleBetween(world.getPlayer().position);
-					
+					double angleBetween = position.angleBetween(targetPlayer.position);
+
 					switch(RandomUtils.randInt(4)) {
 					case 0:
 						for(int i = 0; i < 8; i++) {
@@ -158,9 +157,11 @@ public class BlackTreasureChest extends Enemy {
 			}
 
 			else if(phase == 3) {
-				timer = 90;
-				phase = 4;
-				path = world.getTileMap().findPath(position, world.getPlayer().position, 19, false);
+				if(targetPlayer != null) {
+					timer = 90;
+					phase = 4;
+					path = world.getTileMap().findPath(position, targetPlayer.position, 19, false);
+				}
 			}
 
 			else if(phase == 4) {

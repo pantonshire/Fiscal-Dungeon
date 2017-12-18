@@ -46,7 +46,7 @@ public class GemBoss extends Enemy {
 					path.remove(0);
 					targetTile = path.size() > 0 ? path.get(0) : null;
 					targetPos = getTargetPos(targetTile);
-					
+
 					if(path.size() == 0) {
 						timer = 0;
 					}
@@ -92,6 +92,7 @@ public class GemBoss extends Enemy {
 
 	protected void updateEntity() {
 		if(timer > 0) { --timer; }
+		Player targetPlayer = getNearestPlayer();
 
 		if(health <= 75 && phase != 3) {
 			phase = 3;
@@ -99,46 +100,50 @@ public class GemBoss extends Enemy {
 			path = null;
 			timer = 60;
 		}
-		
+
 		if(timer == 0) {
 			if(phase == 0) {
-				timer = 60;
-				phase = 1;
-				path = world.getTileMap().findPath(position, world.getPlayer().position, 38, true);
+				if(targetPlayer != null) {
+					timer = 60;
+					phase = 1;
+					path = world.getTileMap().findPath(position, targetPlayer.position, 38, true);
+				}
 			}
 
 			else if(phase == 1) {
-				double angleBetween = position.angleBetween(world.getPlayer().position);
+				if(targetPlayer != null) {
+					double angleBetween = position.angleBetween(targetPlayer.position);
 
-				switch(RandomUtils.randInt(2)) {
-				case 0:
-					for(int i = 0; i <= 10; i++) {
-						world.spawn(new PurpleGemProjectile(world, position.x, position.y, Math.PI * 2 / 10 * i));
+					switch(RandomUtils.randInt(2)) {
+					case 0:
+						for(int i = 0; i <= 10; i++) {
+							world.spawn(new PurpleGemProjectile(world, position.x, position.y, Math.PI * 2 / 10 * i));
+						}
+						phase = 2;
+						timer = 30;
+						break;
+					case 1:
+						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween, 4.5));
+						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(4), 4.0));
+						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(8), 3.5));
+						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(4), 4.0));
+						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(8), 3.5));
+						phase = 0;
+						timer = 40;
+						break;
+					case 2:
+						for(int i = 0; i <= 6; i++) {
+							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.75));
+							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.5));
+							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.25));
+						}
+						phase = 0;
+						timer = 40;
+						break;
 					}
-					phase = 2;
-					timer = 30;
-					break;
-				case 1:
-					world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween, 4.5));
-					world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(4), 4.0));
-					world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(8), 3.5));
-					world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(4), 4.0));
-					world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(8), 3.5));
-					phase = 0;
-					timer = 40;
-					break;
-				case 2:
-					for(int i = 0; i <= 6; i++) {
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.75));
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.5));
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.25));
-					}
-					phase = 0;
-					timer = 40;
-					break;
 				}
 			}
-			
+
 			else if(phase == 2) {
 				for(int i = 0; i <= 16; i++) {
 					world.spawn(new RedGemProjectile(world, position.x, position.y, Math.PI * 2 / 16 * i, 4));
@@ -146,7 +151,7 @@ public class GemBoss extends Enemy {
 				phase = 0;
 				timer = 90;
 			}
-			
+
 			else if(phase == 3) {
 				if(RandomUtils.randDouble() < 0.1) { world.spawn(new PurpleGemProjectile(world, position.x, position.y, RandomUtils.randAngle())); }
 				else if(RandomUtils.randDouble() < 0.8) { world.spawn(new RedGemProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 5))); }

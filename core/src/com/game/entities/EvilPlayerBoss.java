@@ -109,48 +109,55 @@ public class EvilPlayerBoss extends Enemy {
 
 	protected void updateEntity() {
 		if(timer > 0) { --timer; }
+		Player targetPlayer = getNearestPlayer();
 
 		if(timer == 0) {
 			if(phase == 0) {
-				timer = 60;
-				phase = 1;
-				path = world.getTileMap().findPath(position, world.getPlayer().position, 38, false);
+				if(targetPlayer != null) {
+					timer = 60;
+					phase = 1;
+					path = world.getTileMap().findPath(position, targetPlayer.position, 38, false);
+				}
 			}
 
 			else if(phase == 1) {
-				bow.setSequence(1, true);
-				phase = 0;
+				if(targetPlayer != null) {
+					bow.setSequence(1, true);
+					phase = 0;
 
-				double angleBetween = position.angleBetween(world.getPlayer().position);
+					double angleBetween = position.angleBetween(targetPlayer.position);
 
-				switch(RandomUtils.randInt(2)) {
-				case 0:
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween));
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(45)));
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(45)));
-					timer = 45;
-					break;
-				case 1:
-					world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween, 4.5));
-					world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + Math.toRadians(5), 4.0));
-					world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + Math.toRadians(10), 3.5));
-					world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(5), 4.0));
-					world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(10), 3.5));
-					timer = 20;
-					break;
-				case 2:
-					for(int i = 0; i <= 4; i++) {
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(30) + (Math.toRadians(60) / 4 * i), 3));
+					switch(RandomUtils.randInt(2)) {
+					case 0:
+						world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween));
+						world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(45)));
+						world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(45)));
+						timer = 45;
+						break;
+					case 1:
+						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween, 4.5));
+						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + Math.toRadians(5), 4.0));
+						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + Math.toRadians(10), 3.5));
+						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(5), 4.0));
+						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(10), 3.5));
+						timer = 20;
+						break;
+					case 2:
+						for(int i = 0; i <= 4; i++) {
+							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(30) + (Math.toRadians(60) / 4 * i), 3));
+						}
+						timer = 20;
+						break;
 					}
-					timer = 20;
-					break;
 				}
 			}
 		}
 
 		followPath();
 
-		armRotation = position.copy().add(-3, 11).angleBetween(world.getPlayer().getPosition());
+		if(targetPlayer != null) {
+			armRotation = position.copy().add(-3, 11).angleBetween(targetPlayer.getPosition());
+		}
 
 		if(armRotation < Math.toRadians(-135)) { facing = 2; }
 		else if(armRotation < Math.toRadians(-90)) { facing = 0; }
@@ -205,7 +212,7 @@ public class EvilPlayerBoss extends Enemy {
 		int x = world.getTileMap().getMapCoordinate(position.x), y = world.getTileMap().getMapCoordinate(position.y);
 		world.getTileMap().setTile(x, y, (byte)-9);
 		world.spawn(new Trapdoor(world, world.getTileMap().getWorldCoordinate(x), world.getTileMap().getWorldCoordinate(y)));
-		
+
 		ArrayList<Enemy> enemies = world.getEnemies();
 		for(Enemy enemy : enemies) {
 			if(enemy != this) {

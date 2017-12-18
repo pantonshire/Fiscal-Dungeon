@@ -16,23 +16,29 @@ import com.game.world.World;
 
 public class Player extends EntityLiving {
 
-	private static final int MAX_COINS = 100; //You die when you reach 100 coins
+	public static final byte
+	PLAYER_1 = 0,
+	PLAYER_2 = 1,
+	PLAYER_3 = 2,
+	PLAYER_4 = 3;
+	
 	private static final int SHOOT_TIME = 24;
 	private static final double ARM_ROTATE_SPEED = Math.toRadians(8);
 
+	private final byte id;
 	private Animation animation;
 	private Animation bow;
 	private double armRotation;
 	private int facing;
-	private int coins;
 	private int shootTimer;
 
 	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
 
-	public Player(World world, double x, double y) {
+	public Player(World world, double x, double y, byte playerID) {
 		super(world, x, y, 10, 30, 2.5);
-		animation = new Animation(Textures.instance.getTexture("player"),
+		id = playerID;
+		animation = new Animation(Textures.instance.getTexture(getBodyTexture(playerID)),
 				Sequence.formatSequences(
 						new Sequence(16, 35, 5, 4),
 						new Sequence(16, 35, 5, 4),
@@ -41,35 +47,44 @@ public class Player extends EntityLiving {
 						new Sequence(16, 35, 5, 4),
 						new Sequence(16, 35, 5, 4)));
 
-		bow = new Animation(Textures.instance.getTexture("bow"),
+		bow = new Animation(Textures.instance.getTexture(getBowTexture(playerID)),
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
 						new Sequence(18, 14, 4, 5).setNoLoop()));
 	}
 
-	public int getCoins() {
-		return coins;
-	}
-
-	public void collectCoins(int amount) {
-		coins += amount;
-		if(coins >= MAX_COINS) {
-			die();
+	private String getBodyTexture(byte playerID) {
+		switch(playerID) {
+		case 0:
+			return "player";
+		case 1:
+			return "player_2";
+		case 2:
+			return "player_3";
+		case 3:
+			return "player_4";
+		default:
+			return "goblin";
 		}
+	}
 
-		if(coins < 0) {
-			coins = 0;
+	private String getBowTexture(byte playerID) {
+		switch(playerID) {
+		case 0:
+			return "bow";
+		case 1:
+			return "bow_2";
+		case 2:
+			return "bow_3";
+		case 3:
+			return "bow_4";
+		default:
+			return "bow";
 		}
 	}
 
-	public void setCoins(int amount) {
-		coins = amount;
-	}
-
-	private void die() {
+	public void explode() {
 		destroy();
-		coins = 0;
-		world.startGameOverTimer();
 		SoundEffects.instance.play("blast", 1, 1, 0);
 		for(int i = 0; i < 200; i++) {
 			Coin coin1 = RandomUtils.randDouble() < 0.05 ? new RedGem(world, position.x, position.y) : new GoldCoin(world, position.x, position.y);
@@ -82,7 +97,7 @@ public class Player extends EntityLiving {
 	}
 
 	private double getTarget() {
-		double target = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, world.gameRenderer));
+		double target = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, world.gameRenderer, id));
 		ArrayList<Enemy> enemies = world.getEnemies();
 		Enemy targetedEnemy = null;
 		double shortestDist = 0;
@@ -99,7 +114,7 @@ public class Player extends EntityLiving {
 				}
 			}
 		}
-		
+
 		if(targetedEnemy != null) {
 			int heuristicArrowTravelTime = (int)Math.ceil(shortestDist / arrowSpeed);
 			Vector estimatedEnemyPosition = targetedEnemy.position.copy().add(targetedEnemy.velocity.copy().mply(heuristicArrowTravelTime));
@@ -122,10 +137,10 @@ public class Player extends EntityLiving {
 	}
 
 	protected void updateEntity() {
-		up = Input.instance.up();
-		down = Input.instance.down();
-		left = Input.instance.left();
-		right = Input.instance.right();
+		up = Input.instance.up(id);
+		down = Input.instance.down(id);
+		left = Input.instance.left(id);
+		right = Input.instance.right(id);
 
 		if(isWalking()) {
 			if(down) {
@@ -156,7 +171,7 @@ public class Player extends EntityLiving {
 			--shootTimer;
 		}
 
-		if(Input.instance.isPerformingAction(Action.ATTACK) && shootTimer == 0) {
+		if(Input.instance.isPerformingAction(Action.ATTACK, id) && shootTimer == 0) {
 			shootTimer = SHOOT_TIME;
 			bow.setSequence(1, true);
 			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position);
@@ -166,7 +181,7 @@ public class Player extends EntityLiving {
 
 		ArrayList<Coin> coins = world.getCoins();
 		for(Coin coin : coins) {
-			if(hitbox.intersectsHitbox(coin.hitbox)) {
+			if(!coin.shouldRemove() && hitbox.intersectsHitbox(coin.hitbox)) {
 				coin.collect(this);
 				break;
 			}

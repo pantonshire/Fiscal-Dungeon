@@ -32,35 +32,35 @@ public class KeyboardInput extends Input {
 		
 	}
 
-	public boolean up() {
+	public boolean up(byte id) {
 		return Gdx.input.isKeyPressed(Keys.W);
 	}
 	
-	public boolean down() {
+	public boolean down(byte id) {
 		return Gdx.input.isKeyPressed(Keys.S);
 	}
 	
-	public boolean left() {
+	public boolean left(byte id) {
 		return Gdx.input.isKeyPressed(Keys.A);
 	}
 	
-	public boolean right() {
+	public boolean right(byte id) {
 		return Gdx.input.isKeyPressed(Keys.D);
 	}
 
-	public Vector getTargetPos(Player player, LayerRenderer renderer) {
+	public Vector getTargetPos(Player player, LayerRenderer renderer, byte id) {
 		int x = Gdx.input.getX(), y = Gdx.input.getY();
 		Vector3 unprojected = unprojectMousePos(renderer, x, y);
 		return new Vector(unprojected.x, unprojected.y);
 	}
 
-	public boolean isPerformingAction(Action action) {
+	public boolean isPerformingAction(Action action, byte id) {
 		int binding = bindings.get(action);
 		return binding < 0 ? Gdx.input.isButtonPressed(-binding - 1) : Gdx.input.isKeyPressed(binding); //This solution sucks but I HAVE NOOO TIME
 		//Negative bindings are for mouse
 	}
 
-	public boolean isJustPerformingAction(Action action) {
+	public boolean isJustPerformingAction(Action action, byte id) {
 		int binding = bindings.get(action);
 		return binding < 0 ? Gdx.input.isButtonPressed(-binding) : Gdx.input.isKeyJustPressed(binding);
 	}

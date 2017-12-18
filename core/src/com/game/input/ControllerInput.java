@@ -13,6 +13,7 @@ import com.game.vector.Vector;
 
 public class ControllerInput extends Input implements ControllerListener {
 
+	private int leftStickX, leftStickY, rightStickX, rightStickY;
 	private HashMap<Integer, Action> bindings;
 	private HashSet<Action> bindingsDown, bindingsJustDown;
 	private Vector leftStick, rightStick;
@@ -20,7 +21,7 @@ public class ControllerInput extends Input implements ControllerListener {
 	
 	private static final double MIN_AXIS_MOVEMENT = 0.4;
 
-	public ControllerInput() {
+	public ControllerInput(Controller controller) {
 		bindings = new HashMap<Integer, Action>();
 		bindingsDown = new HashSet<Action>();
 		bindingsJustDown = new HashSet<Action>();
@@ -28,8 +29,15 @@ public class ControllerInput extends Input implements ControllerListener {
 		rightStick = new Vector();
 		target = new Vector();
 		
-		bindings.put(4, Action.ATTACK);
-		bindings.put(8, Action.PAUSE);
+		int[] bindingIDs = ControllerBindings.getBindings(controller);
+		bindings.put(bindingIDs[0], Action.PAUSE);
+		bindings.put(bindingIDs[1], Action.ATTACK);
+		
+		int[] analogueSticks = ControllerBindings.getAnalogueSticks(controller);
+		leftStickX = analogueSticks[0];
+		leftStickY = analogueSticks[1];
+		rightStickX = analogueSticks[2];
+		rightStickY = analogueSticks[3];
 	}
 	
 	public void update() {
@@ -38,45 +46,43 @@ public class ControllerInput extends Input implements ControllerListener {
 		}
 	}
 
-	public boolean up() {
+	public boolean up(byte id) {
 		return leftStick.y < -MIN_AXIS_MOVEMENT;
 	}
 	
-	public boolean down() {
+	public boolean down(byte id) {
 		return leftStick.y > MIN_AXIS_MOVEMENT;
 	}
 	
-	public boolean left() {
+	public boolean left(byte id) {
 		return leftStick.x < -MIN_AXIS_MOVEMENT;
 	}
 	
-	public boolean right() {
+	public boolean right(byte id) {
 		return leftStick.x > MIN_AXIS_MOVEMENT;
 	}
 
-	public Vector getTargetPos(Player player, LayerRenderer renderer) {
+	public Vector getTargetPos(Player player, LayerRenderer renderer, byte id) {
 		if(Math.abs(rightStick.x) > MIN_AXIS_MOVEMENT || Math.abs(rightStick.y) > MIN_AXIS_MOVEMENT) {
 			target.set(rightStick.x, -rightStick.y);
 		}
 		return player.getPosition().copy().add(-3, 11).add(target);
 	}
 
-	public boolean isPerformingAction(Action action) {
+	public boolean isPerformingAction(Action action, byte id) {
 		return bindingsDown.contains(action);
 	}
 
-	public boolean isJustPerformingAction(Action action) {
+	public boolean isJustPerformingAction(Action action, byte id) {
 		return bindingsJustDown.contains(action);
 	}
 	
 	public void connected(Controller controller) {
-		Input.setControllerInput(true);
-		System.out.println("Connected " + controller.getName());
+//		Input.setControllerInput(true);
 	}
 	
 	public void disconnected(Controller controller) {
-		Input.setControllerInput(false);
-		System.out.println("Disconnected " + controller.getName());
+//		Input.setControllerInput(false);
 	}
 	
 	public boolean buttonDown(Controller controller, int buttonCode) {
@@ -105,22 +111,11 @@ public class ControllerInput extends Input implements ControllerListener {
 //		if(Math.abs(value) > 0.25) {
 //			System.out.println(axisCode + " moved by " + value);
 //		}
-		switch(axisCode) {
-		case 0:
-			leftStick.x = value;
-			break;
-		case 1:
-			leftStick.y = value;
-			break;
-		case 3:
-			rightStick.x = value;
-			break;
-		case 4:
-			rightStick.y = value;
-			break;
-		default:
-			break;
-		}
+		
+		if(axisCode == leftStickX) { leftStick.x = value; }
+		else if(axisCode == leftStickY) { leftStick.y = value; }
+		else if(axisCode == rightStickX) { rightStick.x = value; }
+		else if(axisCode == rightStickY) { rightStick.y = value; }
 		
 		return false;
 	}

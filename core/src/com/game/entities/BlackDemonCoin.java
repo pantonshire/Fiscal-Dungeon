@@ -38,13 +38,14 @@ public class BlackDemonCoin extends Enemy {
 
 	protected void updateEntity() {
 		if(timer > 0) { --timer; }
+		Player targetPlayer = getNearestPlayer();
 
 		if(timer == 0) {
 			if(phase == 0) {
-				if(canSee(world.getPlayer())) {
+				if(targetPlayer != null) {
 					phase = 1;
 					timer = 30;
-					startAngle = position.angleBetween(world.getPlayer().position) - Math.PI / 4;
+					startAngle = position.angleBetween(targetPlayer.position) - Math.PI / 4;
 				}
 			}
 

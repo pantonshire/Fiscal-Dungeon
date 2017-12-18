@@ -90,11 +90,10 @@ public class CoinSnake extends Enemy {
 	
 	protected void updateEntity() {
 		if(pathFindTimer > 0) { --pathFindTimer; }
-		if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null) && canSee(world.getPlayer())) {
-//			Point currentTarget = path != null && path.size() > 0 ? path.get(0) : null;
-			path = world.getTileMap().findPath(position, world.getPlayer().position, 30, false);
+		Player targetPlayer;
+		if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null) && (targetPlayer = getNearestPlayer()) != null) {
+			path = world.getTileMap().findPath(position, targetPlayer.position, 30, false);
 			pathFindTimer = PATH_FIND_UPDATE_RATE;
-//			world.spawn(new GoldCoin(world, position.x, position.y));
 		}
 		
 		followPath();

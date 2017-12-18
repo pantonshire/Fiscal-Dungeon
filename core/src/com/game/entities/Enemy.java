@@ -1,5 +1,7 @@
 package com.game.entities;
 
+import java.util.ArrayList;
+
 import com.game.audio.SoundEffects;
 import com.game.world.World;
 
@@ -27,4 +29,20 @@ public abstract class Enemy extends EntityLiving {
 	}
 
 	protected abstract void onDeath();
+	
+	protected Player getNearestPlayer() {
+		ArrayList<Player> players = world.getPlayers();
+		Player nearestPlayer = null;
+		double shortestDist = 0;
+		
+		for(Player player : players) {
+			double dist = position.distBetween(player.position);
+			if((nearestPlayer == null || dist < shortestDist) && canSee(player)) {
+				shortestDist = dist;
+				nearestPlayer = player;
+			}
+		}
+		
+		return nearestPlayer;
+	}
 }

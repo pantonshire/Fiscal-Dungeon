@@ -15,19 +15,19 @@ public class BigGem extends Enemy {
 
 	private int PATH_FIND_UPDATE_RATE = 10;
 	private int ATTACK_RATE = 240;
-	
+
 	private Animation animation;
 	private ArrayList<Point> path;
 	private int pathFindTimer;
 	private int attackTimer;
-	
+
 	public BigGem(World world, double x, double y) {
 		super(world, x, y, 30, 30, 0.25, 10);
 		animation = new Animation(Textures.instance.getTexture("big_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();
 		attackTimer = ATTACK_RATE;
 	}
-	
+
 	private void followPath() {
 		if(path == null) {
 			return;
@@ -73,7 +73,7 @@ public class BigGem extends Enemy {
 			}
 		}
 	}
-	
+
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
 		int tileSize = world.getTileMap().getTileSize();
@@ -88,37 +88,39 @@ public class BigGem extends Enemy {
 		boolean atTargetY = Math.abs(position.y - targetPos.y) < walkSpeed;
 		return atTargetX && atTargetY;
 	}
-	
+
 	protected void updateEntity() {
-		boolean canSee = canSee(world.getPlayer());
-		
-		if(pathFindTimer > 0) { --pathFindTimer; }
-		if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null) && canSee) {
-			path = world.getTileMap().findPath(position, world.getPlayer().position, 10, false);
-			pathFindTimer = PATH_FIND_UPDATE_RATE;
-		}
-		
-		followPath();
-		
 		if(attackTimer > 0) { --attackTimer; }
-		if(canSee && attackTimer == 0) {
-			attackTimer = ATTACK_RATE;
-			world.spawn(new PurpleGemProjectile(world, position.x, position.y, position.angleBetween(world.getPlayer().position)));
+		Player targetPlayer = getNearestPlayer();
+		
+		if(targetPlayer != null) {
+			if(pathFindTimer > 0) { --pathFindTimer; }
+			if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null)) {
+				path = world.getTileMap().findPath(position, targetPlayer.position, 10, false);
+				pathFindTimer = PATH_FIND_UPDATE_RATE;
+			}
+			
+			if(attackTimer == 0) {
+				attackTimer = ATTACK_RATE;
+				world.spawn(new PurpleGemProjectile(world, position.x, position.y, position.angleBetween(targetPlayer.position)));
+			}
 		}
+
+		followPath();
 	}
-	
+
 	public void render(LayerRenderer renderer) {
 		renderer.getSpriteBatch().draw(animation.getFrame(), (float)(position.x - (animation.getFrameWidth() / 2)), (float)(position.y - (animation.getFrameHeight() / 2)));
 		animation.updateTimer();
 	}
-	
+
 	protected void onDeath() {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i < 10; i++) {
 			Coin coin = new CoinProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
 			world.spawn(coin);
 		}
-		
+
 		if(RandomUtils.randDouble() < 0.1) {
 			world.spawn(new Tax(world, position.x, position.y));
 		}

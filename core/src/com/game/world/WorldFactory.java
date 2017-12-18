@@ -1,6 +1,7 @@
 package com.game.world;
 
 import com.game.Main;
+import com.game.currency.Currency;
 import com.game.graphics.LayerRenderer;
 
 public class WorldFactory {
@@ -21,6 +22,7 @@ public class WorldFactory {
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
 		floor = 0;
+		Currency.newInstance();
 		World nextFloor = new World(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextWorld = nextFloor;
 	}
@@ -29,7 +31,6 @@ public class WorldFactory {
 		if(nextFloorExists()) {
 			++floor;
 			World nextFloor = new World(current.gameRenderer, current.overlayRenderer, SIZES[floor], SIZES[floor], floor % 2 != 0);
-			nextFloor.getPlayer().setCoins(current.getPlayer().getCoins());
 			Main.nextWorld = nextFloor;
 		}
 

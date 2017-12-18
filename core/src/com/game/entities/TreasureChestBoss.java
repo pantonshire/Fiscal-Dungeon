@@ -49,7 +49,7 @@ public class TreasureChestBoss extends Enemy {
 					path.remove(0);
 					targetTile = path.size() > 0 ? path.get(0) : null;
 					targetPos = getTargetPos(targetTile);
-					
+
 					if(path.size() == 0) {
 						timer = 0;
 					}
@@ -94,9 +94,8 @@ public class TreasureChestBoss extends Enemy {
 	}
 
 	protected void updateEntity() {
-		boolean canSee = canSee(world.getPlayer());
-
 		if(timer > 0) { --timer; }
+		Player targetPlayer = getNearestPlayer();
 
 		if(timer == 0) {
 			if(phase == 0) {
@@ -105,12 +104,12 @@ public class TreasureChestBoss extends Enemy {
 			}
 
 			else if(phase == 1) {
-				if(canSee) {
+				if(targetPlayer != null) {
 					phase = 2;
 					timer = 45;
 
-					double angleBetween = position.angleBetween(world.getPlayer().position);
-					
+					double angleBetween = position.angleBetween(targetPlayer.position);
+
 					switch(RandomUtils.randInt(3)) {
 					case 0:
 						phase = 5;
@@ -153,9 +152,11 @@ public class TreasureChestBoss extends Enemy {
 			}
 
 			else if(phase == 3) {
-				timer = 90;
-				phase = 4;
-				path = world.getTileMap().findPath(position, world.getPlayer().position, 38, false);
+				if(targetPlayer != null) {
+					timer = 90;
+					phase = 4;
+					path = world.getTileMap().findPath(position, targetPlayer.position, 38, false);
+				}
 			}
 
 			else if(phase == 4) {
@@ -164,7 +165,7 @@ public class TreasureChestBoss extends Enemy {
 				timer = 10;
 				phase = 0;
 			}
-			
+
 			else if(phase == 5) {
 				phase = 3;
 				timer = 30;
@@ -174,7 +175,7 @@ public class TreasureChestBoss extends Enemy {
 		if(phase == 4) {
 			followPath();
 		}
-		
+
 		if(phase == 5 && timer % 4 == 0) {
 			world.spawn(new CoinProjectile(world, position.x, position.y, (Math.PI * 2 / 480 * timer), 3));
 			world.spawn(new CoinProjectile(world, position.x, position.y, (Math.PI * 2 / 480 * timer) + Math.PI / 2, 3));
