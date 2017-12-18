@@ -21,6 +21,7 @@ public class KeyboardInput extends Input {
 	public KeyboardInput() {
 		bindings = new HashMap<Action, Integer>();
 		bindings.put(Action.ATTACK, LEFT_BUTTON);
+		bindings.put(Action.MAGIC, RIGHT_BUTTON);
 		bindings.put(Action.PAUSE, Keys.ESCAPE);
 	}
 	

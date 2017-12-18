@@ -32,6 +32,7 @@ public class ControllerInput extends Input implements ControllerListener {
 		int[] bindingIDs = ControllerBindings.getBindings(controller);
 		bindings.put(bindingIDs[0], Action.PAUSE);
 		bindings.put(bindingIDs[1], Action.ATTACK);
+		bindings.put(bindingIDs[2], Action.MAGIC);
 		
 		int[] analogueSticks = ControllerBindings.getAnalogueSticks(controller);
 		leftStickX = analogueSticks[0];

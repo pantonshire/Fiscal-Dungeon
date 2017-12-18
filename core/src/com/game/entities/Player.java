@@ -31,6 +31,7 @@ public class Player extends EntityLiving {
 	private double armRotation;
 	private int facing;
 	private int shootTimer;
+	private int magicTimer;
 
 	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
@@ -167,16 +168,25 @@ public class Player extends EntityLiving {
 
 		updateArmRotation();
 
-		if(shootTimer > 0) {
-			--shootTimer;
-		}
+		if(shootTimer > 0) { --shootTimer; }
+		if(magicTimer > 0) { --magicTimer; }
 
 		if(Input.instance.isPerformingAction(Action.ATTACK, id) && shootTimer == 0) {
 			shootTimer = SHOOT_TIME;
 			bow.setSequence(1, true);
-			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position);
+			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
 			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, arrowSpeed));
-			SoundEffects.instance.play("schut", 1, 1, 0);
+			SoundEffects.instance.play("bow", 1, 1, 0);
+		}
+		
+		else if(Input.instance.isPerformingAction(Action.MAGIC, id) && magicTimer == 0) {
+			magicTimer = 120;
+			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
+			world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation, 5));
+//			for(int i = 0; i < 10; i++) {
+//				world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation - Math.toRadians(45) + RandomUtils.randDouble(Math.toRadians(90)), RandomUtils.randDouble(3, 6)));
+//			}
+			SoundEffects.instance.play("magic", 1, 1, 0);
 		}
 
 		ArrayList<Coin> coins = world.getCoins();

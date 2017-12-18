@@ -71,10 +71,6 @@ public class World {
 		return players;
 	}
 
-	//	public Player getPlayer() {
-	//		return player;
-	//	}
-
 	public ArrayList<Entity> getEntities() {
 		return entities;
 	}

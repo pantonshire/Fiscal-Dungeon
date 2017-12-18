@@ -6,8 +6,8 @@ public class ControllerBindings {
 
 	public static int[] getBindings(Controller controller) {
 		String name = controller.getName();
-		if(name.equals("Wireless Controller")) { return new int[] { 9, 4 }; }
-		else if(name.contains("Xbox 360")) { return new int[] { 8, 4 }; }
+		if(name.equals("Wireless Controller")) { return new int[] { 9, 4, 5 }; }
+		else if(name.contains("Xbox 360")) { return new int[] { 8, 4, 5 }; }
 		
 		return new int[] { -1, -1 };
 	}
