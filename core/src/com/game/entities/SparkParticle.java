@@ -3,22 +3,23 @@ package com.game.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
-import com.game.utils.RandomUtils;
 import com.game.world.World;
 
 public class SparkParticle extends Entity {
 
-	private Texture texture;
+	private final Texture texture;
+	private final int lifespan;
 	private int time;
 
-	public SparkParticle(World world, double x, double y, double angle, double speed) {
+	public SparkParticle(String textureName, World world, double x, double y, double angle, double speed, int lifespan) {
 		super(world, x, y);
-		texture = Textures.instance.getTexture(RandomUtils.randBoolean() ? "fireball_particle_red" : "fireball_particle_yellow");
+		texture = Textures.instance.getTexture(textureName);
+		this.lifespan = lifespan;
 		velocity.setAngle(angle, speed);
 	}
 
 	protected void updateEntity() {
-		if(++time > 40) { destroy(); }
+		if(++time > lifespan) { destroy(); }
 	}
 
 	public void render(LayerRenderer renderer) {

@@ -21,7 +21,7 @@ public class WorldFactory {
 	private static final int[] SIZES = new int[] { 100, 100, 170, 100, 200, 100, 240, 100 };
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
-		floor = 0;
+		floor = BOSS_1;
 		Currency.newInstance();
 		World nextFloor = new World(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextWorld = nextFloor;

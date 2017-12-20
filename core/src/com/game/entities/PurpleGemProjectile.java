@@ -22,7 +22,7 @@ public class PurpleGemProjectile extends Coin {
 			destroy();
 		}
 
-		else {
+		else if(!pushed) {
 			ArrayList<Player> players = world.getPlayers();
 			for(Player player : players) {
 				if(position.distSqBetween(player.position) < 4096) {

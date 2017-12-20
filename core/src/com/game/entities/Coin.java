@@ -14,6 +14,13 @@ public abstract class Coin extends Entity {
 	private int value;
 	protected boolean collided;
 	
+	//Pushing coins
+	protected boolean pushed;
+	protected double pushAngle;
+	protected double pushSpeed;
+	protected double finalSpeed;
+	protected double pushDeceleration;
+	
 	public Coin(World world, double x, double y, int value, String sound) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 10, 10);
@@ -27,7 +34,16 @@ public abstract class Coin extends Entity {
 		destroy();
 	}
 	
-	public void updateTileCollisions() {
+	public void push(double angle, double speed, double finalSpeed, double deceleration) {
+		this.pushAngle = angle;
+		this.pushSpeed = speed;
+		this.finalSpeed = finalSpeed;
+		this.pushDeceleration = deceleration;
+//		velocity.setAngle(angle, speed);
+		pushed = true;
+	}
+	
+	protected void updateTileCollisions() {
 		boolean touchedCollidable = false;
 
 		if(velocity.x != 0) {
@@ -47,7 +63,18 @@ public abstract class Coin extends Entity {
 		collided = touchedCollidable;
 	}
 	
+	private void updatePushVelocity() {
+		pushSpeed -= pushDeceleration;
+		if(pushSpeed <= finalSpeed) {
+			pushSpeed = finalSpeed;
+			pushed = false;
+		}
+		
+		velocity.setAngle(pushAngle, pushSpeed);
+	}
+	
 	protected void updateEntity() {
+		if(pushed) { updatePushVelocity(); }
 		updateTileCollisions();
 	}
 	

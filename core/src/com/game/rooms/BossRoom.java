@@ -3,7 +3,7 @@ package com.game.rooms;
 import com.game.entities.BlackDemonCoin;
 import com.game.entities.EvilPlayerBoss;
 import com.game.entities.GemBoss;
-import com.game.entities.TreasureChestBoss;
+import com.game.entities.SlotMachine;
 import com.game.world.TileMap;
 import com.game.world.World;
 import com.game.world.WorldFactory;
@@ -57,7 +57,8 @@ public class BossRoom extends Room {
 		TileMap tiles = world.getTileMap();
 		switch(difficulty) {
 		case WorldFactory.BOSS_1:
-			world.spawn(new TreasureChestBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
+//			world.spawn(new TreasureChestBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
+			world.spawn(new SlotMachine(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
 			break;
 		case WorldFactory.BOSS_2:
 			world.spawn(new EvilPlayerBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));

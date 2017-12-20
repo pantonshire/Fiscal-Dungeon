@@ -67,7 +67,7 @@ public class Fireball extends Entity {
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
-			world.spawn(new SparkParticle(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.25, 1.0)));
+			world.spawn(new SparkParticle(RandomUtils.randBoolean() ? "fireball_particle_red" : "fireball_particle_yellow", world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.25, 1), 40));
 			
 			if(damageCooldown == 0) {
 				ArrayList<Enemy> enemies = world.getEnemies();

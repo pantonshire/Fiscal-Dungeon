@@ -120,8 +120,8 @@ public class TreasureChestBoss extends Enemy {
 							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.5));
 							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.25));
 							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.0));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.75));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.5));
+							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 2.75));
+							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 2.5));
 						}
 						break;
 					case 2:

@@ -180,13 +180,24 @@ public class Player extends EntityLiving {
 		}
 		
 		else if(Input.instance.isPerformingAction(Action.MAGIC, id) && magicTimer == 0) {
-			magicTimer = 120;
-			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
-			world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation, 5));
-//			for(int i = 0; i < 10; i++) {
-//				world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation - Math.toRadians(45) + RandomUtils.randDouble(Math.toRadians(90)), RandomUtils.randDouble(3, 6)));
-//			}
+			//Fireball spell
+//			magicTimer = 120;
+//			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
+//			world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation, 5));
+//			SoundEffects.instance.play("magic", 1, 1, 0);
+			
+			//Repel spell
+			magicTimer = 180;
 			SoundEffects.instance.play("magic", 1, 1, 0);
+			for(int i = 0; i < 40; i++) { world.spawn(new SparkParticle("repel_particle", world, position.x, position.y, Math.PI * 2 / 40 * i, 4, 40)); }
+			ArrayList<Coin> coins = world.getCoins();
+			for(Coin coin : coins) {
+				if(position.distBetween(coin.position) < 160) {
+					double initialSpeed = coin.velocity.magnitude();
+					double speed = Math.max(initialSpeed, 5);
+					coin.push(position.angleBetween(coin.position), speed, initialSpeed, 0.1);
+				}
+			}
 		}
 
 		ArrayList<Coin> coins = world.getCoins();

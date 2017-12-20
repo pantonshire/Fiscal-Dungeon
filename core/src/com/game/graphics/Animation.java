@@ -77,6 +77,12 @@ public class Animation {
 		return !paused && sequences[sequence].getAnimationDelay() > 0 && !(sequences[sequence].noLoop() && frame >= sequences[sequence].getNumFrames() - 1);
 	}
 	
+	public void jumpToFrame(int frame) {
+		this.frame = frame;
+		timer = 0;
+		regionChanged = true;
+	}
+	
 	public void resetFrame() {
 		frame = 0;
 		timer = 0;
