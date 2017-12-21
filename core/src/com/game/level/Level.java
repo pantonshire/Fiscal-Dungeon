@@ -23,6 +23,7 @@ import com.game.graphics.Textures;
 import com.game.input.Action;
 import com.game.input.Input;
 import com.game.light.LevelLightManager;
+import com.game.light.LightSource;
 import com.game.rooms.BossRoom;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
@@ -178,7 +179,8 @@ public class Level {
 			for(int i = 0; i < entities.size(); i++) {
 				if(entities.get(i).shouldRemove()) {
 					if(entities.get(i) instanceof Coin) { coins.remove(entities.get(i)); }
-					if(entities.get(i) instanceof Enemy) { enemies.remove(entities.get(i)); }
+					else if(entities.get(i) instanceof Enemy) { enemies.remove(entities.get(i)); }
+					if(entities.get(i) instanceof LightSource) { light.removeLight((LightSource)entities.get(i)); }
 					entities.remove(i);
 					--i;
 				}
@@ -218,6 +220,10 @@ public class Level {
 	
 	public void applyLight() {
 		light.applyLight(gameRenderer);
+	}
+	
+	public void disposeLight() {
+		light.dispose();
 	}
 
 	public void render(int pass) {

@@ -37,11 +37,11 @@ public class Main extends ApplicationAdapter {
 
 		if(deleteLevel) {
 			deleteLevel = false;
-			currentLevel = null;
+			deleteCurrentLevel();
 		}
 		
 		if(nextLevel != null) {
-			currentLevel = null;
+			deleteCurrentLevel();
 			currentLevel = nextLevel;
 			nextLevel = null;
 		}
@@ -150,6 +150,13 @@ public class Main extends ApplicationAdapter {
 		gameRenderer.dispose();
 		Textures.instance.dispose();
 		SoundEffects.instance.dispose();
+	}
+	
+	private void deleteCurrentLevel() {
+		if(currentLevel != null) {
+			currentLevel.disposeLight();
+			currentLevel = null;
+		}
 	}
 	
 	private void clearScreen() {

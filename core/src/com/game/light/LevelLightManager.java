@@ -17,21 +17,24 @@ public class LevelLightManager implements Disposable {
 	
 	private World world;
 	private RayHandler rayHandler;
-	private HashMap<LightSource, PointLight> fixedLights, temporaryLights;
+	private HashMap<LightSource, PointLight> fixedLights, dynamicLights;
 	
 	public LevelLightManager(World box2dWorld, Color ambientLight, boolean shadows) {
 		world = box2dWorld;
+		RayHandler.useDiffuseLight(true);
+//		RayHandler.setGammaCorrection(true);
 		rayHandler = new RayHandler(world);
 		rayHandler.setShadows(shadows);
+		rayHandler.setBlur(true);
 		rayHandler.setAmbientLight(ambientLight);
 		fixedLights = new HashMap<LightSource, PointLight>();
-		temporaryLights = new HashMap<LightSource, PointLight>();
+		dynamicLights = new HashMap<LightSource, PointLight>();
 	}
 	
 	public void applyLight(LayerRenderer renderer) {
+		moveDynamicLights();
 		rayHandler.setCombinedMatrix(renderer.getCamera());
 		rayHandler.updateAndRender();
-		removeTemporaryLights();
 	}
 	
 	public void addFixedLight(LightSource source) {
@@ -47,18 +50,30 @@ public class LevelLightManager implements Disposable {
 		}
 	}
 	
-	public void addTemporaryLight(LightSource source) {
+	public void addDynamicLight(LightSource source) {
 		Vector pos = source.lightPosition();
 		PointLight light = new PointLight(rayHandler, source.numLightRays(), source.lightColor(), source.lightStrength(), (float)pos.x, (float)pos.y);
-		temporaryLights.put(source, light);
+		dynamicLights.put(source, light);
 	}
 	
-	private void removeTemporaryLights() {
-		for(PointLight light : temporaryLights.values()) {
-			light.remove();
+	public void removeDynamicLight(LightSource source) {
+		if(dynamicLights.containsKey(source)) {
+			dynamicLights.get(source).remove();
+			dynamicLights.remove(source);
 		}
-		
-		temporaryLights.clear();
+	}
+	
+	public void removeLight(LightSource source) {
+		removeFixedLight(source);
+		removeDynamicLight(source);
+	}
+	
+	private void moveDynamicLights() {
+		for(LightSource source : dynamicLights.keySet()) {
+			PointLight light = dynamicLights.get(source);
+			Vector pos = source.lightPosition();
+			light.setPosition((float)pos.x, (float)pos.y);
+		}
 	}
 	
 	public void dispose() {

@@ -57,6 +57,7 @@ public class Player extends EntityLiving implements LightSource {
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
 						new Sequence(18, 14, 4, 5).setNoLoop()));
+		world.getLightManager().addDynamicLight(this);
 		maxMana = 1000;
 	}
 
@@ -209,23 +210,23 @@ public class Player extends EntityLiving implements LightSource {
 		
 		else if(Input.instance.isPerformingAction(Action.MAGIC, id) && magicTimer == 0) {
 			//Fireball spell
-//			magicTimer = 120;
-//			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
-//			world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation, 5));
-//			SoundEffects.instance.play("magic", 1, 1, 0);
+			magicTimer = 120;
+			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
+			world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation, 5));
+			SoundEffects.instance.play("magic", 1, 1, 0);
 			
 			//Repel spell
-			magicTimer = 180;
-			SoundEffects.instance.play("magic", 1, 1, 0);
-			for(int i = 0; i < 40; i++) { world.spawn(new SparkParticle("repel_particle", world, position.x, position.y, Math.PI * 2 / 40 * i, 4, 40)); }
-			ArrayList<Coin> coins = world.getCoins();
-			for(Coin coin : coins) {
-				if(position.distBetween(coin.position) < 160) {
-					double initialSpeed = coin.velocity.magnitude();
-					double speed = Math.max(initialSpeed, 5);
-					coin.push(position.angleBetween(coin.position), speed, initialSpeed, 0.1);
-				}
-			}
+//			magicTimer = 180;
+//			SoundEffects.instance.play("magic", 1, 1, 0);
+//			for(int i = 0; i < 40; i++) { world.spawn(new SparkParticle("repel_particle", world, position.x, position.y, Math.PI * 2 / 40 * i, 4, 40)); }
+//			ArrayList<Coin> coins = world.getCoins();
+//			for(Coin coin : coins) {
+//				if(position.distBetween(coin.position) < 160) {
+//					double initialSpeed = coin.velocity.magnitude();
+//					double speed = Math.max(initialSpeed, 5);
+//					coin.push(position.angleBetween(coin.position), speed, initialSpeed, 0.1);
+//				}
+//			}
 		}
 
 		ArrayList<Coin> coins = world.getCoins();
@@ -234,10 +235,6 @@ public class Player extends EntityLiving implements LightSource {
 				coin.collect(this);
 				break;
 			}
-		}
-		
-		if(!shouldRemove()) {
-			world.getLightManager().addTemporaryLight(this);
 		}
 	}
 
@@ -287,6 +284,6 @@ public class Player extends EntityLiving implements LightSource {
 	}
 	
 	public Color lightColor() {
-		return new Color(1.0F, 1.0F, 1.0F, 0.75F);
+		return new Color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 }

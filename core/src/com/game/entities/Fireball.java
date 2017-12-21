@@ -2,14 +2,18 @@ package com.game.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.level.Level;
+import com.game.light.LevelLightManager;
+import com.game.light.LightSource;
 import com.game.utils.RandomUtils;
+import com.game.vector.Vector;
 
-public class Fireball extends Entity {
+public class Fireball extends Entity implements LightSource {
 
 	private Texture texture;
 	private Hitbox hitbox;
@@ -22,6 +26,7 @@ public class Fireball extends Entity {
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("fireball");
 		velocity.setAngle(angle, speed);
+		world.getLightManager().addDynamicLight(this);
 	}
 
 	@Override
@@ -87,5 +92,22 @@ public class Fireball extends Entity {
 	public void render(LayerRenderer renderer) {
 		int width = texture.getWidth(), height = texture.getHeight();
 		renderer.getSpriteBatch().draw(texture, (float)position.x - width / 2, (float)position.y - height / 2);
+	}
+	
+	public Vector lightPosition() {
+		return position;
+	}
+	
+	public int numLightRays() {
+		return LevelLightManager.DEFAULT_RADIAL_SOURCE;
+	}
+	
+	public float lightStrength() {
+		return 120;
+	}
+	
+	public Color lightColor() {
+		return new Color(1.0F, 0.6F, 0.2F, 0.75F);
+//		return new Color(1.0F, 1.0F, 1.0F, 0.75F);
 	}
 }
