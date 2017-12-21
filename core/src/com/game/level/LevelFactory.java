@@ -1,8 +1,9 @@
 package com.game.level;
 
 import com.game.Main;
-import com.game.currency.Currency;
 import com.game.graphics.LayerRenderer;
+import com.game.run.Run;
+import com.game.spells.WarpSpell;
 
 public class LevelFactory {
 
@@ -22,7 +23,7 @@ public class LevelFactory {
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
 		floor = EASY;
-		Currency.newInstance();
+		Run.newRun(new WarpSpell());
 		Level nextFloor = new Level(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextLevel = nextFloor;
 	}

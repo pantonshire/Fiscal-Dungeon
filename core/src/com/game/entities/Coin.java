@@ -1,10 +1,10 @@
 package com.game.entities;
 
 import com.game.audio.SoundEffects;
-import com.game.currency.Currency;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.level.Level;
+import com.game.run.Run;
 
 public abstract class Coin extends Entity {
 	
@@ -29,7 +29,7 @@ public abstract class Coin extends Entity {
 	}
 	
 	public void collect(Player player) {
-		Currency.instance.collectCoins(world, value);
+		Run.currentRun.collectCoins(world, value);
 		SoundEffects.instance.play(sound, 1, 1, 0);
 		destroy();
 	}

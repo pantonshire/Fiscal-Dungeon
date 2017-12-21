@@ -1,27 +1,31 @@
-package com.game.currency;
+package com.game.run;
 
 import java.util.ArrayList;
 
 import com.game.audio.SoundEffects;
 import com.game.entities.Player;
 import com.game.level.Level;
+import com.game.spells.Spell;
 
-public class Currency {
+public class Run {
 
-	public static Currency instance;
+	public static Run currentRun;
 
-	public static void newInstance() {
-		instance = new Currency();
+	public static void newRun(Spell spell) {
+		currentRun = new Run(spell);
 	}
+	
+	public Spell spell;
 	
 	private int coins;
 	private int maxCoins;
 	private boolean dead;
 
-	private Currency() {
+	private Run(Spell spell) {
 		coins = 0;
 		maxCoins = 100;
 		dead = false;
+		this.spell = spell;
 	}
 
 	public void collectCoins(Level world, int amount) {
@@ -47,7 +51,7 @@ public class Currency {
 		return dead;
 	}
 	
-	private void killPlayers(Level world) {
+	public void killPlayers(Level world) {
 		dead = true;
 		coins = 0;
 		world.startGameOverTimer();

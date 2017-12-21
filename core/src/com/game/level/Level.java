@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.Main;
-import com.game.currency.Currency;
 import com.game.entities.Coin;
 import com.game.entities.Enemy;
 import com.game.entities.Entity;
@@ -25,6 +24,7 @@ import com.game.input.Input;
 import com.game.light.LevelLightManager;
 import com.game.light.LightSource;
 import com.game.rooms.BossRoom;
+import com.game.run.Run;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
 
@@ -69,7 +69,8 @@ public class Level {
 		players = new ArrayList<Player>();
 
 		world = new World(new Vector2(0, 0), true);
-		light = new LevelLightManager(world, new Color(0.2F, 0.2F, 0.2F, 0.2F), true);
+		float ambientLight = 0.5F;
+		light = new LevelLightManager(world, new Color(ambientLight, ambientLight, ambientLight, ambientLight), true);
 		
 		if(boss) { createPlayers(1280, 560); }
 		else { createPlayers(732, 256); }
@@ -164,7 +165,7 @@ public class Level {
 	}
 
 	public void update() {
-		if(fadeOut == -1 && fadeIn == 0 && !Currency.instance.isDead() && Input.instance.isJustPerformingAction(Action.PAUSE, Player.PLAYER_1)) {
+		if(fadeOut == -1 && fadeIn == 0 && !Run.currentRun.isDead() && Input.instance.isJustPerformingAction(Action.PAUSE, Player.PLAYER_1)) {
 			paused = !paused;
 			for(Player player : players) {
 				player.setStopped();
@@ -197,7 +198,7 @@ public class Level {
 			updateCamera();
 		}
 
-		if(Currency.instance.isDead() && --gameOverTimer <= 0) {
+		if(Run.currentRun.isDead() && --gameOverTimer <= 0) {
 			paused = true;
 		}
 
@@ -264,8 +265,8 @@ public class Level {
 		overlayRenderer.getSpriteBatch().draw(coin.getFrame(), 330, Gdx.graphics.getHeight() / 2 + 180);
 		coin.updateTimer();
 		overlayRenderer.setTextColour(Color.WHITE);
-		overlayRenderer.drawText("x " + Currency.instance.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
-		overlayRenderer.drawText("/ " + Currency.instance.getMaxCoins(), 380, Gdx.graphics.getHeight() / 2 + 192);
+		overlayRenderer.drawText("x " + Run.currentRun.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
+		overlayRenderer.drawText("/ " + Run.currentRun.getMaxCoins(), 380, Gdx.graphics.getHeight() / 2 + 192);
 
 		if(roomTitle > 0) {
 			--roomTitle;
@@ -275,7 +276,7 @@ public class Level {
 			overlayRenderer.drawText(text, x, y);
 		}
 
-		if(Currency.instance.isDead() && gameOverTimer <= 0) {
+		if(Run.currentRun.isDead() && gameOverTimer <= 0) {
 			String text = "GAME OVER";
 			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
 			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;

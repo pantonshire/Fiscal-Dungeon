@@ -4,9 +4,9 @@ import com.game.entities.BlackDemonCoin;
 import com.game.entities.EvilPlayerBoss;
 import com.game.entities.SlotMachine;
 import com.game.entities.TreasureChestBoss;
-import com.game.level.TileMap;
 import com.game.level.Level;
 import com.game.level.LevelFactory;
+import com.game.level.TileMap;
 
 public class BossRoom extends Room {
 

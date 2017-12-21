@@ -13,6 +13,7 @@ import com.game.input.Input;
 import com.game.level.Level;
 import com.game.light.LevelLightManager;
 import com.game.light.LightSource;
+import com.game.run.Run;
 import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
@@ -24,7 +25,7 @@ public class Player extends EntityLiving implements LightSource {
 	PLAYER_2 = 1,
 	PLAYER_3 = 2,
 	PLAYER_4 = 3;
-	
+
 	private static final int SHOOT_TIME = 24;
 	private static final double ARM_ROTATE_SPEED = Math.toRadians(8);
 
@@ -37,6 +38,7 @@ public class Player extends EntityLiving implements LightSource {
 	private int magicTimer;
 	private int mana;
 	private int maxMana;
+	private boolean invisible;
 
 	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
@@ -58,7 +60,7 @@ public class Player extends EntityLiving implements LightSource {
 						new Sequence(18, 14, 0, 1),
 						new Sequence(18, 14, 4, 5).setNoLoop()));
 		world.getLightManager().addDynamicLight(this);
-		maxMana = 1000;
+		mana = maxMana = 5000;
 	}
 
 	private String getBodyTexture(byte playerID) {
@@ -90,26 +92,30 @@ public class Player extends EntityLiving implements LightSource {
 			return "bow";
 		}
 	}
-	
+
 	public void setMagicCooldown(int cooldown) {
 		magicTimer = cooldown;
 	}
-	
+
 	public void useMana(int amount) {
 		mana -= amount;
 		if(mana < 0) { mana = 0; }
 	}
-	
+
 	public int getMana() {
 		return mana;
 	}
-	
+
 	public double getManaPercentage() {
 		return (double)mana / (double)maxMana;
 	}
-	
+
 	public double getArmRotation() {
 		return armRotation;
+	}
+	
+	public void setInvisible(boolean invisible) {
+		this.invisible = invisible;
 	}
 
 	public void explode() {
@@ -207,46 +213,33 @@ public class Player extends EntityLiving implements LightSource {
 			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, arrowSpeed));
 			SoundEffects.instance.play("bow", 1, 1, 0);
 		}
-		
+
 		else if(Input.instance.isPerformingAction(Action.MAGIC, id) && magicTimer == 0) {
-			//Fireball spell
-			magicTimer = 120;
-			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
-			world.spawn(new Fireball(world, spawnPos.x, spawnPos.y, armRotation, 5));
-			SoundEffects.instance.play("magic", 1, 1, 0);
-			
-			//Repel spell
-//			magicTimer = 180;
-//			SoundEffects.instance.play("magic", 1, 1, 0);
-//			for(int i = 0; i < 40; i++) { world.spawn(new SparkParticle("repel_particle", world, position.x, position.y, Math.PI * 2 / 40 * i, 4, 40)); }
-//			ArrayList<Coin> coins = world.getCoins();
-//			for(Coin coin : coins) {
-//				if(position.distBetween(coin.position) < 160) {
-//					double initialSpeed = coin.velocity.magnitude();
-//					double speed = Math.max(initialSpeed, 5);
-//					coin.push(position.angleBetween(coin.position), speed, initialSpeed, 0.1);
-//				}
-//			}
+			Run.currentRun.spell.use(world, this);
 		}
 
-		ArrayList<Coin> coins = world.getCoins();
-		for(Coin coin : coins) {
-			if(!coin.shouldRemove() && hitbox.intersectsHitbox(coin.hitbox)) {
-				coin.collect(this);
-				break;
+		if(!invisible) {
+			ArrayList<Coin> coins = world.getCoins();
+			for(Coin coin : coins) {
+				if(!coin.shouldRemove() && hitbox.intersectsHitbox(coin.hitbox)) {
+					coin.collect(this);
+					break;
+				}
 			}
 		}
 	}
 
 	public void render(LayerRenderer renderer) {
-		if(facing == 0 || facing == 1 || facing == 3) {
-			renderBody(renderer);
-			renderArm(renderer);
-		}
+		if(!invisible) {
+			if(facing == 0 || facing == 1 || facing == 3) {
+				renderBody(renderer);
+				renderArm(renderer);
+			}
 
-		else {
-			renderArm(renderer);
-			renderBody(renderer);
+			else {
+				renderArm(renderer);
+				renderBody(renderer);
+			}
 		}
 	}
 
@@ -270,19 +263,19 @@ public class Player extends EntityLiving implements LightSource {
 			bow.setSequence(0, true);
 		}
 	}
-	
+
 	public Vector lightPosition() {
 		return position;
 	}
-	
+
 	public int numLightRays() {
 		return LevelLightManager.DEFAULT_RADIAL_SOURCE;
 	}
-	
+
 	public float lightStrength() {
 		return 240;
 	}
-	
+
 	public Color lightColor() {
 		return new Color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
