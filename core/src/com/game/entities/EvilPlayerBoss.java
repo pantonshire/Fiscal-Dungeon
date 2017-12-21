@@ -8,9 +8,9 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
-import com.game.world.World;
 
 public class EvilPlayerBoss extends Enemy {
 
@@ -22,7 +22,7 @@ public class EvilPlayerBoss extends Enemy {
 	private int timer;
 	private int phase;
 
-	public EvilPlayerBoss(World world, double x, double y) {
+	public EvilPlayerBoss(Level world, double x, double y) {
 		super(world, x, y, 10, 30, 1, 60);
 		animation = new Animation(Textures.instance.getTexture("evil_player_boss"),
 				Sequence.formatSequences(

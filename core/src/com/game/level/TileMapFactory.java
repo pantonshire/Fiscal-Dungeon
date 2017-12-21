@@ -1,4 +1,4 @@
-package com.game.world;
+package com.game.level;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class TileMapFactory {
 		return new TileMap(Textures.instance.getTexture(tileMap), tiles, tileSize);
 	}
 
-	public static TileMap insertRoom(TileMap tileMap, Room room, World world, int x, int y, int difficulty) {
+	public static TileMap insertRoom(TileMap tileMap, Room room, Level world, int x, int y, int difficulty) {
 		for(int i = 0; i < room.getWidth(); i++) {
 			for(int j = 0; j < room.getHeight(); j++) {
 				tileMap.setTile(x + i, y + j, room.getTile(i, j));
@@ -38,7 +38,7 @@ public class TileMapFactory {
 		return tileMap;
 	}
 
-	public static TileMap generateRandomMap(World world, TileMap map, int numPaths, int difficulty) {
+	public static TileMap generateRandomMap(Level world, TileMap map, int numPaths, int difficulty) {
 		int numRoomsX = (int)(map.getWidth() / 24.0D) - 1, numRoomsY = (int)(map.getHeight() / 24.0D) - 1;
 		int[][] rooms = new int[numRoomsY][numRoomsX];
 		rooms[0][rooms[0].length - 1] = 3; //Exit room

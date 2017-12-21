@@ -3,13 +3,13 @@ package com.game.entities;
 import java.util.ArrayList;
 
 import com.game.graphics.LayerRenderer;
-import com.game.world.World;
+import com.game.level.Level;
 
 public class Trapdoor extends Entity {
 
 	private Hitbox hitbox;
 
-	public Trapdoor(World world, double x, double y) {
+	public Trapdoor(Level world, double x, double y) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 8, 8);
 	}

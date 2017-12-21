@@ -8,8 +8,8 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
-import com.game.world.World;
 
 public class GemBoss extends Enemy {
 
@@ -18,7 +18,7 @@ public class GemBoss extends Enemy {
 	private int timer;
 	private int phase;
 
-	public GemBoss(World world, double x, double y) {
+	public GemBoss(Level world, double x, double y) {
 		super(world, x, y, 30, 30, 1, 175);
 		animation = new Animation(Textures.instance.getTexture("gem_boss"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();

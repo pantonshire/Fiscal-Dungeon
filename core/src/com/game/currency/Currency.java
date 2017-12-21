@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.game.audio.SoundEffects;
 import com.game.entities.Player;
-import com.game.world.World;
+import com.game.level.Level;
 
 public class Currency {
 
@@ -24,7 +24,7 @@ public class Currency {
 		dead = false;
 	}
 
-	public void collectCoins(World world, int amount) {
+	public void collectCoins(Level world, int amount) {
 		coins += amount;
 		if(coins >= maxCoins) {
 			killPlayers(world);
@@ -47,7 +47,7 @@ public class Currency {
 		return dead;
 	}
 	
-	private void killPlayers(World world) {
+	private void killPlayers(Level world) {
 		dead = true;
 		coins = 0;
 		world.startGameOverTimer();

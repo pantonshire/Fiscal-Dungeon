@@ -1,10 +1,10 @@
 package com.game.rooms;
 
-import com.game.world.World;
+import com.game.level.Level;
 
 public class StartRoom extends Room {
 
-	public StartRoom(World world) {
+	public StartRoom(Level world) {
 		super(world, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -2, -3, -1, -1, -1, 1 },
@@ -19,7 +19,7 @@ public class StartRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(World world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
 
 	}
 }

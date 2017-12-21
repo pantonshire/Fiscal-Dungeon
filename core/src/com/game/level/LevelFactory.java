@@ -1,10 +1,10 @@
-package com.game.world;
+package com.game.level;
 
 import com.game.Main;
 import com.game.currency.Currency;
 import com.game.graphics.LayerRenderer;
 
-public class WorldFactory {
+public class LevelFactory {
 
 	public static final int NUM_FLOORS = 8;
 	public static final int
@@ -21,17 +21,17 @@ public class WorldFactory {
 	private static final int[] SIZES = new int[] { 100, 100, 170, 100, 200, 100, 240, 100 };
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
-		floor = BOSS_1;
+		floor = EASY;
 		Currency.newInstance();
-		World nextFloor = new World(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
-		Main.nextWorld = nextFloor;
+		Level nextFloor = new Level(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
+		Main.nextLevel = nextFloor;
 	}
 
-	public static void nextFloor(World current) {
+	public static void nextFloor(Level current) {
 		if(nextFloorExists()) {
 			++floor;
-			World nextFloor = new World(current.gameRenderer, current.overlayRenderer, SIZES[floor], SIZES[floor], floor % 2 != 0);
-			Main.nextWorld = nextFloor;
+			Level nextFloor = new Level(current.gameRenderer, current.overlayRenderer, SIZES[floor], SIZES[floor], floor % 2 != 0);
+			Main.nextLevel = nextFloor;
 		}
 
 		else {

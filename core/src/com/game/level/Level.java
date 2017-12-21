@@ -1,4 +1,4 @@
-package com.game.world;
+package com.game.level;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,6 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.game.Main;
 import com.game.currency.Currency;
 import com.game.entities.Coin;
@@ -19,18 +22,20 @@ import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.input.Action;
 import com.game.input.Input;
+import com.game.light.LevelLightManager;
 import com.game.rooms.BossRoom;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
 
-public class World {
+public class Level {
 
 	public LayerRenderer gameRenderer;
 	public LayerRenderer overlayRenderer;
-	public int difficulty;
+
 	private boolean paused;
 	private int gameOverTimer;
 	private int fadeOut, fadeIn, roomTitle;
+
 	private TileMap tiles;
 	private Player player1;
 	private ArrayList<Player> players;
@@ -39,32 +44,47 @@ public class World {
 	private ArrayList<Coin> coins;
 	private ArrayList<Enemy> enemies;
 
+	private World world;
+	private LevelLightManager light;
+	
 	private Animation coin;
+	private TextureRegion manaBar;
 
-	public World(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height, boolean boss) {
+	public Level(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height, boolean boss) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
+		
 		fadeOut = -1;
 		fadeIn = 60;
 		roomTitle = 240;
+		
 		coin = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
+		manaBar = new TextureRegion(Textures.instance.getTexture("magic_meter"));
+		
 		entities = new ArrayList<Entity>();
 		spawnQueue = new HashSet<Entity>();
 		coins = new ArrayList<Coin>();
 		enemies = new ArrayList<Enemy>();
 		players = new ArrayList<Player>();
 
+		world = new World(new Vector2(0, 0), true);
+		light = new LevelLightManager(world, new Color(0.2F, 0.2F, 0.2F, 0.2F), true);
+		
 		if(boss) { createPlayers(1280, 560); }
 		else { createPlayers(732, 256); }
 
-		tiles = TileMapFactory.newBlankMap(WorldFactory.getTileset(), (byte)1, 32, width, height);
+		tiles = TileMapFactory.newBlankMap(LevelFactory.getTileset(), (byte)1, 32, width, height);
 
-		if(boss) { TileMapFactory.insertRoom(tiles, new BossRoom(this), this, 21, 5, WorldFactory.floor); }
-		else { tiles = TileMapFactory.generateRandomMap(this, tiles, 4, WorldFactory.floor); }
+		if(boss) { TileMapFactory.insertRoom(tiles, new BossRoom(this), this, 21, 5, LevelFactory.floor); }
+		else { tiles = TileMapFactory.generateRandomMap(this, tiles, 4, LevelFactory.floor); }
 	}
 
 	public TileMap getTileMap() {
 		return tiles;
+	}
+	
+	public LevelLightManager getLightManager() {
+		return light;
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -107,15 +127,15 @@ public class World {
 		int numPlayers = Input.getNumPlayers();
 		for(byte id = 0; id < numPlayers; id++) {
 			Player player = new Player(this, x, y, id);
-			
+
 			if(id == 0) {
 				player1 = player;
 			}
-			
+
 			else {
 				player.getPosition().add(RandomUtils.randVector(16, 32));
 			}
-			
+
 			players.add(player);
 			addEntity(player);
 		}
@@ -184,12 +204,20 @@ public class World {
 		}
 
 		if(fadeOut > 0 && --fadeOut == 0) {
-			WorldFactory.nextFloor(this);
+			LevelFactory.nextFloor(this);
 		}
 
 		if(fadeIn > 0) {
 			--fadeIn;
 		}
+	}
+	
+	public void stepWorld() {
+		world.step(1/60F, 6, 2);
+	}
+	
+	public void applyLight() {
+		light.applyLight(gameRenderer);
 	}
 
 	public void render(int pass) {
@@ -226,6 +254,7 @@ public class World {
 	}
 
 	private void renderOverlayLayer() {
+		renderManaBar();
 		overlayRenderer.getSpriteBatch().draw(coin.getFrame(), 330, Gdx.graphics.getHeight() / 2 + 180);
 		coin.updateTimer();
 		overlayRenderer.setTextColour(Color.WHITE);
@@ -234,7 +263,7 @@ public class World {
 
 		if(roomTitle > 0) {
 			--roomTitle;
-			String text = "Floor " + (WorldFactory.floor + 1) + ": " + WorldFactory.getFloorName();
+			String text = "Floor " + (LevelFactory.floor + 1) + ": " + LevelFactory.getFloorName();
 			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
 			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
 			overlayRenderer.drawText(text, x, y);
@@ -253,5 +282,16 @@ public class World {
 			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
 			overlayRenderer.drawText(text, x, y);
 		}
+	}
+
+	private void renderManaBar() {
+		manaBar.setRegion(0, 0, 11, 150);
+		int x = Gdx.graphics.getWidth() / 2 + 300;
+		int y = Gdx.graphics.getHeight() / 2 + 45;
+		overlayRenderer.getSpriteBatch().draw(manaBar, x, y);
+		double percentageMana = player1.getManaPercentage();
+		int height = (int)(150 * percentageMana);
+		manaBar.setRegion(11, 150 - height, 7, height);
+		overlayRenderer.getSpriteBatch().draw(manaBar, x + 2, y);
 	}
 }

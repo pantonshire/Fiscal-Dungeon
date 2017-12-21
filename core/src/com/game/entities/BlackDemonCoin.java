@@ -5,9 +5,9 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
-import com.game.world.World;
 
 public class BlackDemonCoin extends Enemy {
 
@@ -17,7 +17,7 @@ public class BlackDemonCoin extends Enemy {
 	private int phase;
 	private double startAngle;
 
-	public BlackDemonCoin(World world, double x, double y) {
+	public BlackDemonCoin(Level world, double x, double y) {
 		super(world, x, y, 30, 30, 0.25, 6);
 		animation = new Animation(Textures.instance.getTexture("black_demon_coin"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),

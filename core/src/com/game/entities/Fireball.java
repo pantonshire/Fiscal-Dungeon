@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
-import com.game.world.World;
 
 public class Fireball extends Entity {
 
@@ -17,7 +17,7 @@ public class Fireball extends Entity {
 	private int damageCooldown;
 	private int bounces;
 
-	public Fireball(World world, double x, double y, double angle, double speed) {
+	public Fireball(Level world, double x, double y, double angle, double speed) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("fireball");

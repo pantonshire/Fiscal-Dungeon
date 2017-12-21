@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import com.game.graphics.Animation;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
-import com.game.world.World;
+import com.game.level.Level;
 
 public class PurpleGemProjectile extends Coin {
 
-	public PurpleGemProjectile(World world, double x, double y, double angle) {
+	public PurpleGemProjectile(Level world, double x, double y, double angle) {
 		super(world, x, y, 3, "coin");
 		animation = new Animation(Textures.instance.getTexture("gem_purple"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
 		velocity.setAngle(angle, getSpeed());

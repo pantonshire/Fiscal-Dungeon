@@ -2,15 +2,15 @@ package com.game.rooms;
 
 import com.game.entities.BlackDemonCoin;
 import com.game.entities.EvilPlayerBoss;
-import com.game.entities.GemBoss;
 import com.game.entities.SlotMachine;
-import com.game.world.TileMap;
-import com.game.world.World;
-import com.game.world.WorldFactory;
+import com.game.entities.TreasureChestBoss;
+import com.game.level.TileMap;
+import com.game.level.Level;
+import com.game.level.LevelFactory;
 
 public class BossRoom extends Room {
 
-	public BossRoom(World world) {
+	public BossRoom(Level world) {
 		super(world, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1 },
@@ -53,25 +53,26 @@ public class BossRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(World world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
 		TileMap tiles = world.getTileMap();
 		switch(difficulty) {
-		case WorldFactory.BOSS_1:
-//			world.spawn(new TreasureChestBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
-			world.spawn(new SlotMachine(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
+		case LevelFactory.BOSS_1:
+			world.spawn(new TreasureChestBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
+//			world.spawn(new SlotMachine(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
 			break;
-		case WorldFactory.BOSS_2:
+		case LevelFactory.BOSS_2:
 			world.spawn(new EvilPlayerBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
 			break;
-		case WorldFactory.BOSS_3:
+		case LevelFactory.BOSS_3:
 			world.spawn(new EvilPlayerBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
 			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 10), tiles.getWorldCoordinate(minY + 21)));
 			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 28), tiles.getWorldCoordinate(minY + 21)));
 			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 10), tiles.getWorldCoordinate(minY + 17)));
 			world.spawn(new BlackDemonCoin(world, tiles.getWorldCoordinate(minX + 28), tiles.getWorldCoordinate(minY + 17)));
 			break;
-		case WorldFactory.BOSS_4:
-			world.spawn(new GemBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
+		case LevelFactory.BOSS_4:
+//			world.spawn(new GemBoss(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
+			world.spawn(new SlotMachine(world, tiles.getWorldCoordinate(minX + 19), tiles.getWorldCoordinate(minY + 19)));
 			break;
 		}
 	}

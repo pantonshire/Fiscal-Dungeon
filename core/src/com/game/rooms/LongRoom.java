@@ -9,14 +9,14 @@ import com.game.entities.DemonCoin;
 import com.game.entities.GoldCoin;
 import com.game.entities.RedGem;
 import com.game.entities.TreasureChest;
+import com.game.level.TileMap;
+import com.game.level.Level;
+import com.game.level.LevelFactory;
 import com.game.utils.RandomUtils;
-import com.game.world.TileMap;
-import com.game.world.World;
-import com.game.world.WorldFactory;
 
 public class LongRoom extends Room {
 
-	public LongRoom(World world) {
+	public LongRoom(Level world) {
 		super(world, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1 },
@@ -37,10 +37,10 @@ public class LongRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(World world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
 		TileMap tiles = world.getTileMap();
 
-		if(difficulty == WorldFactory.EASY) {
+		if(difficulty == LevelFactory.EASY) {
 			switch(RandomUtils.randInt(5)) {
 			case 0:
 				world.spawn(new BigGem(world, tiles.getWorldCoordinate(minX + 16), tiles.getWorldCoordinate(minY + 8)));
@@ -79,7 +79,7 @@ public class LongRoom extends Room {
 			}
 		}
 
-		else if(difficulty == WorldFactory.NORMAL) {
+		else if(difficulty == LevelFactory.NORMAL) {
 			switch(RandomUtils.randInt(9)) {
 			case 0:
 				world.spawn(new BigRedGem(world, tiles.getWorldCoordinate(minX + 6), tiles.getWorldCoordinate(minY + 8)));
@@ -144,7 +144,7 @@ public class LongRoom extends Room {
 			}
 		}
 
-		else if(difficulty == WorldFactory.HARD) {
+		else if(difficulty == LevelFactory.HARD) {
 			switch(RandomUtils.randInt(9)) {
 			case 0:
 				world.spawn(new BigRedGem(world, tiles.getWorldCoordinate(minX + 6), tiles.getWorldCoordinate(minY + 8)));
@@ -195,7 +195,7 @@ public class LongRoom extends Room {
 			}
 		}
 
-		else if(difficulty == WorldFactory.MADNESS) {
+		else if(difficulty == LevelFactory.MADNESS) {
 			switch(RandomUtils.randInt(9)) {
 			case 0:
 				world.spawn(new BigRedGem(world, tiles.getWorldCoordinate(minX + 6), tiles.getWorldCoordinate(minY + 8)));

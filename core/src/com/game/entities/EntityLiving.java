@@ -1,6 +1,6 @@
 package com.game.entities;
 
-import com.game.world.World;
+import com.game.level.Level;
 
 public abstract class EntityLiving extends Entity {
 
@@ -15,7 +15,7 @@ public abstract class EntityLiving extends Entity {
 	protected double pushAngle;
 	protected double pushAcceleration;
 
-	public EntityLiving(World world, double x, double y, int width, int height, double walkSpeed) {
+	public EntityLiving(Level world, double x, double y, int width, int height, double walkSpeed) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, width, height);
 		this.walkSpeed = walkSpeed;

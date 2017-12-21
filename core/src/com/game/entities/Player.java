@@ -2,6 +2,7 @@ package com.game.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.game.audio.SoundEffects;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
@@ -9,12 +10,14 @@ import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.input.Action;
 import com.game.input.Input;
+import com.game.level.Level;
+import com.game.light.LevelLightManager;
+import com.game.light.LightSource;
 import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
-import com.game.world.World;
 
-public class Player extends EntityLiving {
+public class Player extends EntityLiving implements LightSource {
 
 	public static final byte
 	PLAYER_1 = 0,
@@ -32,11 +35,13 @@ public class Player extends EntityLiving {
 	private int facing;
 	private int shootTimer;
 	private int magicTimer;
+	private int mana;
+	private int maxMana;
 
 	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
 
-	public Player(World world, double x, double y, byte playerID) {
+	public Player(Level world, double x, double y, byte playerID) {
 		super(world, x, y, 10, 30, 2.5);
 		id = playerID;
 		animation = new Animation(Textures.instance.getTexture(getBodyTexture(playerID)),
@@ -52,6 +57,7 @@ public class Player extends EntityLiving {
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
 						new Sequence(18, 14, 4, 5).setNoLoop()));
+		maxMana = 1000;
 	}
 
 	private String getBodyTexture(byte playerID) {
@@ -82,6 +88,27 @@ public class Player extends EntityLiving {
 		default:
 			return "bow";
 		}
+	}
+	
+	public void setMagicCooldown(int cooldown) {
+		magicTimer = cooldown;
+	}
+	
+	public void useMana(int amount) {
+		mana -= amount;
+		if(mana < 0) { mana = 0; }
+	}
+	
+	public int getMana() {
+		return mana;
+	}
+	
+	public double getManaPercentage() {
+		return (double)mana / (double)maxMana;
+	}
+	
+	public double getArmRotation() {
+		return armRotation;
 	}
 
 	public void explode() {
@@ -170,6 +197,7 @@ public class Player extends EntityLiving {
 
 		if(shootTimer > 0) { --shootTimer; }
 		if(magicTimer > 0) { --magicTimer; }
+		if(mana < maxMana) { ++mana; }
 
 		if(Input.instance.isPerformingAction(Action.ATTACK, id) && shootTimer == 0) {
 			shootTimer = SHOOT_TIME;
@@ -207,6 +235,10 @@ public class Player extends EntityLiving {
 				break;
 			}
 		}
+		
+		if(!shouldRemove()) {
+			world.getLightManager().addTemporaryLight(this);
+		}
 	}
 
 	public void render(LayerRenderer renderer) {
@@ -240,5 +272,21 @@ public class Player extends EntityLiving {
 		if(bow.getSequence() == 1 && bow.isDone()) {
 			bow.setSequence(0, true);
 		}
+	}
+	
+	public Vector lightPosition() {
+		return position;
+	}
+	
+	public int numLightRays() {
+		return LevelLightManager.DEFAULT_RADIAL_SOURCE;
+	}
+	
+	public float lightStrength() {
+		return 240;
+	}
+	
+	public Color lightColor() {
+		return new Color(1.0F, 1.0F, 1.0F, 0.75F);
 	}
 }

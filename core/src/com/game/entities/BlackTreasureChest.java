@@ -8,8 +8,8 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
-import com.game.world.World;
 
 public class BlackTreasureChest extends Enemy {
 
@@ -18,7 +18,7 @@ public class BlackTreasureChest extends Enemy {
 	private int timer;
 	private int phase;
 
-	public BlackTreasureChest(World world, double x, double y) {
+	public BlackTreasureChest(Level world, double x, double y) {
 		super(world, x, y, 30, 30, 1.5, 30);
 		animation = new Animation(Textures.instance.getTexture("demon_treasure_chest"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),

@@ -8,8 +8,8 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
-import com.game.world.World;
 
 public class CoinSnake extends Enemy {
 
@@ -21,7 +21,7 @@ public class CoinSnake extends Enemy {
 	private int pathFindTimer;
 	private int dropCoinTimer;
 	
-	public CoinSnake(World world, double x, double y) {
+	public CoinSnake(Level world, double x, double y) {
 		super(world, x, y, 14, 14, 1, 1);
 		animation = new Animation(Textures.instance.getTexture("coin_snake"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		path = new ArrayList<Point>();

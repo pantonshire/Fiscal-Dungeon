@@ -3,13 +3,13 @@ package com.game.entities;
 import java.util.ArrayList;
 
 import com.game.audio.SoundEffects;
-import com.game.world.World;
+import com.game.level.Level;
 
 public abstract class Enemy extends EntityLiving {
 
 	protected int health;
 
-	public Enemy(World world, double x, double y, int width, int height, double walkSpeed, int health) {
+	public Enemy(Level world, double x, double y, int width, int height, double walkSpeed, int health) {
 		super(world, x, y, width, height, walkSpeed);
 		this.health = health;
 	}

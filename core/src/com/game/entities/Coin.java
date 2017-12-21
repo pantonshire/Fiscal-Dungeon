@@ -4,7 +4,7 @@ import com.game.audio.SoundEffects;
 import com.game.currency.Currency;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
-import com.game.world.World;
+import com.game.level.Level;
 
 public abstract class Coin extends Entity {
 	
@@ -21,7 +21,7 @@ public abstract class Coin extends Entity {
 	protected double finalSpeed;
 	protected double pushDeceleration;
 	
-	public Coin(World world, double x, double y, int value, String sound) {
+	public Coin(Level world, double x, double y, int value, String sound) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 10, 10);
 		this.value = value;

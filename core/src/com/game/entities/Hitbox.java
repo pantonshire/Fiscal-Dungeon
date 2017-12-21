@@ -1,7 +1,7 @@
 package com.game.entities;
 
+import com.game.level.TileMap;
 import com.game.vector.Vector;
-import com.game.world.TileMap;
 
 public class Hitbox {
 

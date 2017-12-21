@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
-import com.game.world.World;
+import com.game.level.Level;
 
 public class Arrow extends Entity {
 
@@ -14,7 +14,7 @@ public class Arrow extends Entity {
 	private double angle;
 	private int time;
 
-	public Arrow(World world, double x, double y, double angle, double speed) {
+	public Arrow(Level world, double x, double y, double angle, double speed) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("arrow");

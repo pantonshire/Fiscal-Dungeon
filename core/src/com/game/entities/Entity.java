@@ -3,16 +3,16 @@ package com.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.game.graphics.LayerRenderer;
+import com.game.level.Level;
 import com.game.vector.Vector;
-import com.game.world.World;
 
 public abstract class Entity {
 
-	protected World world;
+	protected Level world;
 	protected Vector position, velocity;
 	private boolean shouldRemove;
 	
-	public Entity(World world, double x, double y) {
+	public Entity(Level world, double x, double y) {
 		position = new Vector(x, y);
 		velocity = new Vector();
 		this.world = world;

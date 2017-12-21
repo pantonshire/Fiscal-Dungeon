@@ -5,8 +5,8 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
-import com.game.world.World;
 
 public class BigRedGem extends Enemy {
 
@@ -16,7 +16,7 @@ public class BigRedGem extends Enemy {
 	private int attackTimer;
 	private double angle;
 
-	public BigRedGem(World world, double x, double y) {
+	public BigRedGem(Level world, double x, double y) {
 		super(world, x, y, 30, 30, 0.25, 10);
 		animation = new Animation(Textures.instance.getTexture("big_red_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 	}

@@ -7,9 +7,9 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
-import com.game.world.World;
 
 public class SlotMachine extends Enemy {
 
@@ -19,11 +19,12 @@ public class SlotMachine extends Enemy {
 	private int phase;
 	private double chargeAngle;
 	private double chargeSpeed;
+	private int chargeCooldown;
 	private Vector spawnPos;
 	private int[] slotResults;
 	private int mouthYOffset;
 
-	public SlotMachine(World world, double x, double y) {
+	public SlotMachine(Level world, double x, double y) {
 		super(world, x, y, 38, 54, 0.25, 300);
 		animation = new Animation(Textures.instance.getTexture("slot_machine"), Sequence.formatSequences(
 				new Sequence(39, 56, 0, 1),
@@ -57,7 +58,7 @@ public class SlotMachine extends Enemy {
 			return 0;
 		}
 	}
-	
+
 	private void nextCycle() {
 		phase = 0;
 		timer = 20;
@@ -159,6 +160,7 @@ public class SlotMachine extends Enemy {
 
 	protected void updateEntity() {
 		if(timer > 0) { --timer; }
+		if(chargeCooldown > 0) { --chargeCooldown; }
 		Player targetPlayer = getNearestPlayer();
 
 		if(timer == 0) {
@@ -280,8 +282,8 @@ public class SlotMachine extends Enemy {
 
 		else if(phase == 11) {
 			if(timer > 0 && timer % 30 == 0) {
-				for(int i = 0; i < 6; i++) {
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y + mouthYOffset, Math.PI * 2 / 6 * i + (timer / 30 * 5)));
+				for(int i = 0; i < 4; i++) {
+					world.spawn(new PurpleGemProjectile(world, position.x, position.y + mouthYOffset, Math.PI * 2 / 4 * i + (timer / 30 * 2)));
 				}
 			}
 
@@ -295,8 +297,14 @@ public class SlotMachine extends Enemy {
 			boolean updateVelocity = false;
 
 			if(collided && targetPlayer != null) {
-				chargeAngle = position.angleBetween(targetPlayer.position);
-				updateVelocity = true;
+				if(chargeCooldown == 0) {
+					chargeAngle = position.angleBetween(targetPlayer.position);
+					updateVelocity = true;
+				}
+
+				else {
+					velocity.setAngle(position.angleBetween(spawnPos), chargeSpeed);
+				}
 			}
 
 			if(chargeSpeed < 12) {
@@ -306,13 +314,15 @@ public class SlotMachine extends Enemy {
 
 			if(updateVelocity) {
 				velocity.setAngle(chargeAngle, chargeSpeed);
+				chargeCooldown = 5;
 			}
 
 			if(chargeSpeed > 3.5) {
 				animation.setSequence(1, true);
 			}
 
-			if(timer % 8 == 0) {
+			int rate = 18 - (int)chargeSpeed;
+			if(timer % rate == 0) {
 				world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, chargeAngle + Math.PI, 1));
 			}
 		}

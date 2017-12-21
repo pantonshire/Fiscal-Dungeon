@@ -8,8 +8,8 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
-import com.game.world.World;
 
 public class TreasureChest extends Enemy {
 
@@ -18,7 +18,7 @@ public class TreasureChest extends Enemy {
 	private int timer;
 	private int phase;
 
-	public TreasureChest(World world, double x, double y) {
+	public TreasureChest(Level world, double x, double y) {
 		super(world, x, y, 30, 30, 2, 25);
 		animation = new Animation(Textures.instance.getTexture("treasure_chest"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),

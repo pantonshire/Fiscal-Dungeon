@@ -4,19 +4,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.game.world.World;
+import com.game.level.Level;
 
 public abstract class Room {
 	
 	private byte[][] tiles;
 	
-	public Room(World world, byte[][] tiles) {
+	public Room(Level world, byte[][] tiles) {
 		List<byte[]> list = Arrays.asList(tiles);
 		Collections.reverse(list);
 		this.tiles = tiles;
 	}
 	
-	public abstract void spawnEntities(World world, int minX, int minY, int difficulty);
+	public abstract void spawnEntities(Level world, int minX, int minY, int difficulty);
 	
 	public byte[][] getTiles() {
 		return tiles;

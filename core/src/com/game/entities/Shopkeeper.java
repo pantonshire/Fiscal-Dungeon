@@ -3,13 +3,13 @@ package com.game.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
-import com.game.world.World;
+import com.game.level.Level;
 
 public class Shopkeeper extends Entity {
 
 	private Texture texture;
 
-	public Shopkeeper(World world, double x, double y) {
+	public Shopkeeper(Level world, double x, double y) {
 		super(world, x, y);
 		texture = Textures.instance.getTexture("shopkeeper");
 	}

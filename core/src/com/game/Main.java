@@ -9,18 +9,18 @@ import com.game.audio.SoundEffects;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.input.Input;
-import com.game.world.World;
-import com.game.world.WorldFactory;
+import com.game.level.Level;
+import com.game.level.LevelFactory;
 
 public class Main extends ApplicationAdapter {
 	
 	private LayerRenderer gameRenderer;
 	private LayerRenderer overlayRenderer;
-	private World currentWorld;
+	private Level currentLevel;
 	private int option;
-	private boolean deleteWorld;
+	private boolean deleteLevel;
 	
-	public static World nextWorld;
+	public static Level nextLevel;
 	private static int screen;
 	private static Main instance;
 	
@@ -35,25 +35,27 @@ public class Main extends ApplicationAdapter {
 	public void render() {
 		clearScreen();
 
-		if(deleteWorld) {
-			deleteWorld = false;
-			currentWorld = null;
+		if(deleteLevel) {
+			deleteLevel = false;
+			currentLevel = null;
 		}
 		
-		if(nextWorld != null) {
-			currentWorld = null;
-			currentWorld = nextWorld;
-			nextWorld = null;
+		if(nextLevel != null) {
+			currentLevel = null;
+			currentLevel = nextLevel;
+			nextLevel = null;
 		}
 		
-		if(currentWorld != null) {
-			currentWorld.update();
+		if(currentLevel != null) {
+			currentLevel.update();
 			gameRenderer.beginBatch();
-			currentWorld.render(0);
+			currentLevel.render(0);
 			gameRenderer.endBatch();
+			currentLevel.applyLight();
 			overlayRenderer.beginBatch();
-			currentWorld.render(1);
+			currentLevel.render(1);
 			overlayRenderer.endBatch();
+//			currentLevel.stepWorld();
 		}
 		
 		else if(screen == 0) {
@@ -76,7 +78,7 @@ public class Main extends ApplicationAdapter {
 				
 				switch(option) {
 				case 0:
-					WorldFactory.firstFloor(gameRenderer, overlayRenderer);
+					LevelFactory.firstFloor(gameRenderer, overlayRenderer);
 					break;
 				case 1:
 					screen = 2;
@@ -166,12 +168,12 @@ public class Main extends ApplicationAdapter {
 	
 	public static void toMainMenu() {
 		screen = 0;
-		instance.deleteWorld = true;
+		instance.deleteLevel = true;
 		instance.option = 0;
 	}
 	
 	public static void toCongratulesScreen() {
 		screen = 1;
-		instance.deleteWorld = true;
+		instance.deleteLevel = true;
 	}
 }

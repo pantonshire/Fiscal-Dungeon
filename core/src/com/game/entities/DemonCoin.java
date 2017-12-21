@@ -5,9 +5,9 @@ import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
+import com.game.level.Level;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
-import com.game.world.World;
 
 public class DemonCoin extends Enemy {
 
@@ -16,7 +16,7 @@ public class DemonCoin extends Enemy {
 	private int timer;
 	private int phase;
 
-	public DemonCoin(World world, double x, double y) {
+	public DemonCoin(Level world, double x, double y) {
 		super(world, x, y, 30, 30, 0.25, 9);
 		animation = new Animation(Textures.instance.getTexture("demon_coin"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),

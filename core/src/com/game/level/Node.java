@@ -1,4 +1,4 @@
-package com.game.world;
+package com.game.level;
 
 public class Node implements Comparable<Node> {
 	

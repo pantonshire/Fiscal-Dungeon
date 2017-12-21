@@ -10,14 +10,14 @@ import com.game.entities.GoldCoin;
 import com.game.entities.RedGem;
 import com.game.entities.Tax;
 import com.game.entities.TreasureChest;
+import com.game.level.TileMap;
+import com.game.level.Level;
+import com.game.level.LevelFactory;
 import com.game.utils.RandomUtils;
-import com.game.world.TileMap;
-import com.game.world.World;
-import com.game.world.WorldFactory;
 
 public class StandardRoom extends Room {
 
-	public StandardRoom(World world) {
+	public StandardRoom(Level world) {
 		super(world, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1 },
@@ -38,10 +38,10 @@ public class StandardRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(World world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
 		TileMap tiles = world.getTileMap();
 
-		if(difficulty == WorldFactory.EASY) {
+		if(difficulty == LevelFactory.EASY) {
 			switch(RandomUtils.randInt(6)) {
 			case 0:
 				world.spawn(new BigGem(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8)));
@@ -88,7 +88,7 @@ public class StandardRoom extends Room {
 			}
 		}
 		
-		else if(difficulty == WorldFactory.NORMAL) {
+		else if(difficulty == LevelFactory.NORMAL) {
 			switch(RandomUtils.randInt(11)) {
 			case 0:
 				world.spawn(new BigGem(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8)));
@@ -174,7 +174,7 @@ public class StandardRoom extends Room {
 			}
 		}
 		
-		else if(difficulty == WorldFactory.HARD) {
+		else if(difficulty == LevelFactory.HARD) {
 			switch(RandomUtils.randInt(11)) {
 			case 0:
 				world.spawn(new BigGem(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8)));
@@ -270,7 +270,7 @@ public class StandardRoom extends Room {
 			}
 		}
 		
-		else if(difficulty == WorldFactory.MADNESS) {
+		else if(difficulty == LevelFactory.MADNESS) {
 			switch(RandomUtils.randInt(13)) {
 			case 0:
 				world.spawn(new TreasureChest(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8)));

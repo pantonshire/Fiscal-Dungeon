@@ -3,7 +3,7 @@ package com.game.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
-import com.game.world.World;
+import com.game.level.Level;
 
 public class SparkParticle extends Entity {
 
@@ -11,7 +11,7 @@ public class SparkParticle extends Entity {
 	private final int lifespan;
 	private int time;
 
-	public SparkParticle(String textureName, World world, double x, double y, double angle, double speed, int lifespan) {
+	public SparkParticle(String textureName, Level world, double x, double y, double angle, double speed, int lifespan) {
 		super(world, x, y);
 		texture = Textures.instance.getTexture(textureName);
 		this.lifespan = lifespan;

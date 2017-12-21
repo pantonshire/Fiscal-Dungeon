@@ -3,12 +3,12 @@ package com.game.rooms;
 import com.game.entities.Shopkeeper;
 import com.game.entities.Tax;
 import com.game.entities.Trapdoor;
-import com.game.world.TileMap;
-import com.game.world.World;
+import com.game.level.TileMap;
+import com.game.level.Level;
 
 public class ExitRoom extends Room {
 
-	public ExitRoom(World world) {
+	public ExitRoom(Level world) {
 		super(world, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1 },
@@ -29,7 +29,7 @@ public class ExitRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(World world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
 		TileMap tiles = world.getTileMap();
 		world.spawn(new Trapdoor(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 12)));
 		

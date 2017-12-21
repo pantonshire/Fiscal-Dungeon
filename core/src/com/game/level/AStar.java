@@ -1,4 +1,4 @@
-package com.game.world;
+package com.game.level;
 
 import java.awt.Point;
 import java.util.ArrayList;
