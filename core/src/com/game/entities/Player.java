@@ -273,10 +273,10 @@ public class Player extends EntityLiving implements LightSource {
 	}
 
 	public float lightStrength() {
-		return 240;
+		return 320;
 	}
 
 	public Color lightColor() {
-		return new Color(1.0F, 1.0F, 1.0F, 1.0F);
+		return new Color(1.0F, 1.0F, 1.0F, world.getPlayerLightLevel());
 	}
 }

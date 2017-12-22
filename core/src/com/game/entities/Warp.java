@@ -16,6 +16,7 @@ public class Warp extends Entity {
 	private double angle;
 	private int time;
 	private Player player;
+	private Point lastUnblockedTile;
 
 	public Warp(Level world, double x, double y, double angle, double speed, Player player) {
 		super(world, x, y);
@@ -25,6 +26,10 @@ public class Warp extends Entity {
 		this.angle = angle;
 		this.player = player;
 		player.setInvisible(true);
+		lastUnblockedTile = new Point(world.getTileMap().getMapCoordinate(position.x), world.getTileMap().getMapCoordinate(position.y));
+		if(world.getTileMap().isTileCollidable(lastUnblockedTile.x, lastUnblockedTile.y)) {
+			lastUnblockedTile.setLocation(world.getTileMap().getMapCoordinate(player.position.x), world.getTileMap().getMapCoordinate(player.position.y));
+		}
 		blast(position);
 	}
 
@@ -58,6 +63,11 @@ public class Warp extends Entity {
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
+			Point currentPoint = new Point(world.getTileMap().getMapCoordinate(position.x), world.getTileMap().getMapCoordinate(position.y));
+			if(!world.getTileMap().isTileCollidable(currentPoint.x, currentPoint.y)) {
+				lastUnblockedTile.setLocation(currentPoint.x, currentPoint.y);
+			}
+			
 			for(int i = 0; i < 3; i++) {
 				world.spawn(new SparkParticle("warp_particle", world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.1, 0.5), 30));
 			}
@@ -79,8 +89,7 @@ public class Warp extends Entity {
 	public void destroy() {
 		super.destroy();
 		if(player != null) {
-			Point tilemapPos = new Point(world.getTileMap().getMapCoordinate(position.x), world.getTileMap().getMapCoordinate(position.y));
-			Vector spawnPos = new Vector(world.getTileMap().getWorldCoordinate(tilemapPos.x), world.getTileMap().getWorldCoordinate(tilemapPos.y));
+			Vector spawnPos = new Vector(world.getTileMap().getWorldCoordinate(lastUnblockedTile.x), world.getTileMap().getWorldCoordinate(lastUnblockedTile.y));
 			player.position.set(spawnPos.x, spawnPos.y);
 			player.setInvisible(false);
 			blast(spawnPos);

@@ -15,6 +15,10 @@ public abstract class Enemy extends EntityLiving {
 	}
 
 	public boolean damage(int amount) {
+		if(invulnerable() || shouldRemove()) {
+			return false;
+		}
+		
 		health -= amount;
 		if(health <= 0) {
 			destroy();
@@ -26,6 +30,10 @@ public abstract class Enemy extends EntityLiving {
 		}
 
 		return true;
+	}
+	
+	public boolean invulnerable() {
+		return false;
 	}
 
 	protected abstract void onDeath();

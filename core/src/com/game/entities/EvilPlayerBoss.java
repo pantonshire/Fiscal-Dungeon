@@ -216,7 +216,8 @@ public class EvilPlayerBoss extends Enemy {
 		ArrayList<Enemy> enemies = world.getEnemies();
 		for(Enemy enemy : enemies) {
 			if(enemy != this) {
-				enemy.damage(1000);
+				enemy.destroy();
+				enemy.onDeath();
 			}
 		}
 	}

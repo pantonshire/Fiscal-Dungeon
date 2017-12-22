@@ -47,6 +47,7 @@ public class Level {
 
 	private World world;
 	private LevelLightManager light;
+	private float ambientLightLevel;
 	
 	private Animation coin;
 	private TextureRegion manaBar;
@@ -69,8 +70,8 @@ public class Level {
 		players = new ArrayList<Player>();
 
 		world = new World(new Vector2(0, 0), true);
-		float ambientLight = 0.5F;
-		light = new LevelLightManager(world, new Color(ambientLight, ambientLight, ambientLight, ambientLight), true);
+		ambientLightLevel = 0.25F;
+		light = new LevelLightManager(world, new Color(ambientLightLevel, ambientLightLevel, ambientLightLevel, ambientLightLevel), true);
 		
 		if(boss) { createPlayers(1280, 560); }
 		else { createPlayers(732, 256); }
@@ -87,6 +88,14 @@ public class Level {
 	
 	public LevelLightManager getLightManager() {
 		return light;
+	}
+	
+	public float getAmbientLightLevel() {
+		return ambientLightLevel;
+	}
+	
+	public float getPlayerLightLevel() {
+		return 1 - ambientLightLevel;
 	}
 
 	public ArrayList<Player> getPlayers() {

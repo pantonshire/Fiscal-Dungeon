@@ -28,12 +28,8 @@ public class BlackDemonCoin extends Enemy {
 	}
 	
 	@Override
-	public boolean damage(int amount) {
-		if(invisible) {
-			return false;
-		}
-		
-		return super.damage(amount);
+	public boolean invulnerable() {
+		return invisible;
 	}
 
 	protected void updateEntity() {

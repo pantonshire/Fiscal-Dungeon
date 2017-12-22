@@ -256,7 +256,7 @@ public class SlotMachine extends Enemy {
 				if(targetPlayer != null && timer % 16 == 0) {
 					double coinSpeed = 3.0;
 					int heuristicTravelTime = (int)Math.ceil(position.copy().add(0, mouthYOffset).distBetween(targetPlayer.position) / coinSpeed);
-					Vector estimatedPosition = targetPlayer.position.copy().add(targetPlayer.velocity.mply(heuristicTravelTime));
+					Vector estimatedPosition = targetPlayer.position.copy().add(targetPlayer.velocity.copy().mply(heuristicTravelTime));
 					double targetAngle = position.copy().add(0, mouthYOffset).angleBetween(estimatedPosition);
 					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, targetAngle, coinSpeed));
 				}

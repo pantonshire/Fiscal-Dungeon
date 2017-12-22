@@ -57,6 +57,7 @@ public class Arrow extends Entity {
 				if(hitbox.intersectsHitbox(enemy.hitbox)) {
 					if(enemy.damage(2)) {
 						destroy();
+						break;
 					}
 				}
 			}

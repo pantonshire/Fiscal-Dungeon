@@ -82,6 +82,7 @@ public class Fireball extends Entity implements LightSource {
 							velocity.x = -velocity.x;
 							velocity.y = -velocity.y;
 							damageCooldown = 10;
+							break;
 						}
 					}
 				}

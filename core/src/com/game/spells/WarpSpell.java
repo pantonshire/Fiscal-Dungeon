@@ -8,7 +8,7 @@ import com.game.vector.Vector;
 public class WarpSpell extends Spell {
 
 	public WarpSpell() {
-		super(500, 60);
+		super(750, 120);
 	}
 
 	protected void onUsed(Level world, Player player) {

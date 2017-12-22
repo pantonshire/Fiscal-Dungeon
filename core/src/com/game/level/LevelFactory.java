@@ -3,7 +3,7 @@ package com.game.level;
 import com.game.Main;
 import com.game.graphics.LayerRenderer;
 import com.game.run.Run;
-import com.game.spells.WarpSpell;
+import com.game.spells.DartTrapSpell;
 
 public class LevelFactory {
 
@@ -23,7 +23,7 @@ public class LevelFactory {
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
 		floor = EASY;
-		Run.newRun(new WarpSpell());
+		Run.newRun(new DartTrapSpell());
 		Level nextFloor = new Level(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextLevel = nextFloor;
 	}

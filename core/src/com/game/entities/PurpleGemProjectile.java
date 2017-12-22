@@ -2,17 +2,22 @@ package com.game.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.game.graphics.Animation;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
 import com.game.level.Level;
+import com.game.light.LevelLightManager;
+import com.game.light.LightSource;
+import com.game.vector.Vector;
 
-public class PurpleGemProjectile extends Coin {
+public class PurpleGemProjectile extends Coin implements LightSource {
 
 	public PurpleGemProjectile(Level world, double x, double y, double angle) {
 		super(world, x, y, 3, "coin");
 		animation = new Animation(Textures.instance.getTexture("gem_purple"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
 		velocity.setAngle(angle, getSpeed());
+		world.getLightManager().addDynamicLight(this);
 	}
 
 	@Override
@@ -35,5 +40,21 @@ public class PurpleGemProjectile extends Coin {
 
 	private double getSpeed() {
 		return 1.0;
+	}
+	
+	public Vector lightPosition() {
+		return position;
+	}
+	
+	public int numLightRays() {
+		return LevelLightManager.DEFAULT_RADIAL_SOURCE;
+	}
+	
+	public float lightStrength() {
+		return 70;
+	}
+	
+	public Color lightColor() {
+		return new Color(0.6F, 0.1F, 0.95F, 0.25F);
 	}
 }
