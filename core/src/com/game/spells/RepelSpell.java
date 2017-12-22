@@ -8,11 +8,12 @@ import com.game.entities.Player;
 import com.game.entities.SparkParticle;
 import com.game.level.Level;
 import com.game.vector.Vector;
+import static com.game.spells.SpellUpgrade.*;
 
 public class RepelSpell extends Spell {
 
 	public RepelSpell() {
-		super(1500, 90);
+		super(1500, 90, REPEL_RADIUS, REPEL_FORCE, REPEL_DAMAGE);
 	}
 
 	protected void onUsed(Level world, Player player) {

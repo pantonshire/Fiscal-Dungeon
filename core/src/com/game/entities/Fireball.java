@@ -10,6 +10,7 @@ import com.game.graphics.Textures;
 import com.game.level.Level;
 import com.game.light.LevelLightManager;
 import com.game.light.LightSource;
+import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
 
@@ -20,12 +21,25 @@ public class Fireball extends Entity implements LightSource {
 	private int time;
 	private int damageCooldown;
 	private int bounces;
+	private double speed;
+	private boolean homing;
+	private double homingRange;
+	private double turnSpeed;
+	private Enemy targetedEnemy;
 
-	public Fireball(Level world, double x, double y, double angle, double speed) {
+	public Fireball(Level world, double x, double y, double angle, double speed, int homingLevel) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("fireball");
+		this.speed = speed;
 		velocity.setAngle(angle, speed);
+		
+		if(homingLevel > 0) {
+			homing = true;
+			turnSpeed = Math.toRadians(1) + (Math.toRadians(2) * (homingLevel - 1));
+			homingRange = 96 + (32 * homingLevel);
+		}
+		
 		world.getLightManager().addDynamicLight(this);
 	}
 
@@ -69,6 +83,26 @@ public class Fireball extends Entity implements LightSource {
 		if(++time > 1800) { destroy(); }
 		if(damageCooldown > 0) { --damageCooldown; }
 
+		if(homing && targetedEnemy != null) {
+			if(targetedEnemy.shouldRemove() || targetedEnemy.invulnerable()) {
+				targetedEnemy = null;
+			}
+			
+			else {
+				double target = position.angleBetween(targetedEnemy.position);
+				double angle = Math.atan2(velocity.y, velocity.x);
+				if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) >= turnSpeed) {
+					int direction = AngleHelper.getQuickestRotationDirection(angle, target);
+					angle += turnSpeed * direction;
+					if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) < turnSpeed) {
+						angle = target;
+					}
+					
+					velocity.setAngle(angle, speed);
+				}
+			}
+		}
+		
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
@@ -76,15 +110,32 @@ public class Fireball extends Entity implements LightSource {
 			
 			if(damageCooldown == 0) {
 				ArrayList<Enemy> enemies = world.getEnemies();
+				boolean hitEnemy = false;
+				double closestDistance = 0;
+				Enemy closestEnemy = null;
+				
 				for(Enemy enemy : enemies) {
-					if(hitbox.intersectsHitbox(enemy.hitbox)) {
+					if(!hitEnemy && hitbox.intersectsHitbox(enemy.hitbox)) {
 						if(enemy.damage(3)) {
 							velocity.x = -velocity.x;
 							velocity.y = -velocity.y;
 							damageCooldown = 10;
-							break;
+							bounce();
+							hitEnemy = true;
 						}
 					}
+					
+					if(homing && !enemy.invulnerable()) {
+						double distance = position.distBetween(enemy.position);
+						if(distance <= homingRange && (closestEnemy == null || distance < closestDistance)) {
+							closestEnemy = enemy;
+							closestDistance = distance;
+						}
+					}
+				}
+				
+				if(homing && closestEnemy != null) {
+					targetedEnemy = closestEnemy;
 				}
 			}
 		}

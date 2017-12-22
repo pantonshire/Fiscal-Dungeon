@@ -20,13 +20,14 @@ public class DartTrap extends Entity implements LightSource {
 	private double angle;
 	private double launchSpeed, chaseSpeed;
 	private double deceleration;
+	private double range;
 	private int despawnTime;
 	private boolean chasing;
 	private int time;
 	private Enemy targetEnemy;
 	private RayCaster rayCaster;
 
-	public DartTrap(Level world, double x, double y, double angle, double launchSpeed, double chaseSpeed, double deceleration, int despawnTime) {
+	public DartTrap(Level world, double x, double y, double angle, double launchSpeed, double chaseSpeed, double deceleration, int despawnTime, double range) {
 		super(world, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("dart_trap");
@@ -35,6 +36,7 @@ public class DartTrap extends Entity implements LightSource {
 		this.chaseSpeed = chaseSpeed;
 		this.deceleration = deceleration;
 		this.despawnTime = despawnTime;
+		this.range = range;
 		this.angle = angle;
 		rayCaster = new RayCaster();
 		world.getLightManager().addDynamicLight(this);
@@ -85,7 +87,7 @@ public class DartTrap extends Entity implements LightSource {
 
 				if(velocity.isZero()) {
 					for(Enemy enemy : enemies) {
-						if(!enemy.invulnerable() && position.distBetween(enemy.position) < 160 && rayCaster.canSee(world, position, enemy.position, 6)) {
+						if(!enemy.invulnerable() && position.distBetween(enemy.position) < range && rayCaster.canSee(world, position, enemy.position, 6)) {
 							chasing = true;
 							time = 0;
 							angle = position.angleBetween(enemy.position);

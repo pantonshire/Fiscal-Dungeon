@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 import com.game.audio.SoundEffects;
 import com.game.entities.Coin;
-import com.game.entities.Fireball;
 import com.game.entities.Player;
 import com.game.entities.SparkParticle;
 import com.game.level.Level;
-import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
 
 public class TransmuteSpell extends Spell {
@@ -25,7 +23,7 @@ public class TransmuteSpell extends Spell {
 		for(Coin coin : coins) {
 			if(coin.isOnScreen(world.gameRenderer)) {
 				coin.destroy();
-				world.spawn(new Fireball(world, coin.getPosition().x, coin.getPosition().y, RandomUtils.randAngle(), RandomUtils.randDouble(6, 10)));
+//				world.spawn(new Fireball(world, coin.getPosition().x, coin.getPosition().y, RandomUtils.randAngle(), RandomUtils.randDouble(6, 10)));
 			}
 		}
 	}

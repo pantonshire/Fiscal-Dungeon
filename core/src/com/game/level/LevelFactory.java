@@ -3,7 +3,8 @@ package com.game.level;
 import com.game.Main;
 import com.game.graphics.LayerRenderer;
 import com.game.run.Run;
-import com.game.spells.DartTrapSpell;
+import com.game.spells.FireballSpell;
+import com.game.spells.SpellUpgrade;
 
 public class LevelFactory {
 
@@ -23,7 +24,8 @@ public class LevelFactory {
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
 		floor = EASY;
-		Run.newRun(new DartTrapSpell());
+		Run.newRun(new FireballSpell());
+		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
 		Level nextFloor = new Level(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextLevel = nextFloor;
 	}
