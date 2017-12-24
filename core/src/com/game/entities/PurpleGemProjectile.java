@@ -13,11 +13,11 @@ import com.game.vector.Vector;
 
 public class PurpleGemProjectile extends Coin implements LightSource {
 
-	public PurpleGemProjectile(Level world, double x, double y, double angle) {
-		super(world, x, y, 3, "coin");
+	public PurpleGemProjectile(Level level, double x, double y, double angle) {
+		super(level, x, y, 3, "coin");
 		animation = new Animation(Textures.instance.getTexture("gem_purple"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
 		velocity.setAngle(angle, getSpeed());
-		world.getLightManager().addDynamicLight(this);
+		level.getLightManager().addDynamicLight(this);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class PurpleGemProjectile extends Coin implements LightSource {
 		}
 
 		else if(!pushed) {
-			ArrayList<Player> players = world.getPlayers();
+			ArrayList<Player> players = level.getPlayers();
 			for(Player player : players) {
 				if(position.distSqBetween(player.position) < 4096) {
 					velocity.setAngle(position.angleBetween(player.position), getSpeed());

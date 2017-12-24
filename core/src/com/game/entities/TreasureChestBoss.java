@@ -18,8 +18,8 @@ public class TreasureChestBoss extends Enemy {
 	private int timer;
 	private int phase;
 
-	public TreasureChestBoss(Level world, double x, double y) {
-		super(world, x, y, 30, 30, 2, 80);
+	public TreasureChestBoss(Level level, double x, double y) {
+		super(level, x, y, 30, 30, 2, 80);
 		animation = new Animation(Textures.instance.getTexture("treasure_chest_boss"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),
@@ -80,7 +80,7 @@ public class TreasureChestBoss extends Enemy {
 
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		int targetX = tile.x * tileSize + (tileSize / 2);
 		int targetY = tile.y * tileSize + (tileSize / 2);
 		return new Point(targetX, targetY);
@@ -117,24 +117,24 @@ public class TreasureChestBoss extends Enemy {
 						break;
 					case 1:
 						for(int i = 0; i <= 5; i++) {
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.5));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.25));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.0));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 2.75));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 2.5));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.5));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.25));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.0));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 2.75));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 2.5));
 						}
 						break;
 					case 2:
 						for(int i = 0; i <= 10; i++) {
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(120) + (Math.toRadians(240) / 10 * i), 3.5));
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(120) + (Math.toRadians(240) / 10 * i), 3));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(120) + (Math.toRadians(240) / 10 * i), 3.5));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(120) + (Math.toRadians(240) / 10 * i), 3));
 						}
 						break;
 					case 3:
 						for(int i = 0; i <= 20; i++) {
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 3.5));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 3.25));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 3.0));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 3.5));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 3.25));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 3.0));
 						}
 						break;
 					}
@@ -155,7 +155,7 @@ public class TreasureChestBoss extends Enemy {
 				if(targetPlayer != null) {
 					timer = 90;
 					phase = 4;
-					path = world.getTileMap().findPath(position, targetPlayer.position, 38, false);
+					path = level.getTileMap().findPath(position, targetPlayer.position, 38, false);
 				}
 			}
 
@@ -177,10 +177,10 @@ public class TreasureChestBoss extends Enemy {
 		}
 
 		if(phase == 5 && timer % 4 == 0) {
-			world.spawn(new CoinProjectile(world, position.x, position.y, (Math.PI * 2 / 480 * timer), 3));
-			world.spawn(new CoinProjectile(world, position.x, position.y, (Math.PI * 2 / 480 * timer) + Math.PI / 2, 3));
-			world.spawn(new CoinProjectile(world, position.x, position.y, (Math.PI * 2 / 480 * timer) - Math.PI / 2, 3));
-			world.spawn(new CoinProjectile(world, position.x, position.y, (Math.PI * 2 / 480 * timer) + Math.PI, 3));
+			level.spawn(new CoinProjectile(level, position.x, position.y, (Math.PI * 2 / 480 * timer), 3));
+			level.spawn(new CoinProjectile(level, position.x, position.y, (Math.PI * 2 / 480 * timer) + Math.PI / 2, 3));
+			level.spawn(new CoinProjectile(level, position.x, position.y, (Math.PI * 2 / 480 * timer) - Math.PI / 2, 3));
+			level.spawn(new CoinProjectile(level, position.x, position.y, (Math.PI * 2 / 480 * timer) + Math.PI, 3));
 		}
 	}
 
@@ -205,12 +205,12 @@ public class TreasureChestBoss extends Enemy {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i <= 15; i++) {
 			double angle = Math.PI * 2 / 15 * i;
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1.25));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle, 1.25));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle, 1));
 		}
 
-		int x = world.getTileMap().getMapCoordinate(position.x), y = world.getTileMap().getMapCoordinate(position.y);
-		world.getTileMap().setTile(x, y, (byte)-9);
-		world.spawn(new Trapdoor(world, world.getTileMap().getWorldCoordinate(x), world.getTileMap().getWorldCoordinate(y)));
+		int x = level.getTileMap().getMapCoordinate(position.x), y = level.getTileMap().getMapCoordinate(position.y);
+		level.getTileMap().setTile(x, y, (byte)-9);
+		level.spawn(new Trapdoor(level, level.getTileMap().getWorldCoordinate(x), level.getTileMap().getWorldCoordinate(y)));
 	}
 }

@@ -21,8 +21,8 @@ public class BigGem extends Enemy {
 	private int pathFindTimer;
 	private int attackTimer;
 
-	public BigGem(Level world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 10);
+	public BigGem(Level level, double x, double y) {
+		super(level, x, y, 30, 30, 0.25, 10);
 		animation = new Animation(Textures.instance.getTexture("big_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();
 		attackTimer = ATTACK_RATE;
@@ -76,7 +76,7 @@ public class BigGem extends Enemy {
 
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		int targetX = tile.x * tileSize + (tileSize / 2);
 		int targetY = tile.y * tileSize + (tileSize / 2);
 		return new Point(targetX, targetY);
@@ -96,13 +96,13 @@ public class BigGem extends Enemy {
 		if(targetPlayer != null) {
 			if(pathFindTimer > 0) { --pathFindTimer; }
 			if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null)) {
-				path = world.getTileMap().findPath(position, targetPlayer.position, 10, false);
+				path = level.getTileMap().findPath(position, targetPlayer.position, 10, false);
 				pathFindTimer = PATH_FIND_UPDATE_RATE;
 			}
 			
 			if(attackTimer == 0) {
 				attackTimer = ATTACK_RATE;
-				world.spawn(new PurpleGemProjectile(world, position.x, position.y, position.angleBetween(targetPlayer.position)));
+				level.spawn(new PurpleGemProjectile(level, position.x, position.y, position.angleBetween(targetPlayer.position)));
 			}
 		}
 
@@ -117,12 +117,12 @@ public class BigGem extends Enemy {
 	protected void onDeath() {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i < 10; i++) {
-			Coin coin = new CoinProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
-			world.spawn(coin);
+			Coin coin = new CoinProjectile(level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.0));
+			level.spawn(coin);
 		}
 
 		if(RandomUtils.randDouble() < 0.1) {
-			world.spawn(new Tax(world, position.x, position.y));
+			level.spawn(new Tax(level, position.x, position.y));
 		}
 	}
 }

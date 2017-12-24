@@ -4,8 +4,8 @@ import com.game.level.Level;
 
 public class VerticalCorridor extends Room {
 
-	public VerticalCorridor(Level world) {
-		super(world, new byte[][] {
+	public VerticalCorridor(Level level) {
+		super(level, new byte[][] {
 			new byte[] { 1, -1, -1, -1, -1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, 1 },
@@ -17,7 +17,7 @@ public class VerticalCorridor extends Room {
 		});
 	}
 
-	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level level, int minX, int minY, int difficulty) {
 
 	}
 }

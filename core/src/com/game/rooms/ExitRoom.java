@@ -8,8 +8,8 @@ import com.game.level.Level;
 
 public class ExitRoom extends Room {
 
-	public ExitRoom(Level world) {
-		super(world, new byte[][] {
+	public ExitRoom(Level level) {
+		super(level, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1 },
 			new byte[] { 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1 },
@@ -29,15 +29,15 @@ public class ExitRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
-		TileMap tiles = world.getTileMap();
-		world.spawn(new Trapdoor(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 12)));
+	public void spawnEntities(Level level, int minX, int minY, int difficulty) {
+		TileMap tiles = level.getTileMap();
+		level.spawn(new Trapdoor(level, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 12)));
 		
-		world.spawn(new Shopkeeper(world, tiles.getWorldCoordinate(minX + 4), tiles.getWorldCoordinate(minY + 14) - 4));
+		level.spawn(new Shopkeeper(level, tiles.getWorldCoordinate(minX + 4), tiles.getWorldCoordinate(minY + 14) - 4));
 		
 		int numTaxes = difficulty / 2 + 1;
 		for(int i = 0; i < numTaxes; i++) {
-			world.spawn(new Tax(world, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8 - i)));
+			level.spawn(new Tax(level, tiles.getWorldCoordinate(minX + 8), tiles.getWorldCoordinate(minY + 8 - i)));
 		}
 	}
 }

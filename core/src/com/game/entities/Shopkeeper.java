@@ -9,8 +9,8 @@ public class Shopkeeper extends Entity {
 
 	private Texture texture;
 
-	public Shopkeeper(Level world, double x, double y) {
-		super(world, x, y);
+	public Shopkeeper(Level level, double x, double y) {
+		super(level, x, y);
 		texture = Textures.instance.getTexture("shopkeeper");
 	}
 

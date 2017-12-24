@@ -16,8 +16,8 @@ public class BigRedGem extends Enemy {
 	private int attackTimer;
 	private double angle;
 
-	public BigRedGem(Level world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 10);
+	public BigRedGem(Level level, double x, double y) {
+		super(level, x, y, 30, 30, 0.25, 10);
 		animation = new Animation(Textures.instance.getTexture("big_red_gem"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 	}
 
@@ -28,8 +28,8 @@ public class BigRedGem extends Enemy {
 		if(targetPlayer != null) {
 			if(attackTimer == 0) {
 				attackTimer = ATTACK_RATE;
-				world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1.5));
-				world.spawn(new CoinProjectile(world, position.x, position.y, angle + Math.PI, 1.5));
+				level.spawn(new CoinProjectile(level, position.x, position.y, angle, 1.5));
+				level.spawn(new CoinProjectile(level, position.x, position.y, angle + Math.PI, 1.5));
 				angle += Math.toRadians(16);
 
 				if(angle > Math.PI) {
@@ -47,12 +47,12 @@ public class BigRedGem extends Enemy {
 	protected void onDeath() {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i < 5; i++) {
-			Coin projectile = new CoinProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, 4);
-			world.spawn(projectile);
+			Coin projectile = new CoinProjectile(level, position.x, position.y, 2 * Math.PI / 5 * i, 4);
+			level.spawn(projectile);
 		}
 
 		if(RandomUtils.randDouble() < 0.1) {
-			world.spawn(new Tax(world, position.x, position.y));
+			level.spawn(new Tax(level, position.x, position.y));
 		}
 	}
 }

@@ -40,11 +40,15 @@ public abstract class Spell {
 		return upgrades.containsKey(upgrade) ? upgrades.get(upgrade) : 0;
 	}
 	
-	public void use(Level world, Player player) {
-		if(player.getMana() > manaCost) {
+	public boolean hasSufficientMana(Player player) {
+		return player.getMana() >= manaCost;
+	}
+	
+	public void use(Level level, Player player) {
+		if(hasSufficientMana(player)) {
 			player.useMana(manaCost);
 			player.setMagicCooldown(cooldown);
-			onUsed(world, player);
+			onUsed(level, player);
 		}
 	}
 	
@@ -59,5 +63,5 @@ public abstract class Spell {
 		}
 	}
 	
-	protected abstract void onUsed(Level world, Player player);
+	protected abstract void onUsed(Level level, Player player);
 }

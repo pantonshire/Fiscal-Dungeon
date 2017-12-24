@@ -17,8 +17,8 @@ public class BlackDemonCoin extends Enemy {
 	private int phase;
 	private double startAngle;
 
-	public BlackDemonCoin(Level world, double x, double y) {
-		super(world, x, y, 30, 30, 0.25, 6);
+	public BlackDemonCoin(Level level, double x, double y) {
+		super(level, x, y, 30, 30, 0.25, 6);
 		animation = new Animation(Textures.instance.getTexture("black_demon_coin"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),
@@ -57,9 +57,9 @@ public class BlackDemonCoin extends Enemy {
 			
 			else if(phase == 3 && invisible) {
 				Vector newPos = position.copy().add(RandomUtils.randVector(16, 160));
-				int x = world.getTileMap().getMapCoordinate(newPos.x);
-				int y = world.getTileMap().getMapCoordinate(newPos.y);
-				if(!world.getTileMap().isTileCollidable(x, y) && world.getTileMap().isInMapBounds(x, y)) {
+				int x = level.getTileMap().getMapCoordinate(newPos.x);
+				int y = level.getTileMap().getMapCoordinate(newPos.y);
+				if(!level.getTileMap().isTileCollidable(x, y) && level.getTileMap().isInMapBounds(x, y)) {
 					phase = 2;
 					invisible = false;
 					timer = 11;
@@ -75,8 +75,8 @@ public class BlackDemonCoin extends Enemy {
 		
 		if(phase == 1) {
 			if(timer % 5 == 0) {
-				Coin coin = new RedGemProjectile(world, position.x, position.y, startAngle + (30 - timer) * Math.toRadians(3), 1.5);
-				world.spawn(coin);
+				Coin coin = new RedGemProjectile(level, position.x, position.y, startAngle + (30 - timer) * Math.toRadians(3), 1.5);
+				level.spawn(coin);
 			}
 		}
 	}
@@ -93,12 +93,12 @@ public class BlackDemonCoin extends Enemy {
 	protected void onDeath() {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i < 20; i++) {
-			Coin coin = RandomUtils.randDouble() < 0.3 ? new RedGemProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.5)) : new CoinProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.5));
-			world.spawn(coin);
+			Coin coin = RandomUtils.randDouble() < 0.3 ? new RedGemProjectile(level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.5)) : new CoinProjectile(level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 2.5));
+			level.spawn(coin);
 		}
 		
 		if(RandomUtils.randDouble() < 0.15) {
-			world.spawn(new Tax(world, position.x, position.y));
+			level.spawn(new Tax(level, position.x, position.y));
 		}
 	}
 }

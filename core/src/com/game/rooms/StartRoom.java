@@ -4,8 +4,8 @@ import com.game.level.Level;
 
 public class StartRoom extends Room {
 
-	public StartRoom(Level world) {
-		super(world, new byte[][] {
+	public StartRoom(Level level) {
+		super(level, new byte[][] {
 			new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 			new byte[] { 1, -1, -1, -1, -2, -3, -1, -1, -1, 1 },
 			new byte[] { 1, -1, -1, -1, -6, -7, -1, -1, -1, 1 },
@@ -19,7 +19,7 @@ public class StartRoom extends Room {
 		});
 	}
 
-	public void spawnEntities(Level world, int minX, int minY, int difficulty) {
+	public void spawnEntities(Level level, int minX, int minY, int difficulty) {
 
 	}
 }

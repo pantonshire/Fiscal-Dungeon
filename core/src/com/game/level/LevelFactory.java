@@ -3,7 +3,7 @@ package com.game.level;
 import com.game.Main;
 import com.game.graphics.LayerRenderer;
 import com.game.run.Run;
-import com.game.spells.FireballSpell;
+import com.game.spells.PortalSpell;
 import com.game.spells.SpellUpgrade;
 
 public class LevelFactory {
@@ -24,8 +24,25 @@ public class LevelFactory {
 
 	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
 		floor = EASY;
-		Run.newRun(new FireballSpell());
+		Run.newRun(new PortalSpell());
 		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
+		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
+		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
+		Run.currentRun.spell.upgrade(SpellUpgrade.PORTAL_RANGE);
+		Run.currentRun.spell.upgrade(SpellUpgrade.PORTAL_RANGE);
+		Run.currentRun.spell.upgrade(SpellUpgrade.PORTAL_RANGE);
+//		Run.currentRun.spell.upgrade(SpellUpgrade.SPEED);
+//		Run.currentRun.spell.upgrade(SpellUpgrade.SPEED);
+//		Run.currentRun.spell.upgrade(SpellUpgrade.SPEED);
+		Run.currentRun.spell.upgrade(SpellUpgrade.RATE_OF_FIRE);
+		Run.currentRun.spell.upgrade(SpellUpgrade.RATE_OF_FIRE);
+		Run.currentRun.spell.upgrade(SpellUpgrade.RATE_OF_FIRE);
+		Run.currentRun.spell.upgrade(SpellUpgrade.NUM_SHOTS);
+		Run.currentRun.spell.upgrade(SpellUpgrade.NUM_SHOTS);
+		Run.currentRun.spell.upgrade(SpellUpgrade.NUM_SHOTS);
+//		Run.currentRun.spell.upgrade(SpellUpgrade.ACCURACY);
+//		Run.currentRun.spell.upgrade(SpellUpgrade.ACCURACY);
+//		Run.currentRun.spell.upgrade(SpellUpgrade.ACCURACY);
 		Level nextFloor = new Level(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextLevel = nextFloor;
 	}

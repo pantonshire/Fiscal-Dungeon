@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.level.Level;
+import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
 
@@ -14,22 +15,34 @@ public class Warp extends Entity {
 	private Texture texture;
 	private Hitbox hitbox;
 	private double angle;
+	private double speed;
 	private int time;
+	private boolean controllable;
+	private double turnSpeed;
 	private Player player;
 	private Point lastUnblockedTile;
 
-	public Warp(Level world, double x, double y, double angle, double speed, Player player) {
-		super(world, x, y);
+	public Warp(Level level, double x, double y, double angle, double speed, int controlLevel, Player player) {
+		super(level, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("warp");
 		velocity.setAngle(angle, speed);
 		this.angle = angle;
+		this.speed = speed;
 		this.player = player;
-		player.setInvisible(true);
-		lastUnblockedTile = new Point(world.getTileMap().getMapCoordinate(position.x), world.getTileMap().getMapCoordinate(position.y));
-		if(world.getTileMap().isTileCollidable(lastUnblockedTile.x, lastUnblockedTile.y)) {
-			lastUnblockedTile.setLocation(world.getTileMap().getMapCoordinate(player.position.x), world.getTileMap().getMapCoordinate(player.position.y));
+		
+		if(controlLevel > 0) {
+			controllable = true;
+			turnSpeed = Math.toRadians(8/3) * controlLevel;
 		}
+		
+		player.setInvisible(true);
+		
+		lastUnblockedTile = new Point(level.getTileMap().getMapCoordinate(position.x), level.getTileMap().getMapCoordinate(position.y));
+		if(level.getTileMap().isTileCollidable(lastUnblockedTile.x, lastUnblockedTile.y)) {
+			lastUnblockedTile.setLocation(level.getTileMap().getMapCoordinate(player.position.x), level.getTileMap().getMapCoordinate(player.position.y));
+		}
+		
 		blast(position);
 	}
 
@@ -37,14 +50,14 @@ public class Warp extends Entity {
 		boolean touchedCollidable = false;
 
 		if(velocity.x != 0) {
-			if(hitbox.collidedHorizontal(world.getTileMap())) {
+			if(hitbox.collidedHorizontal(level.getTileMap())) {
 				velocity.x = velocity.y = 0;
 				touchedCollidable = true;
 			}
 		}
 
 		if(velocity.y != 0) {
-			if(hitbox.collidedVertical(world.getTileMap())) {
+			if(hitbox.collidedVertical(level.getTileMap())) {
 				velocity.x = velocity.y = 0;
 				touchedCollidable = true;
 			}
@@ -60,16 +73,29 @@ public class Warp extends Entity {
 			destroy();
 		}
 		
+		if(controllable) {
+			double target = player.getArmRotation();
+			if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) >= turnSpeed) {
+				int direction = AngleHelper.getQuickestRotationDirection(angle, target);
+				angle += direction * turnSpeed;
+				if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) < turnSpeed) {
+					angle = target;
+				}
+				
+				velocity.setAngle(angle, speed);
+			}
+		}
+		
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
-			Point currentPoint = new Point(world.getTileMap().getMapCoordinate(position.x), world.getTileMap().getMapCoordinate(position.y));
-			if(!world.getTileMap().isTileCollidable(currentPoint.x, currentPoint.y)) {
+			Point currentPoint = new Point(level.getTileMap().getMapCoordinate(position.x), level.getTileMap().getMapCoordinate(position.y));
+			if(!level.getTileMap().isTileCollidable(currentPoint.x, currentPoint.y)) {
 				lastUnblockedTile.setLocation(currentPoint.x, currentPoint.y);
 			}
 			
 			for(int i = 0; i < 3; i++) {
-				world.spawn(new SparkParticle("warp_particle", world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.1, 0.5), 30));
+				level.spawn(new SparkParticle("warp_particle", level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.1, 0.5), 30));
 			}
 			
 			if(player != null) {
@@ -81,7 +107,7 @@ public class Warp extends Entity {
 	private void blast(Vector pos) {
 		for(int i = 0; i < 30; i++) {
 			Vector spawnPos = pos.copy().add(RandomUtils.randVector(0, 30));
-			world.spawn(new SparkParticle("warp_particle", world, spawnPos.x, spawnPos.y, position.angleBetween(spawnPos), RandomUtils.randDouble(0.5, 1.5), 30));
+			level.spawn(new SparkParticle("warp_particle", level, spawnPos.x, spawnPos.y, position.angleBetween(spawnPos), RandomUtils.randDouble(0.5, 1.5), 30));
 		}
 	}
 	
@@ -89,10 +115,17 @@ public class Warp extends Entity {
 	public void destroy() {
 		super.destroy();
 		if(player != null) {
-			Vector spawnPos = new Vector(world.getTileMap().getWorldCoordinate(lastUnblockedTile.x), world.getTileMap().getWorldCoordinate(lastUnblockedTile.y));
-			player.position.set(spawnPos.x, spawnPos.y);
+			if(player.hitbox.collidedHorizontal(level.getTileMap()) || player.hitbox.collidedVertical(level.getTileMap())) {
+				Vector spawnPos = new Vector(level.getTileMap().getWorldCoordinate(lastUnblockedTile.x), level.getTileMap().getWorldCoordinate(lastUnblockedTile.y));
+				player.position.set(spawnPos.x, spawnPos.y);
+				blast(spawnPos);
+			}
+			
+			else {
+				blast(position);
+			}
+			
 			player.setInvisible(false);
-			blast(spawnPos);
 		}
 	}
 

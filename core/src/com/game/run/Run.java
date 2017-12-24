@@ -28,10 +28,10 @@ public class Run {
 		this.spell = spell;
 	}
 
-	public void collectCoins(Level world, int amount) {
+	public void collectCoins(Level level, int amount) {
 		coins += amount;
 		if(coins >= maxCoins) {
-			killPlayers(world);
+			killPlayers(level);
 		}
 
 		if(coins < 0) {
@@ -51,12 +51,12 @@ public class Run {
 		return dead;
 	}
 	
-	public void killPlayers(Level world) {
+	public void killPlayers(Level level) {
 		dead = true;
 		coins = 0;
-		world.startGameOverTimer();
+		level.startGameOverTimer();
 		SoundEffects.instance.play("blast", 1, 1, 0);
-		ArrayList<Player> players = world.getPlayers();
+		ArrayList<Player> players = level.getPlayers();
 		for(Player player : players) {
 			player.explode();
 		}

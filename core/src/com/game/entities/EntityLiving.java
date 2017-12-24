@@ -15,8 +15,8 @@ public abstract class EntityLiving extends Entity {
 	protected double pushAngle;
 	protected double pushAcceleration;
 
-	public EntityLiving(Level world, double x, double y, int width, int height, double walkSpeed) {
-		super(world, x, y);
+	public EntityLiving(Level level, double x, double y, int width, int height, double walkSpeed) {
+		super(level, x, y);
 		hitbox = new Hitbox(this, width, height);
 		this.walkSpeed = walkSpeed;
 	}
@@ -53,14 +53,14 @@ public abstract class EntityLiving extends Entity {
 		boolean touchedCollidable = false;
 
 		if(velocity.x != 0) {
-			if(hitbox.collidedHorizontal(world.getTileMap())) {
+			if(hitbox.collidedHorizontal(level.getTileMap())) {
 				velocity.x = 0;
 				touchedCollidable = true;
 			}
 		}
 
 		if(velocity.y != 0) {
-			if(hitbox.collidedVertical(world.getTileMap())) {
+			if(hitbox.collidedVertical(level.getTileMap())) {
 				velocity.y = 0;
 				touchedCollidable = true;
 			}
@@ -135,7 +135,7 @@ public abstract class EntityLiving extends Entity {
 	}
 	
 	public boolean canSee(Entity other) {
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		double ownX = position.x / tileSize, ownY = position.y / tileSize, otherX = other.position.x / tileSize, otherY = other.position.y / tileSize;
 		
 		double deltaX = Math.abs(otherX - ownX);
@@ -190,7 +190,7 @@ public abstract class EntityLiving extends Entity {
 		}
 
 		for(; n > 0; n--) {
-			if(world.getTileMap().isTileCollidable(x, y)) {
+			if(level.getTileMap().isTileCollidable(x, y)) {
 				return false;
 			}
 

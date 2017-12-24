@@ -11,8 +11,8 @@ public class SparkParticle extends Entity {
 	private final int lifespan;
 	private int time;
 
-	public SparkParticle(String textureName, Level world, double x, double y, double angle, double speed, int lifespan) {
-		super(world, x, y);
+	public SparkParticle(String textureName, Level level, double x, double y, double angle, double speed, int lifespan) {
+		super(level, x, y);
 		texture = Textures.instance.getTexture(textureName);
 		this.lifespan = lifespan;
 		velocity.setAngle(angle, speed);

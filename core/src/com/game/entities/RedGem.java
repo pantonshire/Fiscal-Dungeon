@@ -11,10 +11,10 @@ import com.game.vector.Vector;
 
 public class RedGem extends Coin implements LightSource {
 
-	public RedGem(Level world, double x, double y) {
-		super(world, x, y, 5, "coin");
+	public RedGem(Level level, double x, double y) {
+		super(level, x, y, 5, "coin");
 		animation = new Animation(Textures.instance.getTexture("gem_red"), Sequence.formatSequences(new Sequence(16, 14, 6, 5)));
-		world.getLightManager().addDynamicLight(this);
+		level.getLightManager().addDynamicLight(this);
 	}
 	
 	public Vector lightPosition() {

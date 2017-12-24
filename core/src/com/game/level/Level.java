@@ -301,13 +301,13 @@ public class Level {
 	}
 
 	private void renderManaBar() {
-		manaBar.setRegion(0, 0, 11, 150);
-		int x = Gdx.graphics.getWidth() / 2 + 300;
-		int y = Gdx.graphics.getHeight() / 2 + 45;
+		manaBar.setRegion(0, 0, 150, 11);
+		int x = Gdx.graphics.getWidth() / 2 + 160;
+		int y = Gdx.graphics.getHeight() / 2 + 180;
 		overlayRenderer.getSpriteBatch().draw(manaBar, x, y);
 		double percentageMana = player1.getManaPercentage();
-		int height = (int)(150 * percentageMana);
-		manaBar.setRegion(11, 150 - height, 7, height);
-		overlayRenderer.getSpriteBatch().draw(manaBar, x + 2, y);
+		int width = (int)(150 * percentageMana);
+		manaBar.setRegion(0, Run.currentRun.spell.hasSufficientMana(player1) ? 11 : 18, width, 7);
+		overlayRenderer.getSpriteBatch().draw(manaBar, x, y + 2);
 	}
 }

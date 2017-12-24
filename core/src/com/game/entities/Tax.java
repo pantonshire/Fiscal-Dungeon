@@ -7,8 +7,8 @@ import com.game.level.Level;
 
 public class Tax extends Coin {
 
-	public Tax(Level world, double x, double y) {
-		super(world, x, y, -10, "good");
+	public Tax(Level level, double x, double y) {
+		super(level, x, y, -10, "good");
 		animation = new Animation(Textures.instance.getTexture("tax"), Sequence.formatSequences(new Sequence(16, 18, 0, 1)));
 	}
 }

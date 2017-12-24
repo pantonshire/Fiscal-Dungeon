@@ -9,34 +9,36 @@ import com.game.graphics.Textures;
 import com.game.level.Level;
 import com.game.light.LevelLightManager;
 import com.game.light.LightSource;
+import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
-import com.game.utils.RayCaster;
 import com.game.vector.Vector;
 
-public class DartTrap extends Entity implements LightSource {
+public class PortalProjectile extends Entity implements LightSource {
 
 	private Texture texture;
 	private Hitbox hitbox;
 	private double angle;
-	private double launchSpeed, chaseSpeed;
-	private double deceleration;
-	private double range;
-	private int despawnTime;
-	private boolean chasing;
 	private int time;
-	private Enemy targetEnemy;
+	private double speed;
+	private boolean homing;
+	private double homingRange;
+	private double turnSpeed;
+	private Enemy targetedEnemy;
 
-	public DartTrap(Level level, double x, double y, double angle, double launchSpeed, double chaseSpeed, double deceleration, int despawnTime, double range) {
+	public PortalProjectile(Level level, double x, double y, double angle, double speed, int homingLevel) {
 		super(level, x, y);
 		hitbox = new Hitbox(this, 3, 3);
-		texture = Textures.instance.getTexture("dart_trap");
-		velocity.setAngle(angle, launchSpeed);
-		this.launchSpeed = launchSpeed;
-		this.chaseSpeed = chaseSpeed;
-		this.deceleration = deceleration;
-		this.despawnTime = despawnTime;
-		this.range = range;
+		texture = Textures.instance.getTexture("portal_projectile");
+		velocity.setAngle(angle, speed);
 		this.angle = angle;
+		this.speed = speed;
+		
+		if(homingLevel > 0) {
+			homing = true;
+			turnSpeed = Math.toRadians(10) + (Math.toRadians(10) * (homingLevel - 1));
+			homingRange = 96 + (32 * homingLevel);
+		}
+		
 		level.getLightManager().addDynamicLight(this);
 	}
 
@@ -57,67 +59,64 @@ public class DartTrap extends Entity implements LightSource {
 			}
 		}
 
-		if(touchedCollidable && chasing) {
+		if(touchedCollidable) {
 			destroy();
 		}
 	}
 
 	protected void updateEntity() {
-		if(chasing && ++time > 540 / chaseSpeed) {
+		if(++time > 360) {
 			destroy();
 		}
+		
+		if(homing && targetedEnemy != null) {
+			if(targetedEnemy.shouldRemove() || targetedEnemy.invulnerable()) {
+				targetedEnemy = null;
+			}
+			
+			else {
+				double target = position.angleBetween(targetedEnemy.position);
+				int direction = AngleHelper.getQuickestRotationDirection(angle, target);
+				angle += turnSpeed * direction;
+				if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) < turnSpeed) {
+					angle = target;
+				}
+				
+				velocity.setAngle(angle, speed);
+			}
+		}
+		
+		updateTileCollisions();
 
 		if(!shouldRemove()) {
-			if(chasing || time % 3 == 0) {
+			if(time % 3 == 0) {
 				level.spawn(new SparkParticle("dart_trap_particle", level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.1, 0.5), 30));
 			}
 			
 			ArrayList<Enemy> enemies = level.getEnemies();
-			if(!chasing) {
-				if((launchSpeed -= deceleration) < 0) {
-					launchSpeed = 0;
-					velocity.set(0, 0);
-				}
-
-				else if(launchSpeed > 0) {
-					velocity.setAngle(angle, launchSpeed);
-				}
-
-				if(velocity.isZero()) {
-					for(Enemy enemy : enemies) {
-						if(!enemy.invulnerable() && position.distBetween(enemy.position) < range && RayCaster.canSee(level, position, enemy.position, -1)) {
-							chasing = true;
-							time = 0;
-							angle = position.angleBetween(enemy.position);
-							velocity.setAngle(angle, chaseSpeed);
-							targetEnemy = enemy;
-							break;
-						}
-					}
-					
-					if(!chasing && ++time > despawnTime) {
+			double closestDistance = 0;
+			Enemy closestEnemy = null;
+			
+			for(Enemy enemy : enemies) {
+				if(hitbox.intersectsHitbox(enemy.hitbox)) {
+					if(enemy.damage(1)) {
 						destroy();
+						break;
 					}
-				}
-			}
-
-			else if(chasing) {
-				if(targetEnemy != null && !targetEnemy.shouldRemove() && !targetEnemy.invulnerable()) {
-					angle = position.angleBetween(targetEnemy.position);
-					velocity.setAngle(angle, chaseSpeed);
 				}
 				
-				for(Enemy enemy : enemies) {
-					if(hitbox.intersectsHitbox(enemy.hitbox)) {
-						if(enemy.damage(3)) {
-							destroy();
-							break;
-						}
+				else if(homing && !enemy.invulnerable()) {
+					double distance = position.distBetween(enemy.position);
+					if(distance <= homingRange && (closestEnemy == null || distance < closestDistance)) {
+						closestEnemy = enemy;
+						closestDistance = distance;
 					}
 				}
 			}
 			
-			updateTileCollisions();
+			if(homing && closestEnemy != null) {
+				targetedEnemy = closestEnemy;
+			}
 		}
 	}
 
@@ -136,10 +135,10 @@ public class DartTrap extends Entity implements LightSource {
 	}
 	
 	public float lightStrength() {
-		return 70;
+		return 32;
 	}
 	
 	public Color lightColor() {
-		return new Color(0.6F, 0.1F, 0.95F, 0.3F);
+		return new Color(0.75F, 0.05F, 0.9F, 0.25F);
 	}
 }

@@ -8,14 +8,14 @@ import com.game.vector.Vector;
 
 public abstract class Entity {
 
-	protected Level world;
+	protected Level level;
 	protected Vector position, velocity;
 	private boolean shouldRemove;
 	
-	public Entity(Level world, double x, double y) {
+	public Entity(Level level, double x, double y) {
 		position = new Vector(x, y);
 		velocity = new Vector();
-		this.world = world;
+		this.level = level;
 	}
 	
 	/** Returns the position vector associated with this entity, allowing you to get or set the position. */

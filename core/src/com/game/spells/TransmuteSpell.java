@@ -15,13 +15,13 @@ public class TransmuteSpell extends Spell {
 		super(4000, 90);
 	}
 
-	protected void onUsed(Level world, Player player) {
+	protected void onUsed(Level level, Player player) {
 		SoundEffects.instance.play("magic", 1, 1, 0);
 		Vector position = player.getPosition();
-		for(int i = 0; i < 40; i++) { world.spawn(new SparkParticle("fireball_particle_yellow", world, position.x, position.y, Math.PI * 2 / 40 * i, 4, 40)); }
-		ArrayList<Coin> coins = world.getCoins();
+		for(int i = 0; i < 40; i++) { level.spawn(new SparkParticle("fireball_particle_yellow", level, position.x, position.y, Math.PI * 2 / 40 * i, 4, 40)); }
+		ArrayList<Coin> coins = level.getCoins();
 		for(Coin coin : coins) {
-			if(coin.isOnScreen(world.gameRenderer)) {
+			if(coin.isOnScreen(level.gameRenderer)) {
 				coin.destroy();
 //				world.spawn(new Fireball(world, coin.getPosition().x, coin.getPosition().y, RandomUtils.randAngle(), RandomUtils.randDouble(6, 10)));
 			}

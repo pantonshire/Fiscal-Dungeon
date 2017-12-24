@@ -11,11 +11,11 @@ import com.game.vector.Vector;
 
 public class CoinProjectile extends Coin implements LightSource {
 
-	public CoinProjectile(Level world, double x, double y, double angle, double speed) {
-		super(world, x, y, 1, "coin");
+	public CoinProjectile(Level level, double x, double y, double angle, double speed) {
+		super(level, x, y, 1, "coin");
 		animation = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		velocity.setAngle(angle, speed);
-		world.getLightManager().addDynamicLight(this);
+		level.getLightManager().addDynamicLight(this);
 	}
 	
 	@Override

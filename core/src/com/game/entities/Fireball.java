@@ -27,8 +27,8 @@ public class Fireball extends Entity implements LightSource {
 	private double turnSpeed;
 	private Enemy targetedEnemy;
 
-	public Fireball(Level world, double x, double y, double angle, double speed, int homingLevel) {
-		super(world, x, y);
+	public Fireball(Level level, double x, double y, double angle, double speed, int homingLevel) {
+		super(level, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("fireball");
 		this.speed = speed;
@@ -40,13 +40,13 @@ public class Fireball extends Entity implements LightSource {
 			homingRange = 96 + (32 * homingLevel);
 		}
 		
-		world.getLightManager().addDynamicLight(this);
+		level.getLightManager().addDynamicLight(this);
 	}
 
 	@Override
 	public void destroy() {
 		super.destroy();
-		if(isOnScreen(world.gameRenderer)) {
+		if(isOnScreen(level.gameRenderer)) {
 			SoundEffects.instance.play("fire_blast", 1, 1, 0);
 		}
 	}
@@ -61,14 +61,14 @@ public class Fireball extends Entity implements LightSource {
 		boolean touchedCollidable = false;
 
 		if(velocity.x != 0) {
-			if(hitbox.collidedHorizontal(world.getTileMap())) {
+			if(hitbox.collidedHorizontal(level.getTileMap())) {
 				velocity.x = -velocity.x;
 				touchedCollidable = true;
 			}
 		}
 
 		if(velocity.y != 0) {
-			if(hitbox.collidedVertical(world.getTileMap())) {
+			if(hitbox.collidedVertical(level.getTileMap())) {
 				velocity.y = -velocity.y;
 				touchedCollidable = true;
 			}
@@ -106,10 +106,10 @@ public class Fireball extends Entity implements LightSource {
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
-			world.spawn(new SparkParticle(RandomUtils.randBoolean() ? "fireball_particle_red" : "fireball_particle_yellow", world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.25, 1), 40));
+			level.spawn(new SparkParticle(RandomUtils.randBoolean() ? "fireball_particle_red" : "fireball_particle_yellow", level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.25, 1), 40));
 			
 			if(damageCooldown == 0) {
-				ArrayList<Enemy> enemies = world.getEnemies();
+				ArrayList<Enemy> enemies = level.getEnemies();
 				boolean hitEnemy = false;
 				double closestDistance = 0;
 				Enemy closestEnemy = null;

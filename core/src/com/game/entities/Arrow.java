@@ -14,8 +14,8 @@ public class Arrow extends Entity {
 	private double angle;
 	private int time;
 
-	public Arrow(Level world, double x, double y, double angle, double speed) {
-		super(world, x, y);
+	public Arrow(Level level, double x, double y, double angle, double speed) {
+		super(level, x, y);
 		hitbox = new Hitbox(this, 3, 3);
 		texture = Textures.instance.getTexture("arrow");
 		velocity.setAngle(angle, speed);
@@ -26,14 +26,14 @@ public class Arrow extends Entity {
 		boolean touchedCollidable = false;
 
 		if(velocity.x != 0) {
-			if(hitbox.collidedHorizontal(world.getTileMap())) {
+			if(hitbox.collidedHorizontal(level.getTileMap())) {
 				velocity.x = velocity.y = 0;
 				touchedCollidable = true;
 			}
 		}
 
 		if(velocity.y != 0) {
-			if(hitbox.collidedVertical(world.getTileMap())) {
+			if(hitbox.collidedVertical(level.getTileMap())) {
 				velocity.x = velocity.y = 0;
 				touchedCollidable = true;
 			}
@@ -52,7 +52,7 @@ public class Arrow extends Entity {
 		updateTileCollisions();
 
 		if(!shouldRemove()) {
-			ArrayList<Enemy> enemies = world.getEnemies();
+			ArrayList<Enemy> enemies = level.getEnemies();
 			for(Enemy enemy : enemies) {
 				if(hitbox.intersectsHitbox(enemy.hitbox)) {
 					if(enemy.damage(2)) {

@@ -9,16 +9,16 @@ public class Trapdoor extends Entity {
 
 	private Hitbox hitbox;
 
-	public Trapdoor(Level world, double x, double y) {
-		super(world, x, y);
+	public Trapdoor(Level level, double x, double y) {
+		super(level, x, y);
 		hitbox = new Hitbox(this, 8, 8);
 	}
 
 	protected void updateEntity() {
-		ArrayList<Player> players = world.getPlayers();
+		ArrayList<Player> players = level.getPlayers();
 		for(Player player : players) {
 			if(player.getHitbox().intersectsHitbox(hitbox)) {
-				world.nextRoom();
+				level.nextRoom();
 				break;
 			}
 		}

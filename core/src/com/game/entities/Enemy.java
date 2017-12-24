@@ -7,14 +7,14 @@ import com.game.level.Level;
 
 public abstract class Enemy extends EntityLiving {
 
-	protected int health;
+	protected double health;
 
-	public Enemy(Level world, double x, double y, int width, int height, double walkSpeed, int health) {
-		super(world, x, y, width, height, walkSpeed);
+	public Enemy(Level level, double x, double y, int width, int height, double walkSpeed, double health) {
+		super(level, x, y, width, height, walkSpeed);
 		this.health = health;
 	}
 
-	public boolean damage(int amount) {
+	public boolean damage(double amount) {
 		if(invulnerable() || shouldRemove()) {
 			return false;
 		}
@@ -39,7 +39,7 @@ public abstract class Enemy extends EntityLiving {
 	protected abstract void onDeath();
 	
 	protected Player getNearestPlayer() {
-		ArrayList<Player> players = world.getPlayers();
+		ArrayList<Player> players = level.getPlayers();
 		Player nearestPlayer = null;
 		double shortestDist = 0;
 		

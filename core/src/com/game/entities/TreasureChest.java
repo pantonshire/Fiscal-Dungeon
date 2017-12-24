@@ -18,8 +18,8 @@ public class TreasureChest extends Enemy {
 	private int timer;
 	private int phase;
 
-	public TreasureChest(Level world, double x, double y) {
-		super(world, x, y, 30, 30, 2, 25);
+	public TreasureChest(Level level, double x, double y) {
+		super(level, x, y, 30, 30, 2, 25);
 		animation = new Animation(Textures.instance.getTexture("treasure_chest"), Sequence.formatSequences(
 				new Sequence(32, 32, 0, 1),
 				new Sequence(32, 32, 0, 1),
@@ -80,7 +80,7 @@ public class TreasureChest extends Enemy {
 
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		int targetX = tile.x * tileSize + (tileSize / 2);
 		int targetY = tile.y * tileSize + (tileSize / 2);
 		return new Point(targetX, targetY);
@@ -113,33 +113,33 @@ public class TreasureChest extends Enemy {
 					switch(RandomUtils.randInt(4)) {
 					case 0:
 						for(int i = 0; i < 10; i++) {
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 8, RandomUtils.randDouble(2.5, 4)));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween + RandomUtils.randDouble(Math.PI / 4) - Math.PI / 8, RandomUtils.randDouble(2.5, 4)));
 						}
 						break;
 					case 1:
 						for(int i = 0; i <= 5; i++) {
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 1.5));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 1.25));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 1.0));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 0.75));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 0.5));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 1.5));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 1.25));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 1.0));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 0.75));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 0.5));
 						}
 						break;
 					case 2:
 						for(int i = 0; i < 40; i++) {
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - RandomUtils.randDouble(Math.toRadians(40)) + Math.toRadians(20), RandomUtils.randDouble(2, 4)));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - RandomUtils.randDouble(Math.toRadians(40)) + Math.toRadians(20), RandomUtils.randDouble(2, 4)));
 						}
 						break;
 					case 3:
 						for(int i = 0; i <= 5; i++) {
-							world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(20) + (Math.toRadians(40) / 5 * i)));
+							level.spawn(new PurpleGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(20) + (Math.toRadians(40) / 5 * i)));
 						}
 						break;
 					case 4:
 						for(int i = 0; i <= 20; i++) {
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.5));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.25));
-							world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.0));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.5));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.25));
+							level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + (Math.PI * 2 / 20 * i), 1.0));
 						}
 						break;
 					}
@@ -160,7 +160,7 @@ public class TreasureChest extends Enemy {
 				if(targetPlayer != null) {
 					timer = 90;
 					phase = 4;
-					path = world.getTileMap().findPath(position, targetPlayer.position, 19, false);
+					path = level.getTileMap().findPath(position, targetPlayer.position, 19, false);
 				}
 			}
 
@@ -198,12 +198,12 @@ public class TreasureChest extends Enemy {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i <= 15; i++) {
 			double angle = Math.PI * 2 / 15 * i;
-			world.spawn(new RedGemProjectile(world, position.x, position.y, angle, 1.25));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 1));
+			level.spawn(new RedGemProjectile(level, position.x, position.y, angle, 1.25));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle, 1));
 		}
 
 		if(RandomUtils.randDouble() < 0.15) {
-			world.spawn(new Tax(world, position.x, position.y));
+			level.spawn(new Tax(level, position.x, position.y));
 		}
 	}
 }

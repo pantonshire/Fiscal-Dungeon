@@ -21,15 +21,15 @@ public abstract class Coin extends Entity {
 	protected double finalSpeed;
 	protected double pushDeceleration;
 	
-	public Coin(Level world, double x, double y, int value, String sound) {
-		super(world, x, y);
+	public Coin(Level level, double x, double y, int value, String sound) {
+		super(level, x, y);
 		hitbox = new Hitbox(this, 10, 10);
 		this.value = value;
 		this.sound = sound;
 	}
 	
 	public void collect(Player player) {
-		Run.currentRun.collectCoins(world, value);
+		Run.currentRun.collectCoins(level, value);
 		SoundEffects.instance.play(sound, 1, 1, 0);
 		destroy();
 	}
@@ -47,14 +47,14 @@ public abstract class Coin extends Entity {
 		boolean touchedCollidable = false;
 
 		if(velocity.x != 0) {
-			if(hitbox.collidedHorizontal(world.getTileMap())) {
+			if(hitbox.collidedHorizontal(level.getTileMap())) {
 				velocity.x = velocity.y = 0;
 				touchedCollidable = true;
 			}
 		}
 
 		if(velocity.y != 0) {
-			if(hitbox.collidedVertical(world.getTileMap())) {
+			if(hitbox.collidedVertical(level.getTileMap())) {
 				velocity.x = velocity.y = 0;
 				touchedCollidable = true;
 			}

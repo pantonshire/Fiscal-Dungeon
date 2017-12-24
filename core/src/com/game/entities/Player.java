@@ -38,13 +38,14 @@ public class Player extends EntityLiving implements LightSource {
 	private int magicTimer;
 	private int mana;
 	private int maxMana;
+	private int manaRechargeCooldown;
 	private boolean invisible;
 
 	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
 
-	public Player(Level world, double x, double y, byte playerID) {
-		super(world, x, y, 10, 30, 2.5);
+	public Player(Level level, double x, double y, byte playerID) {
+		super(level, x, y, 10, 30, 2.5);
 		id = playerID;
 		animation = new Animation(Textures.instance.getTexture(getBodyTexture(playerID)),
 				Sequence.formatSequences(
@@ -59,8 +60,8 @@ public class Player extends EntityLiving implements LightSource {
 				Sequence.formatSequences(
 						new Sequence(18, 14, 0, 1),
 						new Sequence(18, 14, 4, 5).setNoLoop()));
-		world.getLightManager().addDynamicLight(this);
-		mana = maxMana = 5000;
+		level.getLightManager().addDynamicLight(this);
+		mana = maxMana = 1000;
 	}
 
 	private String getBodyTexture(byte playerID) {
@@ -100,6 +101,7 @@ public class Player extends EntityLiving implements LightSource {
 	public void useMana(int amount) {
 		mana -= amount;
 		if(mana < 0) { mana = 0; }
+		manaRechargeCooldown = 15;
 	}
 
 	public int getMana() {
@@ -122,22 +124,22 @@ public class Player extends EntityLiving implements LightSource {
 		destroy();
 		SoundEffects.instance.play("blast", 1, 1, 0);
 		for(int i = 0; i < 200; i++) {
-			Coin coin1 = RandomUtils.randDouble() < 0.05 ? new RedGem(world, position.x, position.y) : new GoldCoin(world, position.x, position.y);
+			Coin coin1 = RandomUtils.randDouble() < 0.05 ? new RedGem(level, position.x, position.y) : new GoldCoin(level, position.x, position.y);
 			coin1.getVelocity().setAngle(RandomUtils.randAngle(), RandomUtils.randDouble(1.0, 5.0));
-			world.spawn(coin1);
-			Coin coin2 = RandomUtils.randDouble() < 0.05 ? new RedGem(world, position.x, position.y) : new GoldCoin(world, position.x, position.y);
+			level.spawn(coin1);
+			Coin coin2 = RandomUtils.randDouble() < 0.05 ? new RedGem(level, position.x, position.y) : new GoldCoin(level, position.x, position.y);
 			coin2.getVelocity().setAngle(RandomUtils.randAngle(), RandomUtils.randDouble(5.0, 15.0));
-			world.spawn(coin2);
+			level.spawn(coin2);
 		}
 	}
 
 	private double getTarget() {
-		double target = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, world.gameRenderer, id));
-		ArrayList<Enemy> enemies = world.getEnemies();
+		double target = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, level.gameRenderer, id));
+		ArrayList<Enemy> enemies = level.getEnemies();
 		Enemy targetedEnemy = null;
 		double shortestDist = 0;
 		for(Enemy enemy : enemies) {
-			if(enemy.isOnScreen(world.gameRenderer) && canSee(enemy)) {
+			if(enemy.isOnScreen(level.gameRenderer) && canSee(enemy)) {
 				double dist = position.distBetween(enemy.getPosition());
 				if(targetedEnemy == null || dist < shortestDist) {
 					double angleToEnemy = position.angleBetween(enemy.position);
@@ -204,22 +206,23 @@ public class Player extends EntityLiving implements LightSource {
 
 		if(shootTimer > 0) { --shootTimer; }
 		if(magicTimer > 0) { --magicTimer; }
-		if(mana < maxMana) { ++mana; }
+		if(manaRechargeCooldown > 0) { --manaRechargeCooldown; }
+		if(mana < maxMana && manaRechargeCooldown == 0) { ++mana; }
 
 		if(Input.instance.isPerformingAction(Action.ATTACK, id) && shootTimer == 0) {
 			shootTimer = SHOOT_TIME;
 			bow.setSequence(1, true);
 			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
-			world.spawn(new Arrow(world, spawnPos.x, spawnPos.y, armRotation, arrowSpeed));
+			level.spawn(new Arrow(level, spawnPos.x, spawnPos.y, armRotation, arrowSpeed));
 			SoundEffects.instance.play("bow", 1, 1, 0);
 		}
 
 		else if(Input.instance.isPerformingAction(Action.MAGIC, id) && magicTimer == 0) {
-			Run.currentRun.spell.use(world, this);
+			Run.currentRun.spell.use(level, this);
 		}
 
 		if(!invisible) {
-			ArrayList<Coin> coins = world.getCoins();
+			ArrayList<Coin> coins = level.getCoins();
 			for(Coin coin : coins) {
 				if(!coin.shouldRemove() && hitbox.intersectsHitbox(coin.hitbox)) {
 					coin.collect(this);
@@ -277,6 +280,6 @@ public class Player extends EntityLiving implements LightSource {
 	}
 
 	public Color lightColor() {
-		return new Color(1.0F, 1.0F, 1.0F, world.getPlayerLightLevel());
+		return new Color(1.0F, 1.0F, 1.0F, level.getPlayerLightLevel());
 	}
 }

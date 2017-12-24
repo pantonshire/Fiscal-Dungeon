@@ -24,8 +24,8 @@ public class SlotMachine extends Enemy {
 	private int[] slotResults;
 	private int mouthYOffset;
 
-	public SlotMachine(Level world, double x, double y) {
-		super(world, x, y, 38, 54, 0.25, 300);
+	public SlotMachine(Level level, double x, double y) {
+		super(level, x, y, 38, 54, 0.25, 300);
 		animation = new Animation(Textures.instance.getTexture("slot_machine"), Sequence.formatSequences(
 				new Sequence(39, 56, 0, 1),
 				new Sequence(39, 56, 0, 1),
@@ -64,7 +64,7 @@ public class SlotMachine extends Enemy {
 		timer = 20;
 		velocity.set(0, 0);
 		setVelocityLocked(false);
-		ArrayList<Coin> coins = world.getCoins();
+		ArrayList<Coin> coins = level.getCoins();
 		for(Coin coin : coins) {
 			coin.push(position.angleBetween(coin.position), 6.0, 2.0, 0.1);
 		}
@@ -77,7 +77,7 @@ public class SlotMachine extends Enemy {
 				timer = 140;
 				double angle = position.copy().add(0, mouthYOffset).angleBetween(player.position);
 				for(int i = 0; i < 40; i++) {
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle - RandomUtils.randDouble(Math.toRadians(84)) + Math.toRadians(42), RandomUtils.randDouble(1, 4)));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle - RandomUtils.randDouble(Math.toRadians(84)) + Math.toRadians(42), RandomUtils.randDouble(1, 4)));
 				}
 			}
 
@@ -86,11 +86,11 @@ public class SlotMachine extends Enemy {
 				timer = 80;
 				double angle = position.copy().add(0, mouthYOffset).angleBetween(player.position);
 				for(int i = 0; i <= 5; i++) {
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 4.5));
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 4.25));
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 4.0));
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.75));
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.5));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 4.5));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 4.25));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 4.0));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.75));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(60) + (Math.toRadians(120) / 5 * i), 3.5));
 				}
 			}
 
@@ -105,8 +105,8 @@ public class SlotMachine extends Enemy {
 				++phase;
 				timer = 80;
 				for(int i = 0; i < 12; i++) {
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, Math.PI * 2 / 12 * i, 3.0));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, Math.PI * 2 / 12 * i + (Math.PI * 2 / 24), 2.25));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, Math.PI * 2 / 12 * i, 3.0));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, Math.PI * 2 / 12 * i + (Math.PI * 2 / 24), 2.25));
 				}
 			}
 
@@ -115,15 +115,15 @@ public class SlotMachine extends Enemy {
 				timer = 100;
 				double angle = position.copy().add(0, mouthYOffset).angleBetween(player.position);
 				for(int i = 0; i <= 6; i++) {
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 3.5));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 3.25));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 3.0));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 2.75));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 2.5));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 2.25));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 2.0));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 1.75));
-					world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 1.5));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 3.5));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 3.25));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 3.0));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 2.75));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 2.5));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 2.25));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 2.0));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * (i + 0.5)), 1.75));
+					level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(120) + (Math.toRadians(240) / 6 * i), 1.5));
 				}
 			}
 
@@ -138,7 +138,7 @@ public class SlotMachine extends Enemy {
 				++phase;
 				timer = 80;
 				for(int i = 0; i < 8; i++) {
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y + mouthYOffset, Math.PI * 2 / 8 * i));
+					level.spawn(new PurpleGemProjectile(level, position.x, position.y + mouthYOffset, Math.PI * 2 / 8 * i));
 				}
 			}
 
@@ -147,7 +147,7 @@ public class SlotMachine extends Enemy {
 				timer = 80;
 				double angle = position.copy().add(0, mouthYOffset).angleBetween(player.position);
 				for(int i = 0; i < 6; i++) {
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y + mouthYOffset, angle - Math.toRadians(45) + (Math.toRadians(90) / 5 * i)));
+					level.spawn(new PurpleGemProjectile(level, position.x, position.y + mouthYOffset, angle - Math.toRadians(45) + (Math.toRadians(90) / 5 * i)));
 				}
 			}
 
@@ -244,21 +244,21 @@ public class SlotMachine extends Enemy {
 			if(timer > 0 && timer % 4 == 0) {
 				double angle = Math.toRadians(0.375) * (360 - timer);
 				double speed = 3.0;
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle, speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(45), speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(90), speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(135), speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(180), speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(225), speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(270), speed));
-				world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, angle + Math.toRadians(315), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle, speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(45), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(90), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(135), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(180), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(225), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(270), speed));
+				level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, angle + Math.toRadians(315), speed));
 
 				if(targetPlayer != null && timer % 16 == 0) {
 					double coinSpeed = 3.0;
 					int heuristicTravelTime = (int)Math.ceil(position.copy().add(0, mouthYOffset).distBetween(targetPlayer.position) / coinSpeed);
 					Vector estimatedPosition = targetPlayer.position.copy().add(targetPlayer.velocity.copy().mply(heuristicTravelTime));
 					double targetAngle = position.copy().add(0, mouthYOffset).angleBetween(estimatedPosition);
-					world.spawn(new CoinProjectile(world, position.x, position.y + mouthYOffset, targetAngle, coinSpeed));
+					level.spawn(new CoinProjectile(level, position.x, position.y + mouthYOffset, targetAngle, coinSpeed));
 				}
 			}
 
@@ -270,8 +270,8 @@ public class SlotMachine extends Enemy {
 
 		else if(phase == 10) {
 			if(timer > 0 && timer % 10 == 0) {
-				world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, Math.toRadians(1.5) * (360 - timer), 3));
-				world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, Math.toRadians(1.5) * (360 - timer) + Math.PI, 3));
+				level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, Math.toRadians(1.5) * (360 - timer), 3));
+				level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, Math.toRadians(1.5) * (360 - timer) + Math.PI, 3));
 			}
 
 			else if(timer == 0) {
@@ -283,7 +283,7 @@ public class SlotMachine extends Enemy {
 		else if(phase == 11) {
 			if(timer > 0 && timer % 30 == 0) {
 				for(int i = 0; i < 4; i++) {
-					world.spawn(new PurpleGemProjectile(world, position.x, position.y + mouthYOffset, Math.PI * 2 / 4 * i + (timer / 30 * 2)));
+					level.spawn(new PurpleGemProjectile(level, position.x, position.y + mouthYOffset, Math.PI * 2 / 4 * i + (timer / 30 * 2)));
 				}
 			}
 
@@ -323,7 +323,7 @@ public class SlotMachine extends Enemy {
 
 			int rate = 18 - (int)chargeSpeed;
 			if(timer % rate == 0) {
-				world.spawn(new RedGemProjectile(world, position.x, position.y + mouthYOffset, chargeAngle + Math.PI, 1));
+				level.spawn(new RedGemProjectile(level, position.x, position.y + mouthYOffset, chargeAngle + Math.PI, 1));
 			}
 		}
 
@@ -360,15 +360,15 @@ public class SlotMachine extends Enemy {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i <= 18; i++) {
 			double angle = Math.PI * 2 / 18 * i;
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 3.25));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle * 1.5, 3));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 2.75));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle * 1.5, 2.5));
-			world.spawn(new CoinProjectile(world, position.x, position.y, angle, 2.25));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle, 3.25));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle * 1.5, 3));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle, 2.75));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle * 1.5, 2.5));
+			level.spawn(new CoinProjectile(level, position.x, position.y, angle, 2.25));
 		}
 
-		int x = world.getTileMap().getMapCoordinate(position.x), y = world.getTileMap().getMapCoordinate(position.y);
-		world.getTileMap().setTile(x, y, (byte)-9);
-		world.spawn(new Trapdoor(world, world.getTileMap().getWorldCoordinate(x), world.getTileMap().getWorldCoordinate(y)));
+		int x = level.getTileMap().getMapCoordinate(position.x), y = level.getTileMap().getMapCoordinate(position.y);
+		level.getTileMap().setTile(x, y, (byte)-9);
+		level.spawn(new Trapdoor(level, level.getTileMap().getWorldCoordinate(x), level.getTileMap().getWorldCoordinate(y)));
 	}
 }

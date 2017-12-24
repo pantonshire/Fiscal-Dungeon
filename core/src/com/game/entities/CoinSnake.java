@@ -21,8 +21,8 @@ public class CoinSnake extends Enemy {
 	private int pathFindTimer;
 	private int dropCoinTimer;
 	
-	public CoinSnake(Level world, double x, double y) {
-		super(world, x, y, 14, 14, 1, 1);
+	public CoinSnake(Level level, double x, double y) {
+		super(level, x, y, 14, 14, 1, 1);
 		animation = new Animation(Textures.instance.getTexture("coin_snake"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
 		path = new ArrayList<Point>();
 	}
@@ -75,7 +75,7 @@ public class CoinSnake extends Enemy {
 	
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		int targetX = tile.x * tileSize + (tileSize / 2);
 		int targetY = tile.y * tileSize + (tileSize / 2);
 		return new Point(targetX, targetY);
@@ -92,7 +92,7 @@ public class CoinSnake extends Enemy {
 		if(pathFindTimer > 0) { --pathFindTimer; }
 		Player targetPlayer;
 		if(pathFindTimer == 0 && atTarget(path != null && path.size() > 0 ? path.get(0) : null) && (targetPlayer = getNearestPlayer()) != null) {
-			path = world.getTileMap().findPath(position, targetPlayer.position, 30, false);
+			path = level.getTileMap().findPath(position, targetPlayer.position, 30, false);
 			pathFindTimer = PATH_FIND_UPDATE_RATE;
 		}
 		
@@ -101,7 +101,7 @@ public class CoinSnake extends Enemy {
 		if(dropCoinTimer > 0) { --dropCoinTimer; }
 		if(isWalking() && dropCoinTimer == 0) {
 			dropCoinTimer = DROP_COIN_RATE;
-			world.spawn(new GoldCoin(world, position.x, position.y));
+			level.spawn(new GoldCoin(level, position.x, position.y));
 		}
 	}
 	
@@ -113,12 +113,12 @@ public class CoinSnake extends Enemy {
 	protected void onDeath() {
 		SoundEffects.instance.play("coin_snake_die", 1, 1, 0);
 		for(int i = 0; i < 5; i++) {
-			Coin coin = new CoinProjectile(world, position.x, position.y, 2 * Math.PI / 5 * i, RandomUtils.randDouble(0.5, 1.0));
-			world.spawn(coin);
+			Coin coin = new CoinProjectile(level, position.x, position.y, 2 * Math.PI / 5 * i, RandomUtils.randDouble(0.5, 1.0));
+			level.spawn(coin);
 		}
 		
 		if(RandomUtils.randDouble() < 0.05) {
-			world.spawn(new Tax(world, position.x, position.y));
+			level.spawn(new Tax(level, position.x, position.y));
 		}
 	}
 }

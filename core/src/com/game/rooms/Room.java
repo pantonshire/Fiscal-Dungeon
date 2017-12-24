@@ -10,13 +10,13 @@ public abstract class Room {
 	
 	private byte[][] tiles;
 	
-	public Room(Level world, byte[][] tiles) {
+	public Room(Level level, byte[][] tiles) {
 		List<byte[]> list = Arrays.asList(tiles);
 		Collections.reverse(list);
 		this.tiles = tiles;
 	}
 	
-	public abstract void spawnEntities(Level world, int minX, int minY, int difficulty);
+	public abstract void spawnEntities(Level level, int minX, int minY, int difficulty);
 	
 	public byte[][] getTiles() {
 		return tiles;

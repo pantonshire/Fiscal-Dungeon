@@ -5,14 +5,14 @@ import com.game.vector.Vector;
 
 public class RayCaster {
 
-	public boolean canSee(Level level, Vector start, Vector end, double cutoffDistance) {
+	public static boolean canSee(Level level, Vector start, Vector end, double cutoffDistance) {
 		int tileSize = level.getTileMap().getTileSize();
 		double startX = start.x / tileSize, startY = start.y / tileSize, endX = end.x / tileSize, endY = end.y / tileSize;
 		
 		double deltaX = Math.abs(endX - startX);
 		double deltaY = Math.abs(endY - startY);
-		
-		if(cutoffDistance > 0 && (deltaX > cutoffDistance || deltaY > cutoffDistance)) {
+
+		if(cutoffDistance > 0 && (deltaX * tileSize > cutoffDistance || deltaY * tileSize > cutoffDistance)) {
 			return false;
 		}
 

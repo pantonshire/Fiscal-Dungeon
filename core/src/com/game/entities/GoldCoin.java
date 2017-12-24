@@ -11,10 +11,10 @@ import com.game.vector.Vector;
 
 public class GoldCoin extends Coin implements LightSource {
 
-	public GoldCoin(Level world, double x, double y) {
-		super(world, x, y, 1, "coin");
+	public GoldCoin(Level level, double x, double y) {
+		super(level, x, y, 1, "coin");
 		animation = new Animation(Textures.instance.getTexture("coin"), Sequence.formatSequences(new Sequence(14, 14, 6, 8)));
-		world.getLightManager().addDynamicLight(this);
+		level.getLightManager().addDynamicLight(this);
 	}
 	
 	public Vector lightPosition() {

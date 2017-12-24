@@ -22,8 +22,8 @@ public class EvilPlayerBoss extends Enemy {
 	private int timer;
 	private int phase;
 
-	public EvilPlayerBoss(Level world, double x, double y) {
-		super(world, x, y, 10, 30, 1, 60);
+	public EvilPlayerBoss(Level level, double x, double y) {
+		super(level, x, y, 10, 30, 1, 60);
 		animation = new Animation(Textures.instance.getTexture("evil_player_boss"),
 				Sequence.formatSequences(
 						new Sequence(16, 35, 5, 4),
@@ -94,7 +94,7 @@ public class EvilPlayerBoss extends Enemy {
 
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		int targetX = tile.x * tileSize + (tileSize / 2);
 		int targetY = tile.y * tileSize + (tileSize / 2);
 		return new Point(targetX, targetY);
@@ -116,7 +116,7 @@ public class EvilPlayerBoss extends Enemy {
 				if(targetPlayer != null) {
 					timer = 60;
 					phase = 1;
-					path = world.getTileMap().findPath(position, targetPlayer.position, 38, false);
+					path = level.getTileMap().findPath(position, targetPlayer.position, 38, false);
 				}
 			}
 
@@ -129,22 +129,22 @@ public class EvilPlayerBoss extends Enemy {
 
 					switch(RandomUtils.randInt(2)) {
 					case 0:
-						world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween));
-						world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(45)));
-						world.spawn(new PurpleGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(45)));
+						level.spawn(new PurpleGemProjectile(level, position.x, position.y, angleBetween));
+						level.spawn(new PurpleGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(45)));
+						level.spawn(new PurpleGemProjectile(level, position.x, position.y, angleBetween + Math.toRadians(45)));
 						timer = 45;
 						break;
 					case 1:
-						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween, 4.5));
-						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + Math.toRadians(5), 4.0));
-						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween + Math.toRadians(10), 3.5));
-						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(5), 4.0));
-						world.spawn(new CoinProjectile(world, position.x, position.y, angleBetween - Math.toRadians(10), 3.5));
+						level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween, 4.5));
+						level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + Math.toRadians(5), 4.0));
+						level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween + Math.toRadians(10), 3.5));
+						level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(5), 4.0));
+						level.spawn(new CoinProjectile(level, position.x, position.y, angleBetween - Math.toRadians(10), 3.5));
 						timer = 20;
 						break;
 					case 2:
 						for(int i = 0; i <= 4; i++) {
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(30) + (Math.toRadians(60) / 4 * i), 3));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(30) + (Math.toRadians(60) / 4 * i), 3));
 						}
 						timer = 20;
 						break;
@@ -206,14 +206,14 @@ public class EvilPlayerBoss extends Enemy {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i <= 10; i++) {
 			double angle = Math.PI * 2 / 10 * i;
-			world.spawn(new RedGemProjectile(world, position.x, position.y, angle, 2));
+			level.spawn(new RedGemProjectile(level, position.x, position.y, angle, 2));
 		}
 
-		int x = world.getTileMap().getMapCoordinate(position.x), y = world.getTileMap().getMapCoordinate(position.y);
-		world.getTileMap().setTile(x, y, (byte)-9);
-		world.spawn(new Trapdoor(world, world.getTileMap().getWorldCoordinate(x), world.getTileMap().getWorldCoordinate(y)));
+		int x = level.getTileMap().getMapCoordinate(position.x), y = level.getTileMap().getMapCoordinate(position.y);
+		level.getTileMap().setTile(x, y, (byte)-9);
+		level.spawn(new Trapdoor(level, level.getTileMap().getWorldCoordinate(x), level.getTileMap().getWorldCoordinate(y)));
 
-		ArrayList<Enemy> enemies = world.getEnemies();
+		ArrayList<Enemy> enemies = level.getEnemies();
 		for(Enemy enemy : enemies) {
 			if(enemy != this) {
 				enemy.destroy();

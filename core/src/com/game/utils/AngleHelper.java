@@ -1,5 +1,7 @@
 package com.game.utils;
 
+import com.game.vector.Vector;
+
 public class AngleHelper {
 
 	public static final double MAX_RAD = Math.PI;
@@ -34,5 +36,12 @@ public class AngleHelper {
 		double clockwiseAngle = correctAngleRadians(targetRadians - radians);
 		double anticlockwiseAngle = correctAngleRadians(radians - targetRadians);
 		return anticlockwiseAngle < clockwiseAngle ? 1 : -1;
+	}
+	
+	public static double estimateAim(Vector position, double projectileSpeed, Vector targetPosition, Vector targetVelocity) {
+		int heuristicTime = (int)Math.ceil(position.distBetween(targetPosition) / projectileSpeed);
+		Vector estimatedFuturePosition = targetPosition.copy().add(targetVelocity.copy().mply(heuristicTime));
+		double angle = position.angleBetween(estimatedFuturePosition);
+		return angle;
 	}
 }

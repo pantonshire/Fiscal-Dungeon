@@ -18,8 +18,8 @@ public class GemBoss extends Enemy {
 	private int timer;
 	private int phase;
 
-	public GemBoss(Level world, double x, double y) {
-		super(world, x, y, 30, 30, 1, 175);
+	public GemBoss(Level level, double x, double y) {
+		super(level, x, y, 30, 30, 1, 175);
 		animation = new Animation(Textures.instance.getTexture("gem_boss"), Sequence.formatSequences(new Sequence(32, 32, 6, 5)));
 		path = new ArrayList<Point>();
 		timer = 120;
@@ -77,7 +77,7 @@ public class GemBoss extends Enemy {
 
 	private Point getTargetPos(Point tile) {
 		if(tile == null) { return null; }
-		int tileSize = world.getTileMap().getTileSize();
+		int tileSize = level.getTileMap().getTileSize();
 		int targetX = tile.x * tileSize + (tileSize / 2);
 		int targetY = tile.y * tileSize + (tileSize / 2);
 		return new Point(targetX, targetY);
@@ -106,7 +106,7 @@ public class GemBoss extends Enemy {
 				if(targetPlayer != null) {
 					timer = 60;
 					phase = 1;
-					path = world.getTileMap().findPath(position, targetPlayer.position, 38, true);
+					path = level.getTileMap().findPath(position, targetPlayer.position, 38, true);
 				}
 			}
 
@@ -117,25 +117,25 @@ public class GemBoss extends Enemy {
 					switch(RandomUtils.randInt(2)) {
 					case 0:
 						for(int i = 0; i <= 10; i++) {
-							world.spawn(new PurpleGemProjectile(world, position.x, position.y, Math.PI * 2 / 10 * i));
+							level.spawn(new PurpleGemProjectile(level, position.x, position.y, Math.PI * 2 / 10 * i));
 						}
 						phase = 2;
 						timer = 30;
 						break;
 					case 1:
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween, 4.5));
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(4), 4.0));
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween + Math.toRadians(8), 3.5));
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(4), 4.0));
-						world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(8), 3.5));
+						level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween, 4.5));
+						level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween + Math.toRadians(4), 4.0));
+						level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween + Math.toRadians(8), 3.5));
+						level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(4), 4.0));
+						level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(8), 3.5));
 						phase = 0;
 						timer = 40;
 						break;
 					case 2:
 						for(int i = 0; i <= 6; i++) {
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.75));
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.5));
-							world.spawn(new RedGemProjectile(world, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.25));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.75));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.5));
+							level.spawn(new RedGemProjectile(level, position.x, position.y, angleBetween - Math.toRadians(90) + (Math.toRadians(180) / 6 * i), 1.25));
 						}
 						phase = 0;
 						timer = 40;
@@ -146,16 +146,16 @@ public class GemBoss extends Enemy {
 
 			else if(phase == 2) {
 				for(int i = 0; i <= 16; i++) {
-					world.spawn(new RedGemProjectile(world, position.x, position.y, Math.PI * 2 / 16 * i, 4));
+					level.spawn(new RedGemProjectile(level, position.x, position.y, Math.PI * 2 / 16 * i, 4));
 				}
 				phase = 0;
 				timer = 90;
 			}
 
 			else if(phase == 3) {
-				if(RandomUtils.randDouble() < 0.1) { world.spawn(new PurpleGemProjectile(world, position.x, position.y, RandomUtils.randAngle())); }
-				else if(RandomUtils.randDouble() < 0.8) { world.spawn(new RedGemProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 5))); }
-				else { world.spawn(new CoinProjectile(world, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(3, 7))); }
+				if(RandomUtils.randDouble() < 0.1) { level.spawn(new PurpleGemProjectile(level, position.x, position.y, RandomUtils.randAngle())); }
+				else if(RandomUtils.randDouble() < 0.8) { level.spawn(new RedGemProjectile(level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(0.5, 5))); }
+				else { level.spawn(new CoinProjectile(level, position.x, position.y, RandomUtils.randAngle(), RandomUtils.randDouble(3, 7))); }
 				timer = 3;
 			}
 		}
@@ -174,11 +174,11 @@ public class GemBoss extends Enemy {
 		SoundEffects.instance.play("boom", 1, 1, 0);
 		for(int i = 0; i <= 15; i++) {
 			double angle = Math.PI * 2 / 15 * i;
-			world.spawn(new RedGemProjectile(world, position.x, position.y, angle, 1.25));
+			level.spawn(new RedGemProjectile(level, position.x, position.y, angle, 1.25));
 		}
 
-		int x = world.getTileMap().getMapCoordinate(position.x), y = world.getTileMap().getMapCoordinate(position.y);
-		world.getTileMap().setTile(x, y, (byte)-9);
-		world.spawn(new Trapdoor(world, world.getTileMap().getWorldCoordinate(x), world.getTileMap().getWorldCoordinate(y)));
+		int x = level.getTileMap().getMapCoordinate(position.x), y = level.getTileMap().getMapCoordinate(position.y);
+		level.getTileMap().setTile(x, y, (byte)-9);
+		level.spawn(new Trapdoor(level, level.getTileMap().getWorldCoordinate(x), level.getTileMap().getWorldCoordinate(y)));
 	}
 }
