@@ -16,6 +16,7 @@ import com.game.entities.Enemy;
 import com.game.entities.Entity;
 import com.game.entities.Player;
 import com.game.graphics.Animation;
+import com.game.graphics.Fonts;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
 import com.game.graphics.Textures;
@@ -32,6 +33,7 @@ public class Level {
 
 	public LayerRenderer gameRenderer;
 	public LayerRenderer overlayRenderer;
+	public LayerRenderer fontRenderer;
 
 	private boolean paused;
 	private int gameOverTimer;
@@ -52,9 +54,10 @@ public class Level {
 	private Animation coin;
 	private TextureRegion manaBar;
 
-	public Level(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, int width, int height, boolean boss) {
+	public Level(LayerRenderer gameRenderer, LayerRenderer overlayRenderer, LayerRenderer fontRenderer, int width, int height, boolean boss) {
 		this.gameRenderer = gameRenderer;
 		this.overlayRenderer = overlayRenderer;
+		this.fontRenderer = fontRenderer;
 		
 		fadeOut = -1;
 		fadeIn = 60;
@@ -244,6 +247,8 @@ public class Level {
 		case 1:
 			renderOverlayLayer();
 			break;
+		case 2:
+			renderTextLayer();
 		default:
 			break;
 		}
@@ -273,33 +278,8 @@ public class Level {
 		renderManaBar();
 		overlayRenderer.getSpriteBatch().draw(coin.getFrame(), 330, Gdx.graphics.getHeight() / 2 + 180);
 		coin.updateTimer();
-		overlayRenderer.setTextColour(Color.WHITE);
-		overlayRenderer.drawText("x " + Run.currentRun.getCoins(), 350, Gdx.graphics.getHeight() / 2 + 192);
-		overlayRenderer.drawText("/ " + Run.currentRun.getMaxCoins(), 380, Gdx.graphics.getHeight() / 2 + 192);
-
-		if(roomTitle > 0) {
-			--roomTitle;
-			String text = "Floor " + (LevelFactory.floor + 1) + ": " + LevelFactory.getFloorName();
-			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
-			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
-			overlayRenderer.drawText(text, x, y);
-		}
-
-		if(Run.currentRun.isDead() && gameOverTimer <= 0) {
-			String text = "GAME OVER";
-			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
-			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
-			overlayRenderer.drawText(text, x, y);
-		}
-
-		else if(paused) {
-			String text = "PAUSED";
-			GlyphLayout layout = new GlyphLayout(overlayRenderer.getFont(), text);
-			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
-			overlayRenderer.drawText(text, x, y);
-		}
 	}
-
+	
 	private void renderManaBar() {
 		manaBar.setRegion(0, 0, 150, 11);
 		int x = Gdx.graphics.getWidth() / 2 + 160;
@@ -309,5 +289,34 @@ public class Level {
 		int width = (int)(150 * percentageMana);
 		manaBar.setRegion(0, Run.currentRun.spell.hasSufficientMana(player1) ? 11 : 18, width, 7);
 		overlayRenderer.getSpriteBatch().draw(manaBar, x, y + 2);
+	}
+	
+	private void renderTextLayer() {
+		String font = "pcsenior-24";
+		fontRenderer.setTextColour(font, Color.WHITE);
+		fontRenderer.drawText("x " + Run.currentRun.getCoins(), font, 60, Gdx.graphics.getHeight() - 14);
+		fontRenderer.drawText("/" + Run.currentRun.getMaxCoins(), font, 160, Gdx.graphics.getHeight() - 14);
+
+		if(roomTitle > 0) {
+			--roomTitle;
+			String text = "Floor " + (LevelFactory.floor + 1) + ": " + LevelFactory.getFloorName();
+			GlyphLayout layout = new GlyphLayout(Fonts.instance.getFont(font), text);
+			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
+			fontRenderer.drawText(text, font, x, y);
+		}
+
+		if(Run.currentRun.isDead() && gameOverTimer <= 0) {
+			String text = "GAME OVER";
+			GlyphLayout layout = new GlyphLayout(Fonts.instance.getFont(font), text);
+			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
+			fontRenderer.drawText(text, font, x, y);
+		}
+
+		else if(paused) {
+			String text = "PAUSED";
+			GlyphLayout layout = new GlyphLayout(Fonts.instance.getFont(font), text);
+			int x = (int)(Gdx.graphics.getWidth() / 2 - layout.width / 2), y = (int)(Gdx.graphics.getHeight() / 2 - layout.height / 2) + 40;
+			fontRenderer.drawText(text, font, x, y);
+		}
 	}
 }

@@ -1,8 +1,8 @@
 package com.game.spells;
 
 import com.game.audio.SoundEffects;
-import com.game.entities.DartTrap;
 import com.game.entities.Player;
+import com.game.entities.projectiles.DartTrap;
 import com.game.level.Level;
 import com.game.vector.Vector;
 import static com.game.spells.SpellUpgrade.*;

@@ -1,8 +1,11 @@
-package com.game.entities;
+package com.game.entities.projectiles;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.game.entities.Enemy;
+import com.game.entities.Entity;
+import com.game.entities.Hitbox;
 import com.game.level.Level;
 import com.game.utils.AngleHelper;
 
@@ -126,23 +129,22 @@ public abstract class PlayerProjectile extends Entity {
 			Enemy closestEnemy = null;
 
 			for(Enemy enemy : enemies) {
-				if(!hitEnemy && hitbox.intersectsHitbox(enemy.hitbox)) {
+				if(!hitEnemy && hitbox.intersectsHitbox(enemy.getHitbox())) {
 					if(enemy.damage(damage)) {
 						hitEnemy = true;
-						if(bouncy) {
+						if(!piercing && bouncy) {
 							velocity.x = -velocity.x;
 							velocity.y = -velocity.y;
+							angle = Math.atan2(velocity.y, velocity.x);
 							bounce();
 						}
 						
-						else if(!piercing) {
-							break;
-						}
+						break;
 					}
 				}
 
 				if(homing && !enemy.invulnerable()) {
-					double distance = position.distBetween(enemy.position);
+					double distance = position.distBetween(enemy.getPosition());
 					if(distance <= homingRange && (closestEnemy == null || distance < closestDistance)) {
 						closestEnemy = enemy;
 						closestDistance = distance;
@@ -175,8 +177,7 @@ public abstract class PlayerProjectile extends Entity {
 			}
 			
 			else {
-				double target = position.angleBetween(targetedEnemy.position);
-				double angle = Math.atan2(velocity.y, velocity.x);
+				double target = position.angleBetween(targetedEnemy.getPosition());
 				if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) >= turnSpeed) {
 					int direction = AngleHelper.getQuickestRotationDirection(angle, target);
 					angle += turnSpeed * direction;

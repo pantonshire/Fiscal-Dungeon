@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.game.audio.SoundEffects;
+import com.game.graphics.Fonts;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.input.Input;
@@ -16,6 +17,7 @@ public class Main extends ApplicationAdapter {
 	
 	private LayerRenderer gameRenderer;
 	private LayerRenderer overlayRenderer;
+	private LayerRenderer fontRenderer;
 	private Level currentLevel;
 	private int option;
 	private boolean deleteLevel;
@@ -26,10 +28,13 @@ public class Main extends ApplicationAdapter {
 	
 	public void create() {
 		instance = this;
+		Fonts.instance.loadFont("november", 24);
+		Fonts.instance.loadFont("pcsenior", 24);
 		SoundEffects.instance.loadSounds("blast", "boom", "coin", "good", "hurt", "select", "coin_snake_die", "bow", "magic", "fire_blast");
 		Input.init();
 		gameRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
 		overlayRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0.5F);
+		fontRenderer = new LayerRenderer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 1.0F);
 	}
 	
 	public void render() {
@@ -55,6 +60,9 @@ public class Main extends ApplicationAdapter {
 			overlayRenderer.beginBatch();
 			currentLevel.render(1);
 			overlayRenderer.endBatch();
+			fontRenderer.beginBatch();
+			currentLevel.render(2);
+			fontRenderer.endBatch();
 //			currentLevel.stepWorld();
 		}
 		
@@ -78,7 +86,7 @@ public class Main extends ApplicationAdapter {
 				
 				switch(option) {
 				case 0:
-					LevelFactory.firstFloor(gameRenderer, overlayRenderer);
+					LevelFactory.firstFloor(gameRenderer, overlayRenderer, fontRenderer);
 					break;
 				case 1:
 					screen = 2;
@@ -115,10 +123,13 @@ public class Main extends ApplicationAdapter {
 			
 			overlayRenderer.beginBatch();
 			renderMenuBg();
-			overlayRenderer.drawText("Congratulations on conquering the Fiscal Dungeon!", 340, 580);
-			overlayRenderer.drawText("Thank you for playing my game.", 340, 560);
-			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 540);
 			overlayRenderer.endBatch();
+			fontRenderer.beginBatch();
+			String font = "november-24";
+			fontRenderer.drawText("Congratulations on conquering the Fiscal Dungeon!", font, 340, 580);
+			fontRenderer.drawText("Thank you for playing my game.", font, 340, 560);
+			fontRenderer.drawText("Press the ESC key to return to the main menu.", font, 340, 540);
+			fontRenderer.endBatch();
 		}
 		
 		else if(screen == 2) {
@@ -129,18 +140,21 @@ public class Main extends ApplicationAdapter {
 			
 			overlayRenderer.beginBatch();
 			renderMenuBg();
-			overlayRenderer.drawText("Welcome, brave adventurer, to the Fiscal Dungeon!", 340, 580);
-			overlayRenderer.drawText("Once you embark on your quest to conquer the dungeon, use the W, A, S and D keys to move,", 340, 550);
-			overlayRenderer.drawText("use your mouse to aim your bow and use left-click to shoot.", 340, 530);
-			overlayRenderer.drawText("Your quest will not be easy. The dungeon is full of gold and treasure, but beware; many", 340, 500);
-			overlayRenderer.drawText("believe it all to be cursed. After all, the theme of this Ludum Dare is \"the more you have, the", 340, 480);
-			overlayRenderer.drawText("worse it is\"!", 340, 460);
-			overlayRenderer.drawText("Obtaining 100 coins in the dungeon will likely result in your death.", 340, 440);
-			overlayRenderer.drawText("A polite reminder that, by dungeon law, adventurers are required to pay a \'murder tax\' of 10", 340, 410);
-			overlayRenderer.drawText("gold coins for each dungeon entity they slaugher on their travels. If you see any tax return", 340, 390);
-			overlayRenderer.drawText("documents, I implore you to do the lawful thing and pick them up in order to pay them.", 340, 370);
-			overlayRenderer.drawText("Press the ESC key to return to the main menu.", 340, 340);
 			overlayRenderer.endBatch();
+			fontRenderer.beginBatch();
+			String font = "pcsenior-24";
+			fontRenderer.drawText("Welcome, brave adventurer, to the Fiscal Dungeon!", font, 40, 760);
+			fontRenderer.drawText("Once you embark on your quest to conquer the dungeon, use the W, A, S and D keys to move,", font, 40, 720);
+			fontRenderer.drawText("use your mouse to aim your bow and use left-click to shoot.", font, 40, 690);
+			fontRenderer.drawText("Your quest will not be easy. The dungeon is full of gold and treasure, but beware; many", font, 40, 650);
+			fontRenderer.drawText("believe it all to be cursed. After all, the theme of this Ludum Dare is \"the more you have, the", font, 40, 620);
+			fontRenderer.drawText("worse it is\"!", font, 40, 590);
+			fontRenderer.drawText("Obtaining 100 coins in the dungeon will likely result in your death.", font, 40, 550);
+			fontRenderer.drawText("A polite reminder that, by dungeon law, adventurers are required to pay a \"murder tax\" of 10", font, 40, 500);
+			fontRenderer.drawText("gold coins for each dungeon entity they slaugher on their travels. If you see any tax return", font, 40, 470);
+			fontRenderer.drawText("documents, I implore you to do the lawful thing and pick them up in order to pay them.", font, 40, 440);
+			fontRenderer.drawText("Press the ESC key to return to the main menu.", font, 40, 400);
+			fontRenderer.endBatch();
 		}
 		
 		Input.instance.update();
@@ -148,8 +162,11 @@ public class Main extends ApplicationAdapter {
 	
 	public void dispose() {
 		gameRenderer.dispose();
+		overlayRenderer.dispose();
+		fontRenderer.dispose();
 		Textures.instance.dispose();
 		SoundEffects.instance.dispose();
+		Fonts.instance.dispose();
 	}
 	
 	private void deleteCurrentLevel() {

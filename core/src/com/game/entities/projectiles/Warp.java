@@ -1,8 +1,12 @@
-package com.game.entities;
+package com.game.entities.projectiles;
 
 import java.awt.Point;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.game.entities.Entity;
+import com.game.entities.Hitbox;
+import com.game.entities.Player;
+import com.game.entities.SparkParticle;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.level.Level;
@@ -40,7 +44,7 @@ public class Warp extends Entity {
 		
 		lastUnblockedTile = new Point(level.getTileMap().getMapCoordinate(position.x), level.getTileMap().getMapCoordinate(position.y));
 		if(level.getTileMap().isTileCollidable(lastUnblockedTile.x, lastUnblockedTile.y)) {
-			lastUnblockedTile.setLocation(level.getTileMap().getMapCoordinate(player.position.x), level.getTileMap().getMapCoordinate(player.position.y));
+			lastUnblockedTile.setLocation(level.getTileMap().getMapCoordinate(player.getPosition().x), level.getTileMap().getMapCoordinate(player.getPosition().y));
 		}
 		
 		blast(position);
@@ -74,7 +78,7 @@ public class Warp extends Entity {
 		}
 		
 		if(controllable) {
-			double target = player.getArmRotation();
+			double target = player.getLookAngle();
 			if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) >= turnSpeed) {
 				int direction = AngleHelper.getQuickestRotationDirection(angle, target);
 				angle += direction * turnSpeed;
@@ -99,7 +103,7 @@ public class Warp extends Entity {
 			}
 			
 			if(player != null) {
-				player.position.set(position.x, position.y);
+				player.getPosition().set(position.x, position.y);
 			}
 		}
 	}
@@ -115,9 +119,9 @@ public class Warp extends Entity {
 	public void destroy() {
 		super.destroy();
 		if(player != null) {
-			if(player.hitbox.collidedHorizontal(level.getTileMap()) || player.hitbox.collidedVertical(level.getTileMap())) {
+			if(player.getHitbox().collidedHorizontal(level.getTileMap()) || player.getHitbox().collidedVertical(level.getTileMap())) {
 				Vector spawnPos = new Vector(level.getTileMap().getWorldCoordinate(lastUnblockedTile.x), level.getTileMap().getWorldCoordinate(lastUnblockedTile.y));
-				player.position.set(spawnPos.x, spawnPos.y);
+				player.getPosition().set(spawnPos.x, spawnPos.y);
 				blast(spawnPos);
 			}
 			

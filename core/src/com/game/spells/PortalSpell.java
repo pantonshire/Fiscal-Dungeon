@@ -3,7 +3,7 @@ package com.game.spells;
 import static com.game.spells.SpellUpgrade.*;
 
 import com.game.entities.Player;
-import com.game.entities.Portal;
+import com.game.entities.projectiles.Portal;
 import com.game.level.Level;
 import com.game.vector.Vector;
 

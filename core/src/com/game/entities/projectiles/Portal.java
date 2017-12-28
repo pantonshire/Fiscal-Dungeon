@@ -1,9 +1,11 @@
-package com.game.entities;
+package com.game.entities.projectiles;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.game.entities.Enemy;
+import com.game.entities.Entity;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.level.Level;
@@ -47,15 +49,15 @@ public class Portal extends Entity implements LightSource {
 			Enemy closestEnemy = null;
 			
 			for(Enemy enemy : enemies) {
-				double dist = position.distBetween(enemy.position);
-				if(dist < range && (closestEnemy == null || dist < closestDist) && !enemy.invulnerable() && RayCaster.canSee(level, position, enemy.position, -1)) {
+				double dist = position.distBetween(enemy.getPosition());
+				if(dist < range && (closestEnemy == null || dist < closestDist) && !enemy.invulnerable() && RayCaster.canSee(level, position, enemy.getPosition(), -1)) {
 					closestEnemy = enemy;
 					closestDist = dist;
 				}
 			}
 			
 			if(closestEnemy != null) {
-				double angle = AngleHelper.estimateAim(position, speed, closestEnemy.position, closestEnemy.velocity) + RandomUtils.randInnacuracyDegrees(innacuracy);
+				double angle = AngleHelper.estimateAim(position, speed, closestEnemy.getPosition(), closestEnemy.getVelocity()) + RandomUtils.randInnacuracyDegrees(innacuracy);
 				level.spawn(new PortalProjectile(level, position.x, position.y, angle, speed, homingLevel));
 				if(++numShots > maxShots) { destroy(); }
 			}

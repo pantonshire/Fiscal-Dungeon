@@ -1,9 +1,12 @@
-package com.game.entities;
+package com.game.entities.projectiles;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.game.entities.Enemy;
+import com.game.entities.Entity;
+import com.game.entities.Hitbox;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.level.Level;
@@ -74,7 +77,7 @@ public class MagicMissile extends Entity implements LightSource {
 			}
 			
 			else {
-				double target = position.angleBetween(targetedEnemy.position);
+				double target = position.angleBetween(targetedEnemy.getPosition());
 				int direction = AngleHelper.getQuickestRotationDirection(angle, target);
 				angle += turnSpeed * direction;
 				if(Math.abs(AngleHelper.angleDifferenceRadians(angle, target)) < turnSpeed) {
@@ -93,7 +96,7 @@ public class MagicMissile extends Entity implements LightSource {
 			Enemy closestEnemy = null;
 			
 			for(Enemy enemy : enemies) {
-				if(hitbox.intersectsHitbox(enemy.hitbox)) {
+				if(hitbox.intersectsHitbox(enemy.getHitbox())) {
 					if(enemy.damage(1)) {
 						destroy();
 						break;
@@ -101,7 +104,7 @@ public class MagicMissile extends Entity implements LightSource {
 				}
 				
 				else if(homing && !enemy.invulnerable()) {
-					double distance = position.distBetween(enemy.position);
+					double distance = position.distBetween(enemy.getPosition());
 					if(distance <= homingRange && (closestEnemy == null || distance < closestDistance)) {
 						closestEnemy = enemy;
 						closestDistance = distance;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.game.audio.SoundEffects;
+import com.game.entities.projectiles.Arrow;
 import com.game.graphics.Animation;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Sequence;
@@ -14,6 +15,8 @@ import com.game.level.Level;
 import com.game.light.LevelLightManager;
 import com.game.light.LightSource;
 import com.game.run.Run;
+import com.game.upgrades.UpgradeList;
+import com.game.upgrades.UpgradeProperties;
 import com.game.utils.AngleHelper;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;
@@ -25,14 +28,14 @@ public class Player extends EntityLiving implements LightSource {
 	PLAYER_2 = 1,
 	PLAYER_3 = 2,
 	PLAYER_4 = 3;
-
-	private static final int SHOOT_TIME = 24;
+	
 	private static final double ARM_ROTATE_SPEED = Math.toRadians(8);
 
 	private final byte id;
 	private Animation animation;
 	private Animation bow;
 	private double armRotation;
+	private double lookAngle;
 	private int facing;
 	private int shootTimer;
 	private int magicTimer;
@@ -41,7 +44,6 @@ public class Player extends EntityLiving implements LightSource {
 	private int manaRechargeCooldown;
 	private boolean invisible;
 
-	private int arrowSpeed = 10;
 	private double aimAssist = Math.toRadians(25);
 
 	public Player(Level level, double x, double y, byte playerID) {
@@ -116,6 +118,10 @@ public class Player extends EntityLiving implements LightSource {
 		return armRotation;
 	}
 	
+	public double getLookAngle() {
+		return lookAngle;
+	}
+	
 	public void setInvisible(boolean invisible) {
 		this.invisible = invisible;
 	}
@@ -132,9 +138,13 @@ public class Player extends EntityLiving implements LightSource {
 			level.spawn(coin2);
 		}
 	}
+	
+	private double getRawTarget() {
+		return position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, level.gameRenderer, id));
+	}
 
 	private double getTarget() {
-		double target = position.copy().add(-3, 11).angleBetween(Input.instance.getTargetPos(this, level.gameRenderer, id));
+		double target = getRawTarget();
 		ArrayList<Enemy> enemies = level.getEnemies();
 		Enemy targetedEnemy = null;
 		double shortestDist = 0;
@@ -153,6 +163,7 @@ public class Player extends EntityLiving implements LightSource {
 		}
 
 		if(targetedEnemy != null) {
+			double arrowSpeed = UpgradeProperties.getArrowSpeed();
 			int heuristicArrowTravelTime = (int)Math.ceil(shortestDist / arrowSpeed);
 			Vector estimatedEnemyPosition = targetedEnemy.position.copy().add(targetedEnemy.velocity.copy().mply(heuristicArrowTravelTime));
 			target = position.angleBetween(estimatedEnemyPosition);
@@ -160,17 +171,56 @@ public class Player extends EntityLiving implements LightSource {
 
 		return target;
 	}
-
-	private void updateArmRotation() {
-		double target = getTarget();
-		if(Math.abs(AngleHelper.angleDifferenceRadians(armRotation, target)) > 0.01) {
-			int rotationDirection = AngleHelper.getQuickestRotationDirection(armRotation, target);
-			double rotationAngle = rotationDirection * ARM_ROTATE_SPEED;
-			armRotation = AngleHelper.correctAngleRadians(armRotation + rotationAngle);
-			if(Math.abs(AngleHelper.angleDifferenceRadians(armRotation, target)) < ARM_ROTATE_SPEED) {
-				armRotation = target;
+	
+	private double rotateToTarget(double rotation, double target, double speed) {
+		if(Math.abs(AngleHelper.angleDifferenceRadians(rotation, target)) > 0.01) {
+			int rotationDirection = AngleHelper.getQuickestRotationDirection(rotation, target);
+			double rotationAngle = rotationDirection * speed;
+			rotation = AngleHelper.correctAngleRadians(rotation + rotationAngle);
+			if(Math.abs(AngleHelper.angleDifferenceRadians(rotation, target)) < speed) {
+				rotation = target;
 			}
 		}
+		
+		return rotation;
+	}
+
+	private void updateArmRotation() {
+		armRotation = rotateToTarget(armRotation, getTarget(), ARM_ROTATE_SPEED);
+		lookAngle = rotateToTarget(lookAngle, getRawTarget(), ARM_ROTATE_SPEED);
+	}
+	
+	private void arrowAttack() {
+		shootTimer = UpgradeProperties.getBowRate();
+		bow.setSequence(1, true);
+		SoundEffects.instance.play("bow", 1, 1, 0);
+		
+		double innacuracy = UpgradeProperties.getArrowInnacuracy();
+		double speed = UpgradeProperties.getArrowSpeed();
+		double damage = UpgradeProperties.getArrowDamage();
+		
+		spawnArrow(armRotation, innacuracy, speed, damage);
+		
+		if(Run.currentRun.hasUpgrade(UpgradeList.DOUBLE_ARROW)) {
+			spawnArrow(armRotation + Math.PI, innacuracy, speed, damage);
+			if(Run.currentRun.hasUpgrade(UpgradeList.SPLITTING_ARROW)) {
+				spawnArrow(armRotation + Math.PI - Math.toRadians(10), innacuracy, speed, damage);
+				spawnArrow(armRotation + Math.PI + Math.toRadians(10), innacuracy, speed, damage);
+			}
+		}
+		
+		if(Run.currentRun.hasUpgrade(UpgradeList.SPLITTING_ARROW)) {
+			spawnArrow(armRotation - Math.toRadians(10), innacuracy, speed, damage);
+			spawnArrow(armRotation + Math.toRadians(10), innacuracy, speed, damage);
+		}
+	}
+	
+	private void spawnArrow(double angle, double innacuracy, double speed, double damage) {
+		Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
+		Arrow arrow = new Arrow(level, spawnPos.x, spawnPos.y, angle + RandomUtils.randInnacuracyDegrees(innacuracy), speed, damage);
+		if(Run.currentRun.hasUpgrade(UpgradeList.BOUNCY_ARROW)) { arrow.setBouncy(4); }
+		if(Run.currentRun.hasUpgrade(UpgradeList.HOMING_ARROW)) { arrow.setHoming(Math.toRadians(4), 96); }
+		level.spawn(arrow);
 	}
 
 	protected void updateEntity() {
@@ -210,11 +260,7 @@ public class Player extends EntityLiving implements LightSource {
 		if(mana < maxMana && manaRechargeCooldown == 0) { ++mana; }
 
 		if(Input.instance.isPerformingAction(Action.ATTACK, id) && shootTimer == 0) {
-			shootTimer = SHOOT_TIME;
-			bow.setSequence(1, true);
-			Vector spawnPos = (new Vector()).setAngle(armRotation, 8).add(position).add(-3, 5);
-			level.spawn(new Arrow(level, spawnPos.x, spawnPos.y, armRotation, arrowSpeed));
-			SoundEffects.instance.play("bow", 1, 1, 0);
+			arrowAttack();
 		}
 
 		else if(Input.instance.isPerformingAction(Action.MAGIC, id) && magicTimer == 0) {

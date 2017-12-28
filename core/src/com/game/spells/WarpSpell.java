@@ -1,7 +1,7 @@
 package com.game.spells;
 
 import com.game.entities.Player;
-import com.game.entities.Warp;
+import com.game.entities.projectiles.Warp;
 import com.game.level.Level;
 import com.game.vector.Vector;
 import static com.game.spells.SpellUpgrade.*;

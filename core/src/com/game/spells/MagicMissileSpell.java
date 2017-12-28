@@ -5,8 +5,8 @@ import static com.game.spells.SpellUpgrade.HEAVY;
 import static com.game.spells.SpellUpgrade.HOMING;
 
 import com.game.audio.SoundEffects;
-import com.game.entities.MagicMissile;
 import com.game.entities.Player;
+import com.game.entities.projectiles.MagicMissile;
 import com.game.level.Level;
 import com.game.utils.RandomUtils;
 import com.game.vector.Vector;

@@ -1,9 +1,13 @@
-package com.game.entities;
+package com.game.entities.projectiles;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.game.entities.Enemy;
+import com.game.entities.Entity;
+import com.game.entities.Hitbox;
+import com.game.entities.SparkParticle;
 import com.game.graphics.LayerRenderer;
 import com.game.graphics.Textures;
 import com.game.level.Level;
@@ -85,10 +89,10 @@ public class DartTrap extends Entity implements LightSource {
 
 				if(velocity.isZero()) {
 					for(Enemy enemy : enemies) {
-						if(!enemy.invulnerable() && position.distBetween(enemy.position) < range && RayCaster.canSee(level, position, enemy.position, -1)) {
+						if(!enemy.invulnerable() && position.distBetween(enemy.getPosition()) < range && RayCaster.canSee(level, position, enemy.getPosition(), -1)) {
 							chasing = true;
 							time = 0;
-							angle = position.angleBetween(enemy.position);
+							angle = position.angleBetween(enemy.getPosition());
 							velocity.setAngle(angle, chaseSpeed);
 							targetEnemy = enemy;
 							break;
@@ -103,12 +107,12 @@ public class DartTrap extends Entity implements LightSource {
 
 			else if(chasing) {
 				if(targetEnemy != null && !targetEnemy.shouldRemove() && !targetEnemy.invulnerable()) {
-					angle = position.angleBetween(targetEnemy.position);
+					angle = position.angleBetween(targetEnemy.getPosition());
 					velocity.setAngle(angle, chaseSpeed);
 				}
 				
 				for(Enemy enemy : enemies) {
-					if(hitbox.intersectsHitbox(enemy.hitbox)) {
+					if(hitbox.intersectsHitbox(enemy.getHitbox())) {
 						if(enemy.damage(3)) {
 							destroy();
 							break;

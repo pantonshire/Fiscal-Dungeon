@@ -18,7 +18,6 @@ public class LayerRenderer implements Disposable {
 
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
-	private BitmapFont font;
 	private OrthographicCamera camera;
 	private Viewport viewport;
 	private float zoom;
@@ -27,7 +26,6 @@ public class LayerRenderer implements Disposable {
 	public LayerRenderer(int width, int height, float zoom) {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
-		font = new BitmapFont();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, width, height);
 		this.zoom = zoom;
@@ -120,17 +118,15 @@ public class LayerRenderer implements Disposable {
 		return shapeRenderer;
 	}
 	
-	public BitmapFont getFont() {
-		return font;
-	}
-	
-	public void setTextColour(Color colour) {
+	public void setTextColour(String fontName, Color colour) {
+		BitmapFont font = Fonts.instance.getFont(fontName);
 		if(font != null) {
 			font.setColor(colour);
 		}
 	}
 	
-	public void drawText(String text, int x, int y) {
+	public void drawText(String text, String fontName, int x, int y) {
+		BitmapFont font = Fonts.instance.getFont(fontName);
 		if(font != null && batch.isDrawing()) {
 			font.draw(batch, text, x, y);
 		}
@@ -147,6 +143,5 @@ public class LayerRenderer implements Disposable {
 	public void dispose() {
 		batch.dispose();
 		shapeRenderer.dispose();
-		font.dispose();
 	}
 }

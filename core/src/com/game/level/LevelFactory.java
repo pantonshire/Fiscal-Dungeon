@@ -3,8 +3,9 @@ package com.game.level;
 import com.game.Main;
 import com.game.graphics.LayerRenderer;
 import com.game.run.Run;
-import com.game.spells.PortalSpell;
 import com.game.spells.SpellUpgrade;
+import com.game.spells.WarpSpell;
+import com.game.upgrades.UpgradeList;
 
 public class LevelFactory {
 
@@ -22,35 +23,23 @@ public class LevelFactory {
 	public static int floor = 4;
 	private static final int[] SIZES = new int[] { 100, 100, 170, 100, 200, 100, 240, 100 };
 
-	public static void firstFloor(LayerRenderer game, LayerRenderer overlay) {
+	public static void firstFloor(LayerRenderer game, LayerRenderer overlay, LayerRenderer fonts) {
 		floor = EASY;
-		Run.newRun(new PortalSpell());
-		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
-		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
-		Run.currentRun.spell.upgrade(SpellUpgrade.HOMING);
-		Run.currentRun.spell.upgrade(SpellUpgrade.PORTAL_RANGE);
-		Run.currentRun.spell.upgrade(SpellUpgrade.PORTAL_RANGE);
-		Run.currentRun.spell.upgrade(SpellUpgrade.PORTAL_RANGE);
-//		Run.currentRun.spell.upgrade(SpellUpgrade.SPEED);
-//		Run.currentRun.spell.upgrade(SpellUpgrade.SPEED);
-//		Run.currentRun.spell.upgrade(SpellUpgrade.SPEED);
-		Run.currentRun.spell.upgrade(SpellUpgrade.RATE_OF_FIRE);
-		Run.currentRun.spell.upgrade(SpellUpgrade.RATE_OF_FIRE);
-		Run.currentRun.spell.upgrade(SpellUpgrade.RATE_OF_FIRE);
-		Run.currentRun.spell.upgrade(SpellUpgrade.NUM_SHOTS);
-		Run.currentRun.spell.upgrade(SpellUpgrade.NUM_SHOTS);
-		Run.currentRun.spell.upgrade(SpellUpgrade.NUM_SHOTS);
-//		Run.currentRun.spell.upgrade(SpellUpgrade.ACCURACY);
-//		Run.currentRun.spell.upgrade(SpellUpgrade.ACCURACY);
-//		Run.currentRun.spell.upgrade(SpellUpgrade.ACCURACY);
-		Level nextFloor = new Level(game, overlay, SIZES[floor], SIZES[floor], floor % 2 != 0);
+		Run.newRun(new WarpSpell());
+		Run.currentRun.spell.upgrade(SpellUpgrade.CONTROL);
+		Run.currentRun.spell.upgrade(SpellUpgrade.CONTROL);
+		Run.currentRun.spell.upgrade(SpellUpgrade.CONTROL);
+//		Run.currentRun.collectUpgrade(UpgradeList.BOUNCY_ARROW);
+//		Run.currentRun.collectUpgrade(UpgradeList.KLOBB_QUIVER);
+		Run.currentRun.collectUpgrade(UpgradeList.HOMING_ARROW);
+		Level nextFloor = new Level(game, overlay, fonts, SIZES[floor], SIZES[floor], floor % 2 != 0);
 		Main.nextLevel = nextFloor;
 	}
 
 	public static void nextFloor(Level current) {
 		if(nextFloorExists()) {
 			++floor;
-			Level nextFloor = new Level(current.gameRenderer, current.overlayRenderer, SIZES[floor], SIZES[floor], floor % 2 != 0);
+			Level nextFloor = new Level(current.gameRenderer, current.overlayRenderer, current.fontRenderer, SIZES[floor], SIZES[floor], floor % 2 != 0);
 			Main.nextLevel = nextFloor;
 		}
 

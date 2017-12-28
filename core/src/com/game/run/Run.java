@@ -6,6 +6,7 @@ import com.game.audio.SoundEffects;
 import com.game.entities.Player;
 import com.game.level.Level;
 import com.game.spells.Spell;
+import com.game.upgrades.Upgrade;
 
 public class Run {
 
@@ -20,12 +21,14 @@ public class Run {
 	private int coins;
 	private int maxCoins;
 	private boolean dead;
+	private ArrayList<Upgrade> upgrades;
 
 	private Run(Spell spell) {
 		coins = 0;
 		maxCoins = 100;
 		dead = false;
 		this.spell = spell;
+		upgrades = new ArrayList<Upgrade>();
 	}
 
 	public void collectCoins(Level level, int amount) {
@@ -60,5 +63,28 @@ public class Run {
 		for(Player player : players) {
 			player.explode();
 		}
+	}
+	
+	public void collectUpgrade(Upgrade upgrade) {
+		upgrades.add(upgrade);
+	}
+	
+	public boolean hasUpgrade(Upgrade upgrade) {
+		return upgrades.contains(upgrade);
+	}
+	
+	public ArrayList<Upgrade> getUpgrades() {
+		return upgrades;
+	}
+	
+	public boolean hasPrerequisites(Upgrade upgrade) {
+		Upgrade[] prerequisites = upgrade.getPrerequisites();
+		for(Upgrade prerequisite : prerequisites) {
+			if(!upgrades.contains(prerequisite)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }
